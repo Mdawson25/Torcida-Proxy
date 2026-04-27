@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torcida — The Art of the Cigar</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#8B6914;
+--bg:#1A1410;--surface:#231E18;--surface2:#2E2720;--surface3:#3A3028;
+--border:rgba(201,168,76,0.2);--border-s:rgba(201,168,76,0.55);
+--text:#F0E8D8;--muted:#9A8E7A;--dim:#6A5E50;
+--red:#8B3A2A;--red-l:#C4503A;
+--btn-bg:#2E2410;--btn-bg-h:#3D3018;--btn-border:#C9A84C;
+}
+body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padding-bottom:20px;}
+.app{max-width:780px;margin:0 auto;}
+.header{padding:20px 20px 14px;border-bottom:0.5px solid var(--border);background:rgba(201,168,76,0.03);}
+.header-top{display:flex;align-items:center;gap:12px;margin-bottom:3px;}
+.brand-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--gold);letter-spacing:1.5px;}
+.brand-sub{font-size:11px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;padding-left:44px;}
+.nav{display:flex;background:var(--surface);border-bottom:0.5px solid var(--border);overflow-x:auto;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-tab{flex:1;min-width:60px;padding:12px 4px 10px;text-align:center;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'Crimson Pro',serif;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;transition:all 0.2s;border-bottom:2px solid transparent;}
+.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.05);}
+.nav-tab:hover:not(.active){color:var(--gold-light);background:rgba(255,255,255,0.03);}
+.nav-icon{font-size:16px;display:block;margin-bottom:2px;}
+.page{display:none;padding:18px 16px;}
+.page.active{display:block;}
+.sec-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.sec-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
+.btn{padding:10px 18px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.18s;white-space:nowrap;letter-spacing:0.3px;}
+.btn:hover{background:var(--btn-bg-h);color:#FFE08A;border-color:var(--gold-light);}
+.btn-primary{background:#2A2008;border-color:var(--gold);border-width:1.5px;}
+.btn-primary:hover{background:#3A2E0C;color:#FFE08A;}
+.btn-sm{padding:6px 12px;font-size:12px;font-weight:600;}
+.btn-ghost{border-color:rgba(201,168,76,0.35);color:var(--gold);background:transparent;}
+.btn-ghost:hover{color:var(--gold-light);border-color:var(--gold);background:rgba(201,168,76,0.07);}
+.btn-danger{border-color:rgba(196,80,58,0.6);color:#E8906A;background:rgba(139,58,42,0.2);}
+.btn-danger:hover{background:rgba(196,80,58,0.28);color:#FFAA88;border-color:#C4503A;}
+.btn-full{width:100%;margin-bottom:14px;}
+.scanner-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 20px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden;}
+.scanner-box::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 29px,rgba(201,168,76,0.03) 30px);pointer-events:none;}
+.scanner-line{width:60%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto;animation:scan 2s ease-in-out infinite;}
+@keyframes scan{0%,100%{opacity:0.3;transform:scaleX(0.5);}50%{opacity:1;transform:scaleX(1);}}
+.scanner-text{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+.input-row{display:flex;gap:8px;margin-bottom:14px;}
+.search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text);font-family:'Crimson Pro',serif;font-size:15px;outline:none;}
+.search-input:focus{border-color:var(--border-s);}
+.search-input::placeholder{color:var(--dim);}
+.cigar-result{background:var(--surface);border:0.5px solid var(--border-s);border-radius:12px;padding:18px;margin-bottom:14px;display:none;}
+.cigar-result.show{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.cigar-name{font-family:'Playfair Display',serif;font-size:19px;color:var(--gold-light);margin-bottom:3px;}
+.cigar-brand{font-size:12px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
+.cigar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.stat-box{background:var(--surface2);border-radius:7px;padding:9px 11px;border:0.5px solid var(--border);}
+.stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:3px;}
+.stat-val{font-size:14px;color:var(--text);font-weight:500;}
+.notes-block{margin-bottom:12px;}
+.notes-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--gold-dark);margin-bottom:5px;font-weight:600;}
+.notes-text{font-size:13px;color:var(--muted);line-height:1.6;}
+.flavor-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.tag{background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;padding:2px 9px;font-size:11px;color:var(--muted);}
+.tag.gold{border-color:var(--gold-dark);color:var(--gold);background:rgba(201,168,76,0.08);}
+.result-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--border);}
+.cigar-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.2s;}
+.cigar-card:hover{border-color:var(--border-s);}
+.card-band{width:4px;min-height:48px;border-radius:2px;background:var(--gold);flex-shrink:0;margin-top:2px;}
+.card-band.wish{background:var(--red-l);}
+.card-band.smoked{background:#5A7A4A;}
+.card-body{flex:1;min-width:0;}
+.card-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);margin-bottom:2px;}
+.card-brand{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.meta-pill{font-size:11px;color:var(--dim);background:var(--surface2);padding:2px 7px;border-radius:10px;}
+.card-actions{display:flex;gap:5px;align-items:flex-start;flex-shrink:0;}
+.qty-control{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--btn-border);border-radius:8px;padding:3px 7px;}
+.qty-btn{background:none;border:none;color:var(--gold-light);font-size:17px;cursor:pointer;padding:0 1px;line-height:1;font-weight:700;}
+.qty-btn:hover{color:#FFE08A;}
+.qty-num{font-size:14px;color:var(--gold-light);min-width:20px;text-align:center;font-weight:600;}
+.rating-stars{display:flex;gap:2px;margin:5px 0;}
+.star{font-size:15px;cursor:pointer;color:var(--dim);transition:color 0.1s;}
+.star.lit{color:var(--gold);}
+.personal-note{font-size:12px;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.5;border-left:2px solid var(--border);padding-left:9px;}
+.photo-strip{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;}
+.photo-thumb{width:60px;height:60px;object-fit:cover;border-radius:6px;border:0.5px solid var(--border);}
+.photo-add{width:60px;height:60px;border-radius:6px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--dim);font-size:20px;background:var(--surface2);transition:all 0.2s;}
+.photo-add:hover{border-color:var(--gold-dark);color:var(--gold);}
+.empty-state{text-align:center;padding:44px 20px;color:var(--dim);}
+.empty-icon{font-size:44px;display:block;margin-bottom:10px;opacity:0.5;}
+.empty-text{font-size:14px;margin-bottom:6px;color:var(--muted);}
+.empty-sub{font-size:12px;}
+.add-form{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;display:none;}
+.add-form.show{display:block;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold-dark);}
+.form-input{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;outline:none;}
+.form-input:focus{border-color:var(--border-s);}
+.form-actions{display:flex;gap:7px;margin-top:14px;}
+.smoke-note-area{width:100%;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;resize:vertical;min-height:72px;outline:none;}
+.smoke-note-area:focus{border-color:var(--border-s);}
+.summary-bar{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.summary-item{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 13px;flex:1;min-width:80px;}
+.summary-num{font-family:'Playfair Display',serif;font-size:21px;color:var(--gold);}
+.summary-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
+.loader{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-left:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface3);border:0.5px solid var(--border-s);color:var(--gold-light);padding:9px 18px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
+.quote-banner{background:var(--surface);border-bottom:0.5px solid var(--border);padding:18px 20px;text-align:center;}
+.quote-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.quote-ornament{color:var(--gold-dark);font-size:26px;font-family:'Playfair Display',serif;line-height:0.8;display:block;margin-bottom:5px;}
+.quote-text{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--gold-light);line-height:1.6;max-width:580px;margin:0 auto 7px;}
+.quote-attr{font-size:11px;color:var(--muted);letter-spacing:1px;}
+.info-pills{display:flex;gap:5px;padding:14px 16px 0;flex-wrap:wrap;}
+.pill{background:var(--btn-bg);border:1px solid var(--btn-border);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);cursor:pointer;transition:all 0.2s;font-family:'Crimson Pro',serif;font-weight:600;}
+.pill.active{background:#3A2E0C;border-color:var(--gold-light);color:var(--gold-light);}
+.pill:hover:not(.active){background:var(--btn-bg-h);color:var(--gold-light);border-color:var(--gold-light);}
+.info-sec{display:none;padding:16px;}
+.info-sec.active{display:block;}
+.info-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:5px;}
+.info-sub{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+.shapes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px;}
+.shape-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 10px;transition:border-color 0.2s;display:flex;flex-direction:column;align-items:center;}
+.shape-card:hover{border-color:var(--border-s);}
+.shape-visual{display:flex;justify-content:center;align-items:flex-end;height:96px;margin-bottom:9px;width:100%;}
+.shape-name{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-light);margin-bottom:2px;text-align:center;}
+.shape-dim{font-size:10px;color:var(--gold-dark);letter-spacing:0.5px;margin-bottom:4px;text-align:center;}
+.shape-desc{font-size:11px;color:var(--muted);line-height:1.4;text-align:center;}
+.str-row{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;margin-bottom:7px;}
+.str-row:hover{border-color:var(--border-s);}
+.str-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);min-width:110px;}
+.str-bar-wrap{flex:1;}
+.str-bar{height:5px;border-radius:3px;background:var(--surface3);}
+.str-fill{height:100%;border-radius:3px;}
+.str-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.str-ex{font-size:10px;color:var(--dim);margin-top:2px;font-style:italic;}
+.cuts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+.cut-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;transition:border-color 0.2s;}
+.cut-card:hover{border-color:var(--border-s);}
+.cut-vis{display:flex;justify-content:center;margin-bottom:10px;height:76px;align-items:center;}
+.cut-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);margin-bottom:3px;}
+.cut-badge{display:inline-block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-bottom:7px;border:0.5px solid;}
+.cut-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.cut-pro{font-size:10px;color:#7AC49A;margin-top:5px;}
+.cut-con{font-size:10px;color:#E8906A;margin-top:2px;}
+.step{display:flex;gap:12px;margin-bottom:13px;padding:14px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;}
+.step:hover{border-color:var(--border-s);}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,0.15);border:1px solid var(--gold-dark);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);flex-shrink:0;font-weight:700;}
+.step-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);margin-bottom:3px;}
+.step-text{font-size:12px;color:var(--muted);line-height:1.5;}
+.step-tip{font-size:11px;color:var(--gold-dark);margin-top:4px;padding-left:9px;border-left:2px solid var(--gold-dark);}
+.wrapper-swatch{height:24px;border-radius:5px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:4px;}
+.ornament-div{text-align:center;color:var(--gold-dark);font-size:16px;margin:14px 0;letter-spacing:6px;}
+
+/* ABOUT PAGE */
+.about-hero{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+.about-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.07) 0%,transparent 70%);pointer-events:none;}
+.about-logo-word{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--gold);letter-spacing:4px;margin-bottom:6px;}
+.about-tagline{font-size:13px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;}
+.about-ornament{color:var(--gold-dark);font-size:22px;letter-spacing:8px;margin-bottom:18px;display:block;}
+.about-intro{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--gold-light);line-height:1.7;max-width:540px;margin:0 auto;}
+.about-section{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:22px 20px;margin-bottom:14px;}
+.about-section-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.about-section-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
+.about-body{font-size:14px;color:var(--muted);line-height:1.8;}
+.about-body p{margin-bottom:12px;}
+.about-body p:last-child{margin-bottom:0;}
+.about-body strong{color:var(--gold-light);font-weight:600;}
+.tribute-block{background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:16px 18px;margin:14px 0;}
+.tribute-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--gold-light);line-height:1.7;margin-bottom:8px;}
+.tribute-attr{font-size:11px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;}
+.roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px;}
+.role-card{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px 12px;text-align:center;transition:border-color 0.2s;}
+.role-card:hover{border-color:var(--border-s);}
+.role-icon{font-size:26px;display:block;margin-bottom:8px;}
+.role-name{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-light);margin-bottom:4px;}
+.role-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+.about-values{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.value-item{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px 12px;}
+.value-title{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.value-text{font-size:12px;color:var(--muted);line-height:1.5;}
+.about-footer{text-align:center;padding:20px 0 8px;border-top:0.5px solid var(--border);margin-top:20px;}
+.about-footer-word{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold-dark);letter-spacing:4px;}
+.about-footer-sub{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-top">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <ellipse cx="16" cy="22" rx="12" ry="5" fill="rgba(201,168,76,0.15)" stroke="#C9A84C" stroke-width="0.5"/>
+        <path d="M6 22 Q8 10 16 8 Q24 10 26 22" fill="rgba(201,168,76,0.08)" stroke="#C9A84C" stroke-width="0.8"/>
+        <path d="M16 8 Q18 4 20 3" stroke="#C9A84C" stroke-width="0.8" stroke-linecap="round"/>
+        <circle cx="21" cy="2.5" r="1.5" fill="#C9A84C" opacity="0.6"/>
+      </svg>
+      <span class="brand-title">Torcida</span>
+    </div>
+    <div class="brand-sub">The Art of the Cigar</div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-tab active" onclick="showPage('scanner',this)"><span class="nav-icon">🔍</span>Scanner</button>
+    <button class="nav-tab" onclick="showPage('humidor',this)"><span class="nav-icon">📦</span>Humidor</button>
+    <button class="nav-tab" onclick="showPage('wishlist',this)"><span class="nav-icon">✨</span>Wish List</button>
+    <button class="nav-tab" onclick="showPage('smoked',this)"><span class="nav-icon">💨</span>Smoked</button>
+    <button class="nav-tab" onclick="showPage('guide',this)"><span class="nav-icon">📖</span>Guide</button>
+    <button class="nav-tab" onclick="showPage('about',this)"><span class="nav-icon">🌿</span>About</button>
+  </nav>
+
+  <!-- SCANNER -->
+  <div id="page-scanner" class="page active">
+    <div class="scanner-box">
+      <span style="font-size:44px;display:block;margin-bottom:10px;">📷</span>
+      <div class="scanner-line"></div>
+      <div class="scanner-text">Point your camera at a cigar band or barcode<br>to instantly identify it</div>
+      <button class="btn btn-primary" onclick="triggerCamera()">Open Camera Scanner</button>
+      <input type="file" id="cam-input" accept="image/*" capture="environment" style="display:none" onchange="handleScan(this)">
+    </div>
+    <div class="sec-title">Search by Name</div>
+    <div class="input-row">
+      <input class="search-input" id="cigar-search" placeholder="e.g. Padron 1964 Anniversary..." onkeydown="if(event.key==='Enter')searchCigar()">
+      <button class="btn btn-primary" id="search-btn" onclick="searchCigar()">Search</button>
+    </div>
+    <div class="cigar-result" id="cigar-result">
+      <div class="cigar-name" id="res-name"></div>
+      <div class="cigar-brand" id="res-brand"></div>
+      <div class="cigar-grid" id="res-grid"></div>
+      <div class="notes-block"><div class="notes-label">Tasting Notes</div><div class="notes-text" id="res-tasting"></div><div class="flavor-tags" id="res-tags"></div></div>
+      <div class="notes-block"><div class="notes-label">Pairing Recommendations</div><div class="notes-text" id="res-pairing"></div></div>
+      <div class="notes-block"><div class="notes-label">About</div><div class="notes-text" id="res-about"></div></div>
+      <div class="result-actions">
+        <button class="btn btn-sm btn-primary" onclick="addToHumidorFromResult()">+ Humidor</button>
+        <button class="btn btn-sm" onclick="addToWishlistFromResult()">+ Wish List</button>
+        <button class="btn btn-sm" onclick="addToSmokedFromResult()">+ Log Smoked</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUMIDOR -->
+  <div id="page-humidor" class="page">
+    <div class="summary-bar">
+      <div class="summary-item"><div class="summary-num" id="h-count">0</div><div class="summary-lbl">Cigars</div></div>
+      <div class="summary-item"><div class="summary-num" id="h-total">0</div><div class="summary-lbl">Total Stock</div></div>
+    </div>
+    <button class="btn btn-full" onclick="toggleAddForm('humidor-form')">+ Add Cigar to Humidor</button>
+    <div class="add-form" id="humidor-form">
+      <div class="sec-title" style="font-size:16px;">Add to Humidor</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="h-brand" placeholder="Arturo Fuente"></div>
+        <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="h-name" placeholder="Hemingway Masterpiece"></div>
+        <div class="form-group"><label class="form-label">Size</label><input class="form-input" id="h-size" placeholder='7" × 48'></div>
+        <div class="form-group"><label class="form-label">Wrapper</label><input class="form-input" id="h-wrapper" placeholder="Cameroon"></div>
+        <div class="form-group"><label class="form-label">Strength</label>
+          <select class="form-input" id="h-strength"><option>Mild</option><option>Mild-Medium</option><option>Medium</option><option>Medium-Full</option><option>Full</option></select></div>
+        <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" id="h-qty" type="number" value="1" min="1"></div>
+        <div class="form-group full"><label class="form-label">Notes</label><input class="form-input" id="h-notes" placeholder="Purchase date, source, aging notes..."></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="addToHumidor()">Add to Humidor</button>
+        <button class="btn btn-ghost" onclick="toggleAddForm('humidor-form')">Cancel</button>
+      </div>
+    </div>
+    <div class="sec-title">My Humidor</div>
+    <div id="humidor-list"><div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or from the Scanner</div></div></div>
+  </div>
+
+  <!-- WISHLIST -->
+  <div id="page-wishlist" class="page">
+    <button class="btn btn-full" onclick="toggleAddForm('wish-form')">+ Add to Wish List</button>
+    <div class="add-form" id="wish-form">
+      <div class="sec-title" style="font-size:16px;">Add to Wish List</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="w-brand" placeholder="Padron"></div>
+        <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="w-name" placeholder="Family Reserve No. 45"></div>
+        <div class="form-group"><label class="form-label">Size</label><input class="form-input" id="w-size" placeholder='6" × 52'></div>
+        <div class="form-group"><label class="form-label">Est. Price</label><input class="form-input" id="w-price" placeholder="$35"></div>
+        <div class="form-group full"><label class="form-label">Why I want it</label><input class="form-input" id="w-reason" placeholder="Tasting notes heard, recommendations..."></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="addToWishlist()">Add to Wish List</button>
+        <button class="btn btn-ghost" onclick="toggleAddForm('wish-form')">Cancel</button>
+      </div>
+    </div>
+    <div class="sec-title">My Wish List</div>
+    <div id="wish-list"><div class="empty-state"><span class="empty-icon">✨</span><div class="empty-text">Your wish list is empty</div><div class="empty-sub">Add cigars you'd like to try someday</div></div></div>
+  </div>
+
+  <!-- SMOKED -->
+  <div id="page-smoked" class="page">
+    <div class="summary-bar">
+      <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Logged</div></div>
+      <div class="summary-item"><div class="summary-num" id="s-avg">—</div><div class="summary-lbl">Avg Rating</div></div>
+    </div>
+    <button class="btn btn-full" onclick="toggleAddForm('smoked-form')">+ Log a Smoke</button>
+    <div class="add-form" id="smoked-form">
+      <div class="sec-title" style="font-size:16px;">Log a Smoke</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="s-brand" placeholder="Rocky Patel"></div>
+        <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="s-name" placeholder="Vintage 1990"></div>
+        <div class="form-group"><label class="form-label">Date Smoked</label><input class="form-input" id="s-date" type="date"></div>
+        <div class="form-group"><label class="form-label">Location / Occasion</label><input class="form-input" id="s-location" placeholder="Backyard, evening"></div>
+        <div class="form-group full"><label class="form-label">Rating</label>
+          <div class="rating-stars" id="new-stars">
+            <span class="star" onclick="setRating(1)">★</span><span class="star" onclick="setRating(2)">★</span>
+            <span class="star" onclick="setRating(3)">★</span><span class="star" onclick="setRating(4)">★</span>
+            <span class="star" onclick="setRating(5)">★</span>
+          </div>
+        </div>
+        <div class="form-group full"><label class="form-label">Tasting Notes &amp; Impressions</label><textarea class="smoke-note-area" id="s-notes" placeholder="Describe what you tasted, draw, construction, finish..."></textarea></div>
+        <div class="form-group full">
+          <label class="form-label">Photos</label>
+          <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+            <div id="s-photo-preview" style="display:flex;gap:7px;flex-wrap:wrap"></div>
+            <label for="s-photo-input"><div class="photo-add">+</div></label>
+            <input type="file" id="s-photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this)">
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="logSmoke()">Log Smoke</button>
+        <button class="btn btn-ghost" onclick="toggleAddForm('smoked-form')">Cancel</button>
+      </div>
+    </div>
+    <div class="sec-title">Smoking Log</div>
+    <div id="smoked-list"><div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">No smokes logged yet</div><div class="empty-sub">Track smokes, ratings, and tasting notes</div></div></div>
+  </div>
+
+  <!-- GUIDE -->
+  <div id="page-guide" class="page" style="padding:0;">
+    <div class="quote-banner">
+      <div class="quote-label">Daily Cigar Wisdom</div>
+      <span class="quote-ornament">"</span>
+      <div class="quote-text" id="daily-quote"></div>
+      <div class="quote-attr" id="daily-attr"></div>
+    </div>
+    <div class="info-pills">
+      <div class="pill active" onclick="showInfo('shapes',this)">Shapes &amp; Sizes</div>
+      <div class="pill" onclick="showInfo('strength',this)">Strength</div>
+      <div class="pill" onclick="showInfo('cuts',this)">Cuts</div>
+      <div class="pill" onclick="showInfo('lighting',this)">How to Light</div>
+    </div>
+    <div id="info-shapes" class="info-sec active">
+      <div class="info-title">Shapes &amp; sizes</div>
+      <div class="info-sub">Cigars are measured by length (inches) and ring gauge (64ths of an inch). Shape affects draw speed, burn rate, and flavor development.</div>
+      <div class="shapes-grid" id="shapes-grid"></div>
+    </div>
+    <div id="info-strength" class="info-sec">
+      <div class="info-title">Strength guide</div>
+      <div class="info-sub">Strength refers to nicotine content and body — not flavor intensity. Always eat before smoking a full-strength cigar.</div>
+      <div id="str-track"></div>
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 15px;margin-top:14px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:9px;">Wrapper color guide</div>
+        <div id="wrapper-guide"></div>
+      </div>
+    </div>
+    <div id="info-cuts" class="info-sec">
+      <div class="info-title">Types of cuts</div>
+      <div class="info-sub">The cap cut opens the cigar's head for draw. Always use a sharp cutter for a clean, unrestricted draw.</div>
+      <div class="cuts-grid" id="cuts-grid"></div>
+    </div>
+    <div id="info-lighting" class="info-sec">
+      <div class="info-title">How to light a cigar</div>
+      <div class="info-sub">Lighting is a ritual. Done properly it ensures an even, flavorful smoke from first draw to the final third. Never rush it.</div>
+      <div id="light-steps"></div>
+      <div class="ornament-div">— ✦ —</div>
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 15px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px;">Heat source guide</div>
+        <div id="flame-guide"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="page-about" class="page">
+    <div class="about-hero">
+      <div class="about-logo-word">Torcida</div>
+      <div class="about-tagline">The Art of the Cigar</div>
+      <span class="about-ornament">— ✦ —</span>
+      <div class="about-intro">"Every great cigar begins with hands we never see and names we rarely know. Torcida exists to honor that journey — and to welcome everyone who wants to be part of it."</div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-section-title">What is Torcida</div>
+      <div class="about-body">
+        <p>Torcida is a cigar companion app built for <strong>everyone who loves cigars</strong> — whether you smoked your first one last weekend or you've been collecting for decades. We believe the cigar world is at its best when it's open, generous, and welcoming to all.</p>
+        <p>Inside Torcida you'll find an <strong>AI-powered cigar scanner</strong> to identify and learn about any cigar, a personal <strong>humidor tracker</strong> to manage your collection, a <strong>wish list</strong> for the ones you're hunting, a <strong>smoking journal</strong> to capture every memory, and a full <strong>reference guide</strong> covering everything from shapes and strengths to how to properly light a cigar for the first time.</p>
+        <p>Whether you need to know the difference between a Robusto and a Churchill, or you just want to remember that perfect smoke on a Tuesday evening in September — <strong>Torcida is built for you.</strong></p>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-section-title">Cigar Culture is for Everyone</div>
+      <div class="about-body">
+        <p>Cigar culture has a long and storied history, but it has not always opened its arms wide enough. Torcida was built on a simple belief: <strong>the ritual of a great cigar belongs to anyone who wants it.</strong></p>
+        <p>You don't need to know the difference between a Habano and a Corojo wrapper to deserve a seat at the table. You don't need to have been smoking for twenty years. You don't need to speak a certain language, earn a certain income, or fit a certain image. <strong>All you need is curiosity and a willingness to slow down.</strong></p>
+        <p>The cigar is one of the few rituals left in modern life that genuinely demands patience. It cannot be rushed. It rewards attention. And in that shared slowness, something remarkable happens — <strong>strangers become friends, and conversations go deeper.</strong> That is the culture we want to build around Torcida.</p>
+        <div class="tribute-block">
+          <div class="tribute-quote">"In the cigar lounge, the corner office and the first job blur together. The smoke is the same. The pause is the same. The moment is the same."</div>
+          <div class="tribute-attr">— The Torcida Philosophy</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-section-title">Why We Are Called Torcida</div>
+      <div class="about-body">
+        <p>The name <strong>Torcida</strong> is a deliberate and heartfelt tribute to the people who make every premium cigar possible — the men and women whose skilled hands transform raw tobacco leaf into the cigars we love.</p>
+        <p>In Spanish, <em>torcida</em> is the feminine past participle of <em>torcer</em> — meaning something that has been <strong>carefully twisted and rolled by hand</strong>. It is what every premium cigar literally is. A thing made with patience, precision, and generational craft.</p>
+        <p>But we chose the feminine form intentionally. Because the cigar industry — particularly in Cuba, Nicaragua, Honduras, and the Dominican Republic — has always been built significantly on <strong>the labor, skill, and artistry of women.</strong> The escogedoras who sort and grade the leaves. The rezagadoras who select and match wrappers by color and texture. The torcedoras who roll cigars with a precision that takes years to master. Their names rarely appear on the bands. Their faces are rarely in the advertisements. <strong>But without them, there is no cigar.</strong></p>
+      </div>
+
+      <div class="roles-grid">
+        <div class="role-card">
+          <span class="role-icon">🌱</span>
+          <div class="role-name">Veguero</div>
+          <div class="role-desc">The tobacco farmer who tends the fields from seed to harvest</div>
+        </div>
+        <div class="role-card">
+          <span class="role-icon">🍃</span>
+          <div class="role-name">Escogedora</div>
+          <div class="role-desc">Selects and grades leaves by color, texture, and quality</div>
+        </div>
+        <div class="role-card">
+          <span class="role-icon">✋</span>
+          <div class="role-name">Rezagadora</div>
+          <div class="role-desc">Sorts wrapper leaves by shade for visual consistency</div>
+        </div>
+        <div class="role-card">
+          <span class="role-icon">🎋</span>
+          <div class="role-name">Torcedor/a</div>
+          <div class="role-desc">The master roller who hand-rolls each cigar to perfection</div>
+        </div>
+        <div class="role-card">
+          <span class="role-icon">📖</span>
+          <div class="role-name">Lectora</div>
+          <div class="role-desc">Reads aloud to the rolling room — a 150-year-old Cuban tradition</div>
+        </div>
+        <div class="role-card">
+          <span class="role-icon">🎯</span>
+          <div class="role-name">Ligador</div>
+          <div class="role-desc">Creates the blend — the recipe of leaves that defines the cigar's character</div>
+        </div>
+      </div>
+
+      <div class="about-body" style="margin-top:16px;">
+        <p>In Portuguese, <em>torcida</em> also means a <strong>passionate fan base</strong> — the devoted community that shows up with energy, loyalty, and love. That is exactly what we hope Torcida the app becomes: <strong>a community of passionate people who show up for the craft, for each other, and for the culture.</strong></p>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-section-title">Our Values</div>
+      <div class="about-values">
+        <div class="value-item">
+          <div class="value-title">Inclusivity</div>
+          <div class="value-text">The cigar is for everyone. Novice and aficionado sit at the same table here.</div>
+        </div>
+        <div class="value-item">
+          <div class="value-title">Craft First</div>
+          <div class="value-text">We honor the hands, the fields, and the generations of skill behind every cigar.</div>
+        </div>
+        <div class="value-item">
+          <div class="value-title">Patience</div>
+          <div class="value-text">Great cigars cannot be rushed. Neither can great experiences. We build for the slow burn.</div>
+        </div>
+        <div class="value-item">
+          <div class="value-title">Memory</div>
+          <div class="value-text">Every smoke is a moment worth keeping. Torcida is your journal of those moments.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-footer">
+      <div class="about-footer-word">Torcida</div>
+      <div class="about-footer-sub">Made with respect for the craft &amp; the people behind it</div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  ADD YOUR ANTHROPIC API KEY HERE — replace the placeholder below
+//  Get yours at: console.anthropic.com → API Keys → Create Key
+// ═══════════════════════════════════════════════════════════════════
+// API key stored securely in Vercel — no key needed here
+// ═══════════════════════════════════════════════════════════════════
+
+let humidor=[],wishlist=[],smoked=[],currentResult=null,newRatingVal=0,pendingPhotos=[];
+function loadData(){
+  try{const h=localStorage.getItem('tc_humidor');if(h)humidor=JSON.parse(h);}catch(e){}
+  try{const w=localStorage.getItem('tc_wishlist');if(w)wishlist=JSON.parse(w);}catch(e){}
+  try{const s=localStorage.getItem('tc_smoked');if(s)smoked=JSON.parse(s);}catch(e){}
+  renderAll();
+}
+function save(){
+  try{localStorage.setItem('tc_humidor',JSON.stringify(humidor));}catch(e){}
+  try{localStorage.setItem('tc_wishlist',JSON.stringify(wishlist));}catch(e){}
+  try{localStorage.setItem('tc_smoked',JSON.stringify(smoked));}catch(e){}
+}
+function showPage(id,tab){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');tab.classList.add('active');}
+function showInfo(id,pill){document.querySelectorAll('.info-sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));document.getElementById('info-'+id).classList.add('active');pill.classList.add('active');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function toggleAddForm(id){const f=document.getElementById(id);f.classList.toggle('show');if(f.classList.contains('show'))f.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function triggerCamera(){document.getElementById('cam-input').click();}
+function handleScan(input){if(!input.files[0])return;document.getElementById('cigar-search').value='Identifying cigar...';const reader=new FileReader();reader.onload=async(e)=>{await identifyCigarFromImage(e.target.result.split(',')[1]);};reader.readAsDataURL(input.files[0]);}
+async function identifyCigarFromImage(b64){const btn=document.getElementById('search-btn');btn.innerHTML='Searching<span class="loader"></span>';btn.disabled=true;try{const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify this cigar. Return ONLY JSON with: name,brand,size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),pairing,about(2 sentences).'}]}]})});const data=await res.json();const cigar=JSON.parse(data.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim());displayResult(cigar);document.getElementById('cigar-search').value=cigar.name;}catch(e){showToast('Could not identify — try searching by name');}btn.innerHTML='Search';btn.disabled=false;}
+async function searchCigar(){
+  const q=document.getElementById('cigar-search').value.trim();
+  if(!q)return;
+  const btn=document.getElementById('search-btn');
+  btn.disabled=true;
+  const messages=['Consulting the galera...','Finding tasting notes...','Preparing your result...'];
+  let mi=0;
+  btn.innerHTML=messages[0]+'<span class="loader"></span>';
+  const msgTimer=setInterval(()=>{mi=(mi+1)%messages.length;btn.innerHTML=messages[mi]+'<span class="loader"></span>';},2000);
+  try{
+    const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:500,
+        system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown, no explanation. Be concise.',
+        messages:[{
+          role:'user',
+          content:'Provide detailed info about this cigar: "'+q+'". Return a JSON object with these exact keys: name, brand, size, wrapper, strength, rating, tasting_notes, flavor_tags (array of 6 words), pairing, about.'
+        }]
+      })
+    });
+    const data=await res.json();
+    if(data.error){throw new Error(data.error.message||'API error');}
+    const text=data.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim();
+    const cigar=JSON.parse(text);
+    displayResult(cigar);
+  }catch(e){
+    console.error('Search error:',e);
+    showToast('Search failed — try a different query');
+  }
+  clearInterval(msgTimer);
+  btn.innerHTML='Search';
+  btn.disabled=false;
+}
+function displayResult(cigar){currentResult=cigar;document.getElementById('res-name').textContent=cigar.name||'Unknown';document.getElementById('res-brand').textContent=(cigar.brand||'').toUpperCase();document.getElementById('res-grid').innerHTML=[['Size',cigar.size],['Wrapper',cigar.wrapper],['Strength',cigar.strength],['Rating',cigar.rating]].filter(([,v])=>v).map(([l,v])=>`<div class="stat-box"><div class="stat-label">${l}</div><div class="stat-val">${v}</div></div>`).join('');document.getElementById('res-tasting').textContent=cigar.tasting_notes||'';document.getElementById('res-tags').innerHTML=(cigar.flavor_tags||[]).map(t=>`<span class="tag gold">${t}</span>`).join('');document.getElementById('res-pairing').textContent=cigar.pairing||'';document.getElementById('res-about').textContent=cigar.about||'';const el=document.getElementById('cigar-result');el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function addToHumidorFromResult(){if(!currentResult)return;humidor.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1});save();renderHumidor();showToast('Added to Humidor ✓');}
+function addToWishlistFromResult(){if(!currentResult)return;wishlist.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',price:'',reason:currentResult.tasting_notes||''});save();renderWishlist();showToast('Added to Wish List ✓');}
+function addToSmokedFromResult(){if(!currentResult)return;smoked.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,date:new Date().toISOString().split('T')[0],location:'',rating:0,notes:'',photos:[]});save();renderSmoked();showToast('Added to Smoking Log ✓');}
+function addToHumidor(){const name=document.getElementById('h-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}humidor.push({id:Date.now(),brand:document.getElementById('h-brand').value,name,size:document.getElementById('h-size').value,wrapper:document.getElementById('h-wrapper').value,strength:document.getElementById('h-strength').value,notes:document.getElementById('h-notes').value,qty:parseInt(document.getElementById('h-qty').value)||1});['h-brand','h-name','h-size','h-wrapper','h-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('h-qty').value=1;save();renderHumidor();toggleAddForm('humidor-form');showToast('Added to Humidor ✓');}
+function addToWishlist(){const name=document.getElementById('w-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}wishlist.push({id:Date.now(),brand:document.getElementById('w-brand').value,name,size:document.getElementById('w-size').value,price:document.getElementById('w-price').value,reason:document.getElementById('w-reason').value});['w-brand','w-name','w-size','w-price','w-reason'].forEach(id=>document.getElementById(id).value='');save();renderWishlist();toggleAddForm('wish-form');showToast('Added to Wish List ✓');}
+function setRating(n){newRatingVal=n;document.querySelectorAll('#new-stars .star').forEach((s,i)=>s.classList.toggle('lit',i<n));}
+function handlePhotoUpload(input){Array.from(input.files).forEach(file=>{const reader=new FileReader();reader.onload=e=>{pendingPhotos.push(e.target.result);const prev=document.getElementById('s-photo-preview');const img=document.createElement('img');img.src=e.target.result;img.className='photo-thumb';prev.appendChild(img);};reader.readAsDataURL(file);});}
+function logSmoke(){const name=document.getElementById('s-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}smoked.push({id:Date.now(),brand:document.getElementById('s-brand').value,name,date:document.getElementById('s-date').value,location:document.getElementById('s-location').value,rating:newRatingVal,notes:document.getElementById('s-notes').value,photos:[...pendingPhotos]});['s-brand','s-name','s-location','s-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('s-date').value='';document.getElementById('s-photo-preview').innerHTML='';document.getElementById('s-photo-input').value='';pendingPhotos=[];newRatingVal=0;document.querySelectorAll('#new-stars .star').forEach(s=>s.classList.remove('lit'));save();renderSmoked();toggleAddForm('smoked-form');showToast('Smoke logged ✓');}
+function changeQty(id,delta){const c=humidor.find(h=>h.id===id);if(!c)return;c.qty=Math.max(0,(c.qty||1)+delta);if(c.qty===0){humidor=humidor.filter(h=>h.id!==id);showToast('Removed from Humidor');}save();renderHumidor();}
+function moveToHumidor(id){const c=wishlist.find(w=>w.id===id);if(!c)return;humidor.push({id:Date.now(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(w=>w.id!==id);save();renderWishlist();renderHumidor();showToast('Moved to Humidor ✓');}
+function removeWish(id){wishlist=wishlist.filter(w=>w.id!==id);save();renderWishlist();}
+function removeSmoked(id){smoked=smoked.filter(s=>s.id!==id);save();renderSmoked();}
+function renderHumidor(){const total=humidor.reduce((a,c)=>a+(c.qty||1),0);document.getElementById('h-count').textContent=humidor.length;document.getElementById('h-total').textContent=total;const list=document.getElementById('humidor-list');if(!humidor.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or from the Scanner</div></div>';return;}list.innerHTML=humidor.map(c=>`<div class="cigar-card"><div class="card-band"></div><div class="card-body"><div class="card-name">${c.name}</div><div class="card-brand">${c.brand||'Unknown Brand'}</div><div class="card-meta">${c.size?`<span class="meta-pill">${c.size}</span>`:''} ${c.wrapper?`<span class="meta-pill">${c.wrapper}</span>`:''} ${c.strength?`<span class="meta-pill">${c.strength}</span>`:''}</div>${c.notes?`<div class="personal-note">${c.notes}</div>`:''}</div><div class="card-actions"><div class="qty-control"><button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button><span class="qty-num">${c.qty||1}</span><button class="qty-btn" onclick="changeQty(${c.id},1)">+</button></div></div></div>`).join('');}
+function renderWishlist(){const list=document.getElementById('wish-list');if(!wishlist.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">✨</span><div class="empty-text">Your wish list is empty</div><div class="empty-sub">Add cigars you\'d like to try someday</div></div>';return;}list.innerHTML=wishlist.map(c=>`<div class="cigar-card"><div class="card-band wish"></div><div class="card-body"><div class="card-name">${c.name}</div><div class="card-brand">${c.brand||'Unknown Brand'}</div><div class="card-meta">${c.size?`<span class="meta-pill">${c.size}</span>`:''} ${c.price?`<span class="meta-pill">${c.price}</span>`:''}</div>${c.reason?`<div class="personal-note">${c.reason}</div>`:''}</div><div class="card-actions" style="flex-direction:column;gap:5px"><button class="btn btn-sm" onclick="moveToHumidor(${c.id})">→ Humidor</button><button class="btn btn-sm btn-danger" onclick="removeWish(${c.id})">Remove</button></div></div>`).join('');}
+function renderSmoked(){const ratings=smoked.filter(s=>s.rating>0).map(s=>s.rating);document.getElementById('s-count').textContent=smoked.length;document.getElementById('s-avg').textContent=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+' ★':'—';const list=document.getElementById('smoked-list');if(!smoked.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">No smokes logged yet</div><div class="empty-sub">Track smokes, ratings, and tasting notes</div></div>';return;}list.innerHTML=[...smoked].reverse().map(c=>`<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">${c.name}</div><div class="card-brand">${c.brand||'Unknown Brand'}</div><div class="card-meta">${c.date?`<span class="meta-pill">${c.date}</span>`:''} ${c.location?`<span class="meta-pill">${c.location}</span>`:''}</div>${c.rating?`<div class="rating-stars" style="margin-top:5px">${'<span class="star lit">★</span>'.repeat(c.rating)+'<span class="star">★</span>'.repeat(5-c.rating)}</div>`:''} ${c.notes?`<div class="personal-note">${c.notes}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="removeSmoked(${c.id})" style="flex-shrink:0">✕</button></div>${c.photos&&c.photos.length?`<div class="photo-strip">${c.photos.map(p=>`<img src="${p}" class="photo-thumb">`).join('')}</div>`:''}</div>`).join('');}
+function renderAll(){renderHumidor();renderWishlist();renderSmoked();}
+
+const quotes=[{q:"A good cigar is as great a comfort to a man as a good cry to a woman.",a:"Edward Bulwer-Lytton"},{q:"The cigar is the perfect complement of a good life.",a:"Zino Davidoff"},{q:"If I had taken my doctor's advice and quit smoking when he advised me to, I wouldn't have lived to go to his funeral.",a:"George Burns"},{q:"A woman is just a woman, but a good cigar is a smoke.",a:"Rudyard Kipling"},{q:"Happiness is a good cigar and a good book.",a:"Groucho Marx"},{q:"There are two things a man never forgets: his first love and his first cigar.",a:"Anonymous"},{q:"The most precious things in life cannot be seen or touched — they are felt with the heart and tasted in a fine cigar.",a:"Zino Davidoff"},{q:"Life is too short to smoke bad cigars.",a:"Anonymous"},{q:"A fine cigar is the punctuation mark of a civilized life.",a:"Anonymous"},{q:"Smoke slowly. Think deeply. Ash gracefully.",a:"Anonymous"},{q:"The first third is introduction, the second third is conversation, the final third is revelation.",a:"Cigar Aficionado"},{q:"No matter what Aristotle and the Philosophers say, nothing is equal to tobacco.",a:"Molière"},{q:"Every cigar is a small autobiography.",a:"Anonymous"},{q:"Age and experience taught me one thing: never rush a fine cigar or a good conversation.",a:"Anonymous"},{q:"In every puff there is a pause — and in every pause, wisdom.",a:"Anonymous"},{q:"A day without a cigar is just a day.",a:"Anonymous"},{q:"The true aficionado does not smoke cigars — he contemplates them.",a:"Anonymous"},{q:"Find a porch, a sunset, and a well-constructed cigar. The rest follows.",a:"Anonymous"},{q:"A premium cigar demands nothing but your full, unhurried attention.",a:"Anonymous"},{q:"A cigar shared among friends is worth twice the smoke.",a:"Anonymous"}];
+function setDailyQuote(){const q=quotes[Math.floor(Date.now()/86400000)%quotes.length];document.getElementById('daily-quote').textContent=q.q;document.getElementById('daily-attr').textContent='— '+q.a;}
+setDailyQuote();
+
+function darken(hex,amt){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`rgb(${Math.max(0,r-amt)},${Math.max(0,g-amt)},${Math.max(0,b-amt)})`;}
+function lighten(hex,amt){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`rgb(${Math.min(255,r+amt)},${Math.min(255,g+amt)},${Math.min(255,b+amt)})`;}
+function makeCigar(wrap,bandHex,tipType,ringGauge,lengthIn){const W=Math.round(ringGauge*0.7),H=Math.round(lengthIn*10),cx=Math.round(W/2)+4,totalW=W+8,totalH=H+26,r=Math.round(W/2);const wLight=lighten(wrap,36),wMid=lighten(wrap,12),wDark=darken(wrap,26),wVein=darken(wrap,42);const br=parseInt(bandHex.slice(1,3),16),bg2=parseInt(bandHex.slice(3,5),16),bb=parseInt(bandHex.slice(5,7),16);const bandLight=`rgb(${Math.min(255,br+55)},${Math.min(255,bg2+55)},${Math.min(255,bb+55)})`;const bandEdge=`rgb(${Math.min(255,br+90)},${Math.min(255,bg2+80)},${Math.min(255,bb+50)})`;const bY=4;let capPath='',footPath='';const tH2=tipType==='torpedo'?Math.round(H*0.13):tipType==='belicoso'?Math.round(H*0.08):0;if(tipType==='torpedo'||tipType==='belicoso'){capPath=`<path d="M ${cx} ${bY} L ${cx-r} ${bY+tH2} L ${cx+r} ${bY+tH2} Z" fill="${wMid}"/><path d="M ${cx} ${bY} L ${cx-r} ${bY+tH2}" stroke="${wDark}" stroke-width="0.7" fill="none"/><path d="M ${cx} ${bY} L ${cx+r} ${bY+tH2}" stroke="${wLight}" stroke-width="0.4" fill="none"/>`;footPath=`<rect x="${cx-r}" y="${H+bY-4}" width="${W}" height="7" rx="2" fill="#E07820" opacity="0.9"/>`;}else if(tipType==='figurado'){capPath=`<path d="M ${cx} ${bY+2} Q ${cx-r*0.5} ${bY+6} ${cx-r} ${bY+Math.round(H*0.1)} L ${cx+r} ${bY+Math.round(H*0.1)} Q ${cx+r*0.5} ${bY+6} ${cx} ${bY+2} Z" fill="${wMid}"/>`;footPath=`<ellipse cx="${cx}" cy="${H+bY}" rx="${r}" ry="3" fill="#E07820" opacity="0.9"/>`;}else if(tipType==='tapered'){const tH3=Math.round(H*0.06);capPath=`<path d="M ${cx} ${bY} Q ${cx-r*0.4} ${bY+tH3*0.5} ${cx-r} ${bY+tH3} L ${cx+r} ${bY+tH3} Q ${cx+r*0.4} ${bY+tH3*0.5} ${cx} ${bY} Z" fill="${wMid}"/>`;footPath=`<rect x="${cx-r}" y="${H+bY-3}" width="${W}" height="6" rx="2" fill="#E07820" opacity="0.9"/>`;}else if(tipType==='pointed'){capPath=`<ellipse cx="${cx}" cy="${bY+3}" rx="${r}" ry="4" fill="${wMid}"/><ellipse cx="${cx}" cy="${bY+2}" rx="${Math.round(r*0.5)}" ry="3" fill="${wLight}"/>`;footPath=`<ellipse cx="${cx}" cy="${H+bY}" rx="${r}" ry="3" fill="#E07820" opacity="0.85"/>`;}else{capPath=`<ellipse cx="${cx}" cy="${bY+3}" rx="${r}" ry="5" fill="${wMid}"/><ellipse cx="${cx}" cy="${bY+1}" rx="${Math.round(r*0.6)}" ry="3.5" fill="${wLight}"/>`;footPath=`<ellipse cx="${cx}" cy="${H+bY}" rx="${r}" ry="3.5" fill="#E07820" opacity="0.85"/>`;}
+const sOff=((tipType==='torpedo'||tipType==='belicoso')?tH2:0)+bY+6,sH=H+bY-sOff-4,nV=Math.max(4,Math.round(W/4));let veins='';for(let i=0;i<nV;i++){const xi=cx-r+2+Math.round((W-4)*i/nV),wv=(i%2===0)?2:-2;veins+=`<path d="M ${xi} ${sOff+4} Q ${xi+wv} ${sOff+Math.round(sH*0.5)} ${xi+Math.round(wv*0.5)} ${sOff+sH-4}" stroke="${wVein}" stroke-width="0.5" fill="none" opacity="0.32"/>`;}
+const bandY=Math.round(H*0.18),bandH2=Math.round(W*0.7),ashH=Math.round(H*0.05);return `<svg width="${totalW}" height="${totalH}" viewBox="0 0 ${totalW} ${totalH}" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wg${cx}${W}" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${wDark}"/><stop offset="22%" stop-color="${wMid}"/><stop offset="50%" stop-color="${wLight}"/><stop offset="80%" stop-color="${wMid}"/><stop offset="100%" stop-color="${wDark}"/></linearGradient><linearGradient id="bg${cx}${W}" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${darken(bandHex,20)}"/><stop offset="35%" stop-color="${bandLight}"/><stop offset="65%" stop-color="${bandHex}"/><stop offset="100%" stop-color="${darken(bandHex,30)}"/></linearGradient></defs><rect x="${cx-r}" y="${sOff}" width="${W}" height="${sH}" rx="${Math.round(r*0.2)}" fill="url(#wg${cx}${W})"/>${veins}<rect x="${cx-r+1}" y="${sOff+4}" width="${Math.round(W*0.2)}" height="${sH-8}" rx="${Math.round(W*0.1)}" fill="${wLight}" opacity="0.1"/>${capPath}<rect x="${cx-r}" y="${bandY+sOff}" width="${W}" height="${bandH2}" rx="0" fill="url(#bg${cx}${W})"/><rect x="${cx-r}" y="${bandY+sOff}" width="${W}" height="1.5" fill="${bandEdge}" opacity="0.6"/><rect x="${cx-r}" y="${bandY+sOff+bandH2-1.5}" width="${W}" height="1.5" fill="${bandEdge}" opacity="0.6"/><rect x="${cx-r}" y="${H+bY-3}" width="${W}" height="${ashH}" rx="1" fill="#C8C4BE" opacity="0.7"/>${footPath}</svg>`;}
+
+const shapesData=[{name:'Corona',dim:'5.5" × 42',desc:'The classic benchmark.',wrapHex:'#7B4A1E',bandHex:'#1A3A1A',tip:'pointed'},{name:'Robusto',dim:'5" × 50',desc:'Most popular. Full flavor in 45 min.',wrapHex:'#6B3C14',bandHex:'#3A1A0A',tip:'round'},{name:'Churchill',dim:'7" × 47',desc:'Elegant and long. Cooler smoke.',wrapHex:'#8B5A2A',bandHex:'#1A1A3A',tip:'tapered'},{name:'Toro',dim:'6" × 50',desc:'Balanced draw and generous gauge.',wrapHex:'#7A4820',bandHex:'#2A1A0A',tip:'round'},{name:'Torpedo',dim:'6.5" × 52',desc:'Tapered head concentrates flavor.',wrapHex:'#6A3C18',bandHex:'#1A2A1A',tip:'torpedo'},{name:'Figurado',dim:'6" × 48',desc:'Irregular shape. Expressive rolling.',wrapHex:'#5A3010',bandHex:'#2A0A0A',tip:'figurado'},{name:'Lonsdale',dim:'6.5" × 44',desc:'Long and lean. Elegant draw.',wrapHex:'#7A4A22',bandHex:'#0A1A2A',tip:'tapered'},{name:'Panatela',dim:'7" × 36',desc:'Thin and delicate. Airy flavors.',wrapHex:'#8A5830',bandHex:'#1A3A2A',tip:'pointed'},{name:'Gordo',dim:'6" × 60',desc:'Massive ring gauge. Rich and creamy.',wrapHex:'#5A2E0E',bandHex:'#3A1A2A',tip:'round'},{name:'Petit Corona',dim:'4.5" × 42',desc:'Quick 30-min smoke.',wrapHex:'#7A4820',bandHex:'#1A3A1A',tip:'round'},{name:'Double Corona',dim:'7.5" × 49',desc:'For a relaxed 90+ min experience.',wrapHex:'#6E3E1A',bandHex:'#1A1A3A',tip:'tapered'},{name:'Belicoso',dim:'5.5" × 52',desc:'Bulkier torpedo. Spicy, bold flavors.',wrapHex:'#6A3C18',bandHex:'#2A1A0A',tip:'belicoso'}];
+const grid=document.getElementById('shapes-grid');
+shapesData.forEach(s=>{const rg=parseInt(s.dim.split('×')[1]),len=parseFloat(s.dim.split('"')[0]);const card=document.createElement('div');card.className='shape-card';card.innerHTML=`<div class="shape-visual">${makeCigar(s.wrapHex,s.bandHex,s.tip,rg,len)}</div><div class="shape-name">${s.name}</div><div class="shape-dim">${s.dim}</div><div class="shape-desc">${s.desc}</div>`;grid.appendChild(card);});
+
+const strengths=[{name:'Mild',pct:20,fill:'#8BBF7A',desc:'Smooth and creamy. Great for beginners.',ex:'Macanudo Café, Davidoff Signature'},{name:'Mild-Medium',pct:40,fill:'#A8A870',desc:'More complexity with cedar and light spice.',ex:'Arturo Fuente Curly Head, Montecristo White'},{name:'Medium',pct:60,fill:'#C9A84C',desc:'The sweet spot. Balanced and complex.',ex:'Padron 1964, Arturo Fuente Hemingway'},{name:'Medium-Full',pct:78,fill:'#C4803A',desc:'Rich earth, leather, pepper.',ex:'Rocky Patel Vintage, Liga Privada No. 9'},{name:'Full',pct:95,fill:'#C4503A',desc:'Bold nicotine. Best after a meal.',ex:'Padron 1926 Maduro, Perdomo Double Aged'}];
+const strTrack=document.getElementById('str-track');
+strengths.forEach(s=>{strTrack.innerHTML+=`<div class="str-row"><svg width="16" height="20" viewBox="0 0 16 20" style="flex-shrink:0"><path d="M8 2 C8 2 13 7 13 12 C13 15.9 10.8 18 8 18 C5.2 18 3 15.9 3 12 C3 7 8 2 8 2Z" fill="${s.fill}" opacity="0.85"/></svg><div class="str-name">${s.name}</div><div class="str-bar-wrap"><div class="str-bar"><div class="str-fill" style="width:${s.pct}%;background:${s.fill};"></div></div><div class="str-desc">${s.desc}</div><div class="str-ex">${s.ex}</div></div></div>`;});
+const wrappers=[{c:'#F5E6B8',l:'Claro'},{c:'#D4A866',l:'Natural'},{c:'#A0703A',l:'Colorado'},{c:'#7A4E22',l:'Colo. Maduro'},{c:'#4A2810',l:'Maduro'},{c:'#2C1808',l:'Oscuro'}];
+document.getElementById('wrapper-guide').innerHTML=`<div style="display:flex;gap:5px;flex-wrap:wrap;">${wrappers.map(w=>`<div style="text-align:center;flex:1;min-width:70px;"><div class="wrapper-swatch" style="background:${w.c};"></div><div style="font-size:10px;color:var(--gold);">${w.l}</div></div>`).join('')}</div><div style="font-size:11px;color:var(--dim);margin-top:8px;font-style:italic;">Darker wrappers suggest longer fermentation. Blend construction matters far more than wrapper color alone.</div>`;
+
+const cuts=[{name:'Straight cut',badge:'Most popular',bc:'#2A5A3A',bt:'#7AC49A',desc:'Clean horizontal cut. Works on all shapes.',pro:'Easy to master, universal',con:'Can unravel if cut too deep',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><line x1="12" y1="20" x2="68" y2="20" stroke="#E8C97A" stroke-width="1.5" stroke-dasharray="3,2"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">cut line</text></svg>`},{name:'V-cut',badge:'Wide ring',bc:'#2A3A5A',bt:'#7A9AC4',desc:'Wedge notch concentrates smoke.',pro:'Great airflow on 50+ ring gauges',con:'Can clog if too shallow',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><path d="M28 20 L40 30 L52 20" fill="#1A1410" stroke="#E8C97A" stroke-width="1.5"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">v-notch</text></svg>`},{name:'Punch cut',badge:'Precise',bc:'#3A2A5A',bt:'#9A7AC4',desc:'Circular punch. Compact, ideal for travel.',pro:'No unraveling risk',con:'Can restrict on tight caps',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><circle cx="40" cy="14" r="6" fill="#1A1410" stroke="#E8C97A" stroke-width="1.5"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">punch hole</text></svg>`},{name:'Shuriken',badge:'Advanced',bc:'#5A3A2A',bt:'#C49A7A',desc:'Spiral cuts maximize airflow and flavor.',pro:'Maximum draw',con:'Requires specialty cutter',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><line x1="34" y1="8" x2="46" y2="20" stroke="#E8C97A" stroke-width="1.5"/><line x1="40" y1="6" x2="40" y2="22" stroke="#E8C97A" stroke-width="1.5"/><line x1="46" y1="8" x2="34" y2="20" stroke="#E8C97A" stroke-width="1.5"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">spiral cuts</text></svg>`}];
+document.getElementById('cuts-grid').innerHTML=cuts.map(c=>`<div class="cut-card"><div class="cut-vis">${c.svg}</div><div class="cut-name">${c.name}</div><span class="cut-badge" style="background:${c.bc}25;border-color:${c.bc};color:${c.bt};">${c.badge}</span><div class="cut-desc">${c.desc}</div><div class="cut-pro">+ ${c.pro}</div><div class="cut-con">− ${c.con}</div></div>`).join('');
+
+const steps=[{n:1,title:'Inspect the cigar',text:'Gently roll the cigar between your fingers. Feel for soft spots, cracks, or lumps. The wrapper should be smooth.',tip:'Slight springiness is ideal. Rock-hard or spongy both suggest poor humidity.'},{n:2,title:'Make your cut',text:'Cut just above the shoulder of the cap. Remove 1/16" to 1/8". Too deep unravels; too shallow restricts.',tip:'One decisive motion. Hesitation causes ragged edges.'},{n:3,title:'Test the cold draw',text:'Draw air through the unlit cigar. You should feel easy, unrestricted airflow.',tip:'A persistently tight draw may indicate a construction problem.'},{n:4,title:'Toast the foot',text:'Hold flame 1–2 inches below the foot without touching it. Rotate slowly to char evenly.',tip:'Toasting takes 15–30 seconds. Patience here pays off in the first third.'},{n:5,title:'Light with the first draws',text:'Bring flame closer and take slow puffs while rotating. Blow gently on the foot to check for an even cherry.',tip:'Never jam the foot into the flame — you\'ll scorch the wrapper.'},{n:6,title:'Confirm the even light',text:'Look for uniform glowing across the full foot. Touch up any unlit areas carefully.',tip:'Uneven lighting leads to canoeing — one side burning faster.'},{n:7,title:'Settle in and smoke slowly',text:'One draw every 30–60 seconds. Rest the cigar between puffs to let it cool and develop.',tip:'If it goes out, let it cool a minute, knock off the ash, and relight only the foot.'}];
+document.getElementById('light-steps').innerHTML=steps.map(s=>`<div class="step"><div class="step-num">${s.n}</div><div><div class="step-title">${s.title}</div><div class="step-text">${s.text}</div><div class="step-tip">${s.tip}</div></div></div>`).join('');
+
+const flames=[{name:'Cedar spill',badge:'Best',col:'#7AC49A',desc:'Zero off-flavors. The purist\'s choice.'},{name:'Butane lighter',badge:'Good',col:'#C9A84C',desc:'Clean burning. Hold 1–2 inches from the foot.'},{name:'Torch lighter',badge:'Good',col:'#C9A84C',desc:'Wind-resistant and precise.'},{name:'Wooden match',badge:'OK',col:'#C4803A',desc:'Let sulfur burn off 3 seconds before use.'},{name:'Zippo / fluid lighter',badge:'Avoid',col:'#C4503A',desc:'Naphtha fluid taints the flavor.'},{name:'Scented candle',badge:'Avoid',col:'#C4503A',desc:'Wax vapors contaminate even premium cigars.'}];
+document.getElementById('flame-guide').innerHTML=flames.map(f=>`<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:9px;padding-bottom:9px;border-bottom:0.5px solid var(--border);"><span style="font-size:11px;padding:2px 9px;border-radius:10px;background:${f.col}20;border:0.5px solid ${f.col}40;color:${f.col};white-space:nowrap;flex-shrink:0;">${f.badge}</span><div><div style="font-size:13px;color:var(--gold-light);font-weight:600;margin-bottom:2px;">${f.name}</div><div style="font-size:12px;color:var(--muted);">${f.desc}</div></div></div>`).join('');
+
+document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
+loadData();
+</script>
+</body>
+</html>
