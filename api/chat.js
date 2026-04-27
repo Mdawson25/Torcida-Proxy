@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body;
-    body.model = 'claude-sonnet-4-5-20251001';
+    body.model = 'claude-sonnet-4-6';
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
