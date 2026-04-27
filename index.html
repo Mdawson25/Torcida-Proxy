@@ -90,6 +90,33 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 .photo-thumb{width:60px;height:60px;object-fit:cover;border-radius:6px;border:0.5px solid var(--border);}
 .photo-add{width:60px;height:60px;border-radius:6px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--dim);font-size:20px;background:var(--surface2);transition:all 0.2s;}
 .photo-add:hover{border-color:var(--gold-dark);color:var(--gold);}
+.ash-challenge-box{background:var(--surface);border:1px solid var(--gold-dark);border-radius:12px;padding:20px;margin-bottom:18px;position:relative;overflow:hidden;}
+.ash-challenge-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.06) 0%,transparent 70%);pointer-events:none;}
+.ash-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.ash-subtitle{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.ash-upload-area{border:1.5px dashed var(--gold-dark);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:14px;background:var(--surface2);}
+.ash-upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.05);}
+.ash-upload-icon{font-size:32px;display:block;margin-bottom:7px;}
+.ash-upload-text{font-size:13px;color:var(--muted);}
+.ash-upload-sub{font-size:11px;color:var(--dim);margin-top:3px;}
+.ash-result{display:none;margin-top:14px;animation:fadeIn 0.3s ease;}
+.ash-result.show{display:block;}
+.ash-photo-wrap{position:relative;display:inline-block;margin-bottom:12px;}
+.ash-photo{max-width:100%;max-height:220px;object-fit:cover;border-radius:8px;border:1px solid var(--border-s);display:block;}
+.ash-badge{position:absolute;top:8px;right:8px;background:rgba(201,168,76,0.92);color:#1A1410;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.ash-analysis{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px;}
+.ash-analysis-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.ash-analysis-text{font-size:13px;color:var(--muted);line-height:1.7;}
+.ash-edu-box{background:var(--surface);border:0.5px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 16px;margin-top:14px;}
+.ash-edu-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;font-weight:600;}
+.ash-edu-text{font-size:12px;color:var(--muted);line-height:1.7;}
+.ash-personal-best{display:flex;align-items:center;gap:10px;background:rgba(201,168,76,0.08);border:0.5px solid var(--gold-dark);border-radius:8px;padding:9px 13px;margin-top:12px;}
+.ash-best-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);}
+.ash-best-val{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold-light);font-weight:700;}
+.ash-best-sub{font-size:11px;color:var(--dim);}
+.ash-loading{display:none;text-align:center;padding:14px;}
+.ash-loading.show{display:block;}
+
 .empty-state{text-align:center;padding:44px 20px;color:var(--dim);}
 .empty-icon{font-size:44px;display:block;margin-bottom:10px;opacity:0.5;}
 .empty-text{font-size:14px;margin-bottom:6px;color:var(--muted);}
@@ -189,6 +216,63 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 .about-footer{text-align:center;padding:20px 0 8px;border-top:0.5px solid var(--border);margin-top:20px;}
 .about-footer-word{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold-dark);letter-spacing:4px;}
 .about-footer-sub{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+/* ── EDIT MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.show{display:flex;animation:fadeIn 0.2s ease;}
+.modal-box{background:var(--surface);border:0.5px solid var(--border-s);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;animation:slideUp 0.25s ease;}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{background:none;border:none;color:var(--dim);font-size:22px;cursor:pointer;padding:0 4px;line-height:1;}
+.modal-close:hover{color:var(--gold);}
+.modal-actions{display:flex;gap:8px;margin-top:16px;}
+
+/* ── SMOKE TIMER ── */
+.timer-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.timer-display{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);min-width:80px;letter-spacing:2px;}
+.timer-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:2px;}
+.timer-cigar{font-size:12px;color:var(--muted);font-style:italic;}
+.timer-actions{display:flex;gap:6px;margin-left:auto;}
+.timer-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.18s;}
+.timer-btn.active{background:#1A3A0A;border-color:#5A9A3A;color:#7AC49A;}
+.timer-btn.stop{background:#3A1010;border-color:var(--red-l);color:#E8906A;}
+
+/* ── HUMIDOR SEARCH ── */
+.humidor-search-row{display:flex;gap:8px;margin-bottom:12px;}
+.humidor-search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;outline:none;}
+.humidor-search-input:focus{border-color:var(--border-s);}
+.humidor-search-input::placeholder{color:var(--dim);}
+.sort-select{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--muted);font-family:'Crimson Pro',serif;font-size:12px;outline:none;cursor:pointer;}
+.sort-select:focus{border-color:var(--border-s);}
+
+/* ── AGING BADGE ── */
+.aging-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:0.5px;}
+.aging-new{background:rgba(90,154,58,0.15);border:0.5px solid #5A9A3A;color:#7AC49A;}
+.aging-mid{background:rgba(201,168,76,0.15);border:0.5px solid var(--gold-dark);color:var(--gold);}
+.aging-long{background:rgba(196,128,58,0.15);border:0.5px solid #C4803A;color:#E8A86A;}
+
+/* ── COLLECTION VALUE ── */
+.value-summary{background:rgba(201,168,76,0.06);border:0.5px solid var(--gold-dark);border-radius:8px;padding:9px 13px;flex:1;min-width:80px;}
+.value-num{font-family:'Playfair Display',serif;font-size:21px;color:var(--gold);}
+.value-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
+
+/* ── SMOKED LOG FILTER ── */
+.smoked-filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.filter-pill{padding:4px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Crimson Pro',serif;font-size:11px;cursor:pointer;transition:all 0.15s;letter-spacing:0.5px;}
+.filter-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+.smoked-search-input{flex:1;min-width:140px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:6px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;outline:none;}
+.smoked-search-input:focus{border-color:var(--border-s);}
+.smoked-search-input::placeholder{color:var(--dim);}
+
+/* ── CIGAR OF THE DAY ── */
+.cotd-banner{background:var(--surface);border:1px solid var(--gold-dark);border-radius:12px;padding:16px;margin:0 16px 0;position:relative;overflow:hidden;}
+.cotd-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none;}
+.cotd-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:6px;font-weight:600;}
+.cotd-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:2px;}
+.cotd-brand{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.cotd-note{font-size:12px;color:var(--muted);line-height:1.6;font-style:italic;}
+.cotd-actions{display:flex;gap:7px;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border);}
+.cotd-loading{text-align:center;padding:12px;color:var(--dim);font-size:12px;font-style:italic;}
+
 </style>
 </head>
 <body>
@@ -249,6 +333,17 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
     <div class="summary-bar">
       <div class="summary-item"><div class="summary-num" id="h-count">0</div><div class="summary-lbl">Cigars</div></div>
       <div class="summary-item"><div class="summary-num" id="h-total">0</div><div class="summary-lbl">Total Stock</div></div>
+      <div class="value-summary"><div class="value-num" id="h-value">$0</div><div class="value-lbl">Collection Value</div></div>
+    </div>
+    <div class="humidor-search-row">
+      <input class="humidor-search-input" id="h-search" placeholder="Search by name, brand, wrapper..." oninput="renderHumidor()">
+      <select class="sort-select" id="h-sort" onchange="renderHumidor()">
+        <option value="added">Recently Added</option>
+        <option value="name">Name A–Z</option>
+        <option value="brand">Brand A–Z</option>
+        <option value="strength">Strength</option>
+        <option value="aging">Aging (Oldest First)</option>
+      </select>
     </div>
     <button class="btn btn-full" onclick="toggleAddForm('humidor-form')">+ Add Cigar to Humidor</button>
     <div class="add-form" id="humidor-form">
@@ -261,7 +356,9 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
         <div class="form-group"><label class="form-label">Strength</label>
           <select class="form-input" id="h-strength"><option>Mild</option><option>Mild-Medium</option><option>Medium</option><option>Medium-Full</option><option>Full</option></select></div>
         <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" id="h-qty" type="number" value="1" min="1"></div>
-        <div class="form-group full"><label class="form-label">Notes</label><input class="form-input" id="h-notes" placeholder="Purchase date, source, aging notes..."></div>
+        <div class="form-group"><label class="form-label">Purchase Date</label><input class="form-input" id="h-date" type="date"></div>
+        <div class="form-group"><label class="form-label">Price Per Cigar ($)</label><input class="form-input" id="h-price" type="number" placeholder="0.00" step="0.01" min="0"></div>
+        <div class="form-group full"><label class="form-label">Notes</label><input class="form-input" id="h-notes" placeholder="Source, aging notes, occasion..."></div>
       </div>
       <div class="form-actions">
         <button class="btn btn-primary" onclick="addToHumidor()">Add to Humidor</button>
@@ -299,6 +396,59 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
       <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Logged</div></div>
       <div class="summary-item"><div class="summary-num" id="s-avg">—</div><div class="summary-lbl">Avg Rating</div></div>
     </div>
+    <!-- SMOKE TIMER -->
+    <div class="timer-bar" style="flex-wrap:wrap;gap:10px;">
+      <div style="flex:1;min-width:120px;">
+        <div class="timer-label">Smoke Timer</div>
+        <div class="timer-display" id="timer-display">00:00</div>
+        <div class="timer-cigar" id="timer-cigar-name">No cigar active</div>
+      </div>
+      <div id="timer-input-wrap" style="display:flex;gap:7px;align-items:center;flex:1;min-width:180px;">
+        <input class="humidor-search-input" id="timer-cigar-input" placeholder="Cigar name..." style="flex:1;" onkeydown="if(event.key==='Enter')confirmStartTimer()">
+        <button class="timer-btn" id="timer-start-btn" onclick="confirmStartTimer()">▶ Start</button>
+      </div>
+      <div id="timer-running-wrap" style="display:none;align-items:center;gap:7px;">
+        <button class="timer-btn stop" id="timer-stop-btn" onclick="stopTimer()">■ Stop &amp; Log</button>
+      </div>
+    </div>
+
+    <!-- LONG ASH CHALLENGE -->
+    <div class="ash-challenge-box">
+      <div class="ash-title">🏆 Long Ash Challenge</div>
+      <div class="ash-subtitle">Submit a photo of your long ash. Claude will analyze its length and what it reveals about your cigar's construction — then explain why a long ash is the mark of a master roller.</div>
+      <div class="ash-upload-area" onclick="document.getElementById('ash-input').click()">
+        <span class="ash-upload-icon">🪶</span>
+        <div class="ash-upload-text">Tap to upload your long ash photo</div>
+        <div class="ash-upload-sub">Hold your cigar steady — the longer the better</div>
+      </div>
+      <input type="file" id="ash-input" accept="image/*" style="display:none" onchange="analyzeAsh(this)">
+      <div class="ash-loading" id="ash-loading">
+        <span class="loader"></span>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;">Measuring your ash...</div>
+      </div>
+      <div class="ash-result" id="ash-result">
+        <div class="ash-photo-wrap">
+          <img id="ash-photo" class="ash-photo" src="" alt="Long ash photo">
+          <div class="ash-badge" id="ash-length-badge">—</div>
+        </div>
+        <div class="ash-analysis">
+          <div class="ash-analysis-title">✦ Construction Analysis</div>
+          <div class="ash-analysis-text" id="ash-analysis-text"></div>
+        </div>
+        <div class="ash-edu-box">
+          <div class="ash-edu-title">Why Long Ash Contests Exist</div>
+          <div class="ash-edu-text" id="ash-edu-text"></div>
+        </div>
+        <div class="ash-personal-best" id="ash-best-wrap">
+          <div>
+            <div class="ash-best-label">Your Personal Best</div>
+            <div class="ash-best-val" id="ash-best-val">—</div>
+            <div class="ash-best-sub" id="ash-best-sub">No entries yet</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%;" onclick="resetAsh()">Try Another Photo</button>
+      </div>
+    </div>
     <button class="btn btn-full" onclick="toggleAddForm('smoked-form')">+ Log a Smoke</button>
     <div class="add-form" id="smoked-form">
       <div class="sec-title" style="font-size:16px;">Log a Smoke</div>
@@ -330,12 +480,31 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
       </div>
     </div>
     <div class="sec-title">Smoking Log</div>
+    <div class="smoked-filter-row">
+      <input class="smoked-search-input" id="s-search" placeholder="Search smokes..." oninput="renderSmoked()">
+      <div class="filter-pill active" onclick="setSmokedFilter('all',this)">All</div>
+      <div class="filter-pill" onclick="setSmokedFilter('5',this)">★★★★★</div>
+      <div class="filter-pill" onclick="setSmokedFilter('4',this)">★★★★+</div>
+      <div class="filter-pill" onclick="setSmokedFilter('3',this)">★★★+</div>
+    </div>
     <div id="smoked-list"><div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">No smokes logged yet</div><div class="empty-sub">Track smokes, ratings, and tasting notes</div></div></div>
   </div>
 
   <!-- GUIDE -->
   <div id="page-guide" class="page" style="padding:0;">
-    <div class="quote-banner">
+    <div class="cotd-banner" id="cotd-banner">
+      <div class="cotd-loading" id="cotd-loading"><span class="loader"></span> Loading today's cigar...</div>
+      <div id="cotd-content" style="display:none;">
+        <div class="cotd-label">✦ Cigar of the Day</div>
+        <div class="cotd-name" id="cotd-name"></div>
+        <div class="cotd-brand" id="cotd-brand"></div>
+        <div class="cotd-note" id="cotd-note"></div>
+        <div class="cotd-actions">
+          <button class="btn btn-sm btn-primary" onclick="searchFromCotd()">Search This Cigar</button>
+        </div>
+      </div>
+    </div>
+    <div class="quote-banner" style="margin-top:14px;">
       <div class="quote-label">Daily Cigar Wisdom</div>
       <span class="quote-ornament">"</span>
       <div class="quote-text" id="daily-quote"></div>
@@ -483,6 +652,79 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
     </div>
   </div>
 </div>
+
+<!-- EDIT MODALS -->
+<!-- Humidor Edit Modal -->
+<div class="modal-overlay" id="modal-humidor" onclick="if(event.target===this)closeModal('modal-humidor')">
+  <div class="modal-box">
+    <div class="modal-title">Edit Cigar <button class="modal-close" onclick="closeModal('modal-humidor')">✕</button></div>
+    <input type="hidden" id="edit-h-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-h-brand"></div>
+      <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="edit-h-name"></div>
+      <div class="form-group"><label class="form-label">Size</label><input class="form-input" id="edit-h-size"></div>
+      <div class="form-group"><label class="form-label">Wrapper</label><input class="form-input" id="edit-h-wrapper"></div>
+      <div class="form-group"><label class="form-label">Strength</label>
+        <select class="form-input" id="edit-h-strength"><option>Mild</option><option>Mild-Medium</option><option>Medium</option><option>Medium-Full</option><option>Full</option></select></div>
+      <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" id="edit-h-qty" type="number" min="1"></div>
+      <div class="form-group"><label class="form-label">Purchase Date</label><input class="form-input" id="edit-h-date" type="date"></div>
+      <div class="form-group"><label class="form-label">Price Per Cigar ($)</label><input class="form-input" id="edit-h-price" type="number" step="0.01" min="0"></div>
+      <div class="form-group full"><label class="form-label">Notes</label><input class="form-input" id="edit-h-notes"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditHumidor()">Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-humidor')">Cancel</button>
+      <button class="btn btn-danger" onclick="deleteFromHumidor()" style="margin-left:auto;">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Wishlist Edit Modal -->
+<div class="modal-overlay" id="modal-wishlist" onclick="if(event.target===this)closeModal('modal-wishlist')">
+  <div class="modal-box">
+    <div class="modal-title">Edit Wish List Entry <button class="modal-close" onclick="closeModal('modal-wishlist')">✕</button></div>
+    <input type="hidden" id="edit-w-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-w-brand"></div>
+      <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="edit-w-name"></div>
+      <div class="form-group"><label class="form-label">Size</label><input class="form-input" id="edit-w-size"></div>
+      <div class="form-group"><label class="form-label">Est. Price</label><input class="form-input" id="edit-w-price"></div>
+      <div class="form-group full"><label class="form-label">Why I want it</label><input class="form-input" id="edit-w-reason"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditWishlist()">Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-wishlist')">Cancel</button>
+      <button class="btn btn-danger" onclick="deleteFromWishlist()" style="margin-left:auto;">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Smoked Edit Modal -->
+<div class="modal-overlay" id="modal-smoked" onclick="if(event.target===this)closeModal('modal-smoked')">
+  <div class="modal-box">
+    <div class="modal-title">Edit Smoke Log <button class="modal-close" onclick="closeModal('modal-smoked')">✕</button></div>
+    <input type="hidden" id="edit-s-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-s-brand"></div>
+      <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="edit-s-name"></div>
+      <div class="form-group"><label class="form-label">Date Smoked</label><input class="form-input" id="edit-s-date" type="date"></div>
+      <div class="form-group"><label class="form-label">Location / Occasion</label><input class="form-input" id="edit-s-location"></div>
+      <div class="form-group full"><label class="form-label">Rating</label>
+        <div class="rating-stars" id="edit-stars">
+          <span class="star" onclick="setEditRating(1)">★</span><span class="star" onclick="setEditRating(2)">★</span>
+          <span class="star" onclick="setEditRating(3)">★</span><span class="star" onclick="setEditRating(4)">★</span>
+          <span class="star" onclick="setEditRating(5)">★</span>
+        </div>
+      </div>
+      <div class="form-group full"><label class="form-label">Tasting Notes</label><textarea class="smoke-note-area" id="edit-s-notes" style="min-height:80px;"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditSmoked()">Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-smoked')">Cancel</button>
+      <button class="btn btn-danger" onclick="deleteFromSmoked()" style="margin-left:auto;">Delete</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -494,6 +736,9 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 // ═══════════════════════════════════════════════════════════════════
 
 let humidor=[],wishlist=[],smoked=[],currentResult=null,newRatingVal=0,pendingPhotos=[];
+let editRatingVal=0;
+let timerInterval=null,timerSeconds=0,timerRunning=false;
+let smokedFilter='all';
 function loadData(){
   try{const h=localStorage.getItem('tc_humidor');if(h)humidor=JSON.parse(h);}catch(e){}
   try{const w=localStorage.getItem('tc_wishlist');if(w)wishlist=JSON.parse(w);}catch(e){}
@@ -552,7 +797,7 @@ function displayResult(cigar){currentResult=cigar;document.getElementById('res-n
 function addToHumidorFromResult(){if(!currentResult)return;humidor.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1});save();renderHumidor();showToast('Added to Humidor ✓');}
 function addToWishlistFromResult(){if(!currentResult)return;wishlist.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',price:'',reason:currentResult.tasting_notes||''});save();renderWishlist();showToast('Added to Wish List ✓');}
 function addToSmokedFromResult(){if(!currentResult)return;smoked.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,date:new Date().toISOString().split('T')[0],location:'',rating:0,notes:'',photos:[]});save();renderSmoked();showToast('Added to Smoking Log ✓');}
-function addToHumidor(){const name=document.getElementById('h-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}humidor.push({id:Date.now(),brand:document.getElementById('h-brand').value,name,size:document.getElementById('h-size').value,wrapper:document.getElementById('h-wrapper').value,strength:document.getElementById('h-strength').value,notes:document.getElementById('h-notes').value,qty:parseInt(document.getElementById('h-qty').value)||1});['h-brand','h-name','h-size','h-wrapper','h-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('h-qty').value=1;save();renderHumidor();toggleAddForm('humidor-form');showToast('Added to Humidor ✓');}
+function addToHumidor(){const name=document.getElementById('h-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}humidor.push({id:Date.now(),brand:document.getElementById('h-brand').value,name,size:document.getElementById('h-size').value,wrapper:document.getElementById('h-wrapper').value,strength:document.getElementById('h-strength').value,notes:document.getElementById('h-notes').value,qty:parseInt(document.getElementById('h-qty').value)||1,price:parseFloat(document.getElementById('h-price').value)||0,purchaseDate:document.getElementById('h-date').value||null});['h-brand','h-name','h-size','h-wrapper','h-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('h-qty').value=1;document.getElementById('h-price').value='';document.getElementById('h-date').value='';save();renderHumidor();toggleAddForm('humidor-form');showToast('Added to Humidor ✓');}
 function addToWishlist(){const name=document.getElementById('w-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}wishlist.push({id:Date.now(),brand:document.getElementById('w-brand').value,name,size:document.getElementById('w-size').value,price:document.getElementById('w-price').value,reason:document.getElementById('w-reason').value});['w-brand','w-name','w-size','w-price','w-reason'].forEach(id=>document.getElementById(id).value='');save();renderWishlist();toggleAddForm('wish-form');showToast('Added to Wish List ✓');}
 function setRating(n){newRatingVal=n;document.querySelectorAll('#new-stars .star').forEach((s,i)=>s.classList.toggle('lit',i<n));}
 function handlePhotoUpload(input){Array.from(input.files).forEach(file=>{const reader=new FileReader();reader.onload=e=>{pendingPhotos.push(e.target.result);const prev=document.getElementById('s-photo-preview');const img=document.createElement('img');img.src=e.target.result;img.className='photo-thumb';prev.appendChild(img);};reader.readAsDataURL(file);});}
@@ -561,9 +806,60 @@ function changeQty(id,delta){const c=humidor.find(h=>h.id===id);if(!c)return;c.q
 function moveToHumidor(id){const c=wishlist.find(w=>w.id===id);if(!c)return;humidor.push({id:Date.now(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(w=>w.id!==id);save();renderWishlist();renderHumidor();showToast('Moved to Humidor ✓');}
 function removeWish(id){wishlist=wishlist.filter(w=>w.id!==id);save();renderWishlist();}
 function removeSmoked(id){smoked=smoked.filter(s=>s.id!==id);save();renderSmoked();}
-function renderHumidor(){const total=humidor.reduce((a,c)=>a+(c.qty||1),0);document.getElementById('h-count').textContent=humidor.length;document.getElementById('h-total').textContent=total;const list=document.getElementById('humidor-list');if(!humidor.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or from the Scanner</div></div>';return;}list.innerHTML=humidor.map(c=>`<div class="cigar-card"><div class="card-band"></div><div class="card-body"><div class="card-name">${c.name}</div><div class="card-brand">${c.brand||'Unknown Brand'}</div><div class="card-meta">${c.size?`<span class="meta-pill">${c.size}</span>`:''} ${c.wrapper?`<span class="meta-pill">${c.wrapper}</span>`:''} ${c.strength?`<span class="meta-pill">${c.strength}</span>`:''}</div>${c.notes?`<div class="personal-note">${c.notes}</div>`:''}</div><div class="card-actions"><div class="qty-control"><button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button><span class="qty-num">${c.qty||1}</span><button class="qty-btn" onclick="changeQty(${c.id},1)">+</button></div></div></div>`).join('');}
-function renderWishlist(){const list=document.getElementById('wish-list');if(!wishlist.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">✨</span><div class="empty-text">Your wish list is empty</div><div class="empty-sub">Add cigars you\'d like to try someday</div></div>';return;}list.innerHTML=wishlist.map(c=>`<div class="cigar-card"><div class="card-band wish"></div><div class="card-body"><div class="card-name">${c.name}</div><div class="card-brand">${c.brand||'Unknown Brand'}</div><div class="card-meta">${c.size?`<span class="meta-pill">${c.size}</span>`:''} ${c.price?`<span class="meta-pill">${c.price}</span>`:''}</div>${c.reason?`<div class="personal-note">${c.reason}</div>`:''}</div><div class="card-actions" style="flex-direction:column;gap:5px"><button class="btn btn-sm" onclick="moveToHumidor(${c.id})">→ Humidor</button><button class="btn btn-sm btn-danger" onclick="removeWish(${c.id})">Remove</button></div></div>`).join('');}
-function renderSmoked(){const ratings=smoked.filter(s=>s.rating>0).map(s=>s.rating);document.getElementById('s-count').textContent=smoked.length;document.getElementById('s-avg').textContent=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+' ★':'—';const list=document.getElementById('smoked-list');if(!smoked.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">No smokes logged yet</div><div class="empty-sub">Track smokes, ratings, and tasting notes</div></div>';return;}list.innerHTML=[...smoked].reverse().map(c=>`<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">${c.name}</div><div class="card-brand">${c.brand||'Unknown Brand'}</div><div class="card-meta">${c.date?`<span class="meta-pill">${c.date}</span>`:''} ${c.location?`<span class="meta-pill">${c.location}</span>`:''}</div>${c.rating?`<div class="rating-stars" style="margin-top:5px">${'<span class="star lit">★</span>'.repeat(c.rating)+'<span class="star">★</span>'.repeat(5-c.rating)}</div>`:''} ${c.notes?`<div class="personal-note">${c.notes}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="removeSmoked(${c.id})" style="flex-shrink:0">✕</button></div>${c.photos&&c.photos.length?`<div class="photo-strip">${c.photos.map(p=>`<img src="${p}" class="photo-thumb">`).join('')}</div>`:''}</div>`).join('');}
+function renderHumidor(){
+  const total=humidor.reduce((a,c)=>a+(c.qty||1),0);
+  const value=humidor.reduce((a,c)=>a+((c.price||0)*(c.qty||1)),0);
+  document.getElementById('h-count').textContent=humidor.length;
+  document.getElementById('h-total').textContent=total;
+  document.getElementById('h-value').textContent='$'+value.toFixed(0);
+  const q=(document.getElementById('h-search')||{value:''}).value.toLowerCase();
+  const sort=(document.getElementById('h-sort')||{value:'added'}).value;
+  let list=[...humidor];
+  if(q)list=list.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.brand||'').toLowerCase().includes(q)||(c.wrapper||'').toLowerCase().includes(q)||(c.strength||'').toLowerCase().includes(q));
+  if(sort==='name')list.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  else if(sort==='brand')list.sort((a,b)=>(a.brand||'').localeCompare(b.brand||''));
+  else if(sort==='strength'){const o=['Mild','Mild-Medium','Medium','Medium-Full','Full'];list.sort((a,b)=>o.indexOf(a.strength)-o.indexOf(b.strength));}
+  else if(sort==='aging')list.sort((a,b)=>(a.purchaseDate||'9999')>(b.purchaseDate||'9999')?1:-1);
+  const el=document.getElementById('humidor-list');
+  if(!list.length){el.innerHTML=q?'<div class="empty-state"><div class="empty-text">No cigars match your search</div></div>':'<div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or from the Scanner</div></div>';return;}
+  const today=new Date();
+  el.innerHTML=list.map(c=>{
+    let agingHtml='';
+    if(c.purchaseDate){const days=Math.floor((today-new Date(c.purchaseDate))/86400000);const cls=days<30?'aging-new':days<180?'aging-mid':'aging-long';agingHtml=`<span class="aging-badge ${cls}">${days}d aging</span>`;}
+    const priceHtml=c.price?`<span class="meta-pill">$${(c.price*1).toFixed(0)}/ea</span>`:'';
+    return `<div class="cigar-card"><div class="card-band"></div><div class="card-body"><div class="card-name">${c.name}</div><div class="card-brand">${c.brand||'Unknown Brand'}</div><div class="card-meta">${c.size?`<span class="meta-pill">${c.size}</span>`:''} ${c.wrapper?`<span class="meta-pill">${c.wrapper}</span>`:''} ${c.strength?`<span class="meta-pill">${c.strength}</span>`:''} ${priceHtml} ${agingHtml}</div>${c.notes?`<div class="personal-note">${c.notes}</div>`:''}</div><div class="card-actions" style="flex-direction:column;gap:5px;"><div class="qty-control"><button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button><span class="qty-num">${c.qty||1}</span><button class="qty-btn" onclick="changeQty(${c.id},1)">+</button></div><button class="btn btn-sm btn-ghost" onclick="openEditHumidor(${c.id})">Edit</button></div></div>`;
+  }).join('');
+}
+function renderWishlist(){
+  const list=document.getElementById('wish-list');
+  if(!wishlist.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">✨</span><div class="empty-text">Your wish list is empty</div><div class="empty-sub">Add cigars you would like to try someday</div></div>';return;}
+  list.innerHTML=wishlist.map(function(c){
+    return '<div class="cigar-card"><div class="card-band wish"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+(c.size?'<span class="meta-pill">'+c.size+'</span>':'')+' '+(c.price?'<span class="meta-pill">'+c.price+'</span>':'')+'</div>'+(c.reason?'<div class="personal-note">'+c.reason+'</div>':'')+'</div><div class="card-actions" style="flex-direction:column;gap:5px"><button class="btn btn-sm" onclick="moveToHumidor('+c.id+')">→ Humidor</button><button class="btn btn-sm btn-ghost" onclick="openEditWishlist('+c.id+')">Edit</button><button class="btn btn-sm btn-danger" onclick="removeWish('+c.id+')">Remove</button></div></div>';
+  }).join('');
+}
+function renderSmoked(){
+  const ratings=smoked.filter(s=>s.rating>0).map(s=>s.rating);
+  document.getElementById('s-count').textContent=smoked.length;
+  document.getElementById('s-avg').textContent=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+' ★':'—';
+  const q=(document.getElementById('s-search')||{value:''}).value.toLowerCase();
+  const minRating=smokedFilter==='all'?0:parseInt(smokedFilter);
+  let list=[...smoked].reverse();
+  if(q)list=list.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.brand||'').toLowerCase().includes(q)||(c.notes||'').toLowerCase().includes(q));
+  if(minRating>0)list=list.filter(c=>c.rating>=minRating);
+  const el=document.getElementById('smoked-list');
+  if(!list.length){
+    el.innerHTML=q||minRating?'<div class="empty-state"><div class="empty-text">No smokes match your filter</div></div>':'<div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">No smokes logged yet</div><div class="empty-sub">Track smokes, ratings, and tasting notes</div></div>';
+    return;
+  }
+  el.innerHTML=list.map(function(c){
+    var stars=c.rating?('<div class="rating-stars" style="margin-top:5px">'+('<span class="star lit">★</span>').repeat(c.rating)+('<span class="star">★</span>').repeat(5-c.rating)+'</div>'):'';
+    var note=c.notes?('<div class="personal-note">'+c.notes+'</div>'):'';
+    var datePill=c.date?('<span class="meta-pill">'+c.date+'</span>'):'';
+    var locPill=c.location?('<span class="meta-pill">'+c.location+'</span>'):'';
+    var photos=c.photos&&c.photos.length?('<div class="photo-strip">'+c.photos.map(function(p){return '<img src="'+p+'" class="photo-thumb">';}).join('')+'</div>'):'';
+    return '<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+datePill+' '+locPill+'</div>'+stars+note+'</div><div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;"><button class="btn btn-sm btn-ghost" onclick="openEditSmoked('+c.id+')">Edit</button><button class="btn btn-sm btn-danger" onclick="removeSmoked('+c.id+')">✕</button></div></div>'+photos+'</div>';
+  }).join('');
+}
 function renderAll(){renderHumidor();renderWishlist();renderSmoked();}
 
 const quotes=[{q:"A good cigar is as great a comfort to a man as a good cry to a woman.",a:"Edward Bulwer-Lytton"},{q:"The cigar is the perfect complement of a good life.",a:"Zino Davidoff"},{q:"If I had taken my doctor's advice and quit smoking when he advised me to, I wouldn't have lived to go to his funeral.",a:"George Burns"},{q:"A woman is just a woman, but a good cigar is a smoke.",a:"Rudyard Kipling"},{q:"Happiness is a good cigar and a good book.",a:"Groucho Marx"},{q:"There are two things a man never forgets: his first love and his first cigar.",a:"Anonymous"},{q:"The most precious things in life cannot be seen or touched — they are felt with the heart and tasted in a fine cigar.",a:"Zino Davidoff"},{q:"Life is too short to smoke bad cigars.",a:"Anonymous"},{q:"A fine cigar is the punctuation mark of a civilized life.",a:"Anonymous"},{q:"Smoke slowly. Think deeply. Ash gracefully.",a:"Anonymous"},{q:"The first third is introduction, the second third is conversation, the final third is revelation.",a:"Cigar Aficionado"},{q:"No matter what Aristotle and the Philosophers say, nothing is equal to tobacco.",a:"Molière"},{q:"Every cigar is a small autobiography.",a:"Anonymous"},{q:"Age and experience taught me one thing: never rush a fine cigar or a good conversation.",a:"Anonymous"},{q:"In every puff there is a pause — and in every pause, wisdom.",a:"Anonymous"},{q:"A day without a cigar is just a day.",a:"Anonymous"},{q:"The true aficionado does not smoke cigars — he contemplates them.",a:"Anonymous"},{q:"Find a porch, a sunset, and a well-constructed cigar. The rest follows.",a:"Anonymous"},{q:"A premium cigar demands nothing but your full, unhurried attention.",a:"Anonymous"},{q:"A cigar shared among friends is worth twice the smoke.",a:"Anonymous"}];
@@ -597,6 +893,258 @@ document.getElementById('flame-guide').innerHTML=flames.map(f=>`<div style="disp
 
 document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
 loadData();
+
+// ── EDIT FUNCTIONS ───────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('show');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('show');document.body.style.overflow='';}
+
+// HUMIDOR EDIT
+function openEditHumidor(id){
+  const c=humidor.find(h=>h.id===id);if(!c)return;
+  document.getElementById('edit-h-id').value=id;
+  document.getElementById('edit-h-brand').value=c.brand||'';
+  document.getElementById('edit-h-name').value=c.name||'';
+  document.getElementById('edit-h-size').value=c.size||'';
+  document.getElementById('edit-h-wrapper').value=c.wrapper||'';
+  document.getElementById('edit-h-strength').value=c.strength||'Medium';
+  document.getElementById('edit-h-qty').value=c.qty||1;
+  document.getElementById('edit-h-date').value=c.purchaseDate||'';
+  document.getElementById('edit-h-price').value=c.price||'';
+  document.getElementById('edit-h-notes').value=c.notes||'';
+  openModal('modal-humidor');
+}
+function saveEditHumidor(){
+  const id=parseInt(document.getElementById('edit-h-id').value);
+  const c=humidor.find(h=>h.id===id);if(!c)return;
+  c.brand=document.getElementById('edit-h-brand').value;
+  c.name=document.getElementById('edit-h-name').value;
+  c.size=document.getElementById('edit-h-size').value;
+  c.wrapper=document.getElementById('edit-h-wrapper').value;
+  c.strength=document.getElementById('edit-h-strength').value;
+  c.qty=parseInt(document.getElementById('edit-h-qty').value)||1;
+  c.purchaseDate=document.getElementById('edit-h-date').value||null;
+  c.price=parseFloat(document.getElementById('edit-h-price').value)||0;
+  c.notes=document.getElementById('edit-h-notes').value;
+  save();renderHumidor();closeModal('modal-humidor');showToast('Humidor entry updated ✓');
+}
+function deleteFromHumidor(){
+  const id=parseInt(document.getElementById('edit-h-id').value);
+  humidor=humidor.filter(h=>h.id!==id);
+  save();renderHumidor();closeModal('modal-humidor');showToast('Removed from Humidor');
+}
+
+// WISHLIST EDIT
+function openEditWishlist(id){
+  const c=wishlist.find(w=>w.id===id);if(!c)return;
+  document.getElementById('edit-w-id').value=id;
+  document.getElementById('edit-w-brand').value=c.brand||'';
+  document.getElementById('edit-w-name').value=c.name||'';
+  document.getElementById('edit-w-size').value=c.size||'';
+  document.getElementById('edit-w-price').value=c.price||'';
+  document.getElementById('edit-w-reason').value=c.reason||'';
+  openModal('modal-wishlist');
+}
+function saveEditWishlist(){
+  const id=parseInt(document.getElementById('edit-w-id').value);
+  const c=wishlist.find(w=>w.id===id);if(!c)return;
+  c.brand=document.getElementById('edit-w-brand').value;
+  c.name=document.getElementById('edit-w-name').value;
+  c.size=document.getElementById('edit-w-size').value;
+  c.price=document.getElementById('edit-w-price').value;
+  c.reason=document.getElementById('edit-w-reason').value;
+  save();renderWishlist();closeModal('modal-wishlist');showToast('Wish list entry updated ✓');
+}
+function deleteFromWishlist(){
+  const id=parseInt(document.getElementById('edit-w-id').value);
+  wishlist=wishlist.filter(w=>w.id!==id);
+  save();renderWishlist();closeModal('modal-wishlist');showToast('Removed from Wish List');
+}
+
+// SMOKED EDIT
+function setEditRating(n){
+  editRatingVal=n;
+  document.querySelectorAll('#edit-stars .star').forEach((s,i)=>s.classList.toggle('lit',i<n));
+}
+function openEditSmoked(id){
+  const c=smoked.find(s=>s.id===id);if(!c)return;
+  document.getElementById('edit-s-id').value=id;
+  document.getElementById('edit-s-brand').value=c.brand||'';
+  document.getElementById('edit-s-name').value=c.name||'';
+  document.getElementById('edit-s-date').value=c.date||'';
+  document.getElementById('edit-s-location').value=c.location||'';
+  document.getElementById('edit-s-notes').value=c.notes||'';
+  editRatingVal=c.rating||0;
+  document.querySelectorAll('#edit-stars .star').forEach((s,i)=>s.classList.toggle('lit',i<editRatingVal));
+  openModal('modal-smoked');
+}
+function saveEditSmoked(){
+  const id=parseInt(document.getElementById('edit-s-id').value);
+  const c=smoked.find(s=>s.id===id);if(!c)return;
+  c.brand=document.getElementById('edit-s-brand').value;
+  c.name=document.getElementById('edit-s-name').value;
+  c.date=document.getElementById('edit-s-date').value;
+  c.location=document.getElementById('edit-s-location').value;
+  c.notes=document.getElementById('edit-s-notes').value;
+  c.rating=editRatingVal;
+  save();renderSmoked();closeModal('modal-smoked');showToast('Smoke log updated ✓');
+}
+function deleteFromSmoked(){
+  const id=parseInt(document.getElementById('edit-s-id').value);
+  smoked=smoked.filter(s=>s.id!==id);
+  save();renderSmoked();closeModal('modal-smoked');showToast('Entry deleted');
+}
+// ── SMOKE TIMER ──────────────────────────────────────────────────
+function confirmStartTimer(){
+  // Clear any existing timer first
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  // Get cigar name — use placeholder text if empty
+  var inputEl=document.getElementById('timer-cigar-input');
+  var name=inputEl.value.trim()||'Cigar';
+  // Reset and start
+  timerSeconds=0;
+  timerRunning=true;
+  // Update display
+  document.getElementById('timer-cigar-name').textContent=name;
+  document.getElementById('timer-display').textContent='00:00';
+  document.getElementById('timer-input-wrap').style.display='none';
+  document.getElementById('timer-running-wrap').style.display='flex';
+  // Start interval
+  timerInterval=setInterval(function(){
+    timerSeconds++;
+    var m=Math.floor(timerSeconds/60).toString().padStart(2,'0');
+    var s=(timerSeconds%60).toString().padStart(2,'0');
+    document.getElementById('timer-display').textContent=m+':'+s;
+  },1000);
+  showToast('Timer started — smoking '+name);
+}
+function startTimer(){confirmStartTimer();}
+function stopTimer(){
+  clearInterval(timerInterval);timerRunning=false;
+  var m=Math.floor(timerSeconds/60);var s=timerSeconds%60;
+  var duration=m+'m '+s+'s';
+  var cigar=document.getElementById('timer-cigar-name').textContent;
+  showToast('Smoke time: '+duration+' — pre-filled below!');
+  document.getElementById('s-name').value=cigar;
+  document.getElementById('s-notes').value='Smoke duration: '+duration;
+  document.getElementById('timer-input-wrap').style.display='flex';
+  document.getElementById('timer-running-wrap').style.display='none';
+  document.getElementById('timer-display').textContent='00:00';
+  document.getElementById('timer-cigar-name').textContent='No cigar active';
+  document.getElementById('timer-cigar-input').value='';
+  timerSeconds=0;
+  var f=document.getElementById('smoked-form');
+  if(!f.classList.contains('show')){f.classList.add('show');f.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+
+// ── HUMIDOR SEARCH & SORT ────────────────────────────────────────
+function setSmokedFilter(val,el){
+  smokedFilter=val;
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderSmoked();
+}
+
+// ── CIGAR OF THE DAY ─────────────────────────────────────────────
+let cotdCache=null;
+async function loadCigarOfTheDay(){
+  const today=new Date().toDateString();
+  try{const cached=localStorage.getItem('tc_cotd');if(cached){const c=JSON.parse(cached);if(c.date===today){cotdCache=c;showCotd(c);return;}}}catch(e){}
+  try{
+    const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',max_tokens:300,
+        system:'You are an expert cigar sommelier. Return ONLY valid JSON.',
+        messages:[{role:'user',content:'Recommend one premium cigar for today, '+new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+'. Return JSON with: name, brand, strength, why_today (one sentence on why this cigar suits today — season, mood, occasion).'}]
+      })
+    });
+    const data=await res.json();
+    if(data.error)throw new Error();
+    const text=data.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim();
+    const cotd=JSON.parse(text);cotd.date=today;
+    localStorage.setItem('tc_cotd',JSON.stringify(cotd));
+    showCotd(cotd);
+  }catch(e){
+    document.getElementById("cotd-loading").textContent="Could not load today's cigar.";
+  }
+}
+function showCotd(c){
+  document.getElementById('cotd-loading').style.display='none';
+  document.getElementById('cotd-name').textContent=c.name||'';
+  document.getElementById('cotd-brand').textContent=(c.brand||'').toUpperCase()+' · '+( c.strength||'');
+  document.getElementById('cotd-note').textContent=c.why_today||'';
+  document.getElementById('cotd-content').style.display='block';
+  cotdCache=c;
+}
+function searchFromCotd(){
+  if(!cotdCache)return;
+  document.getElementById('cigar-search').value=cotdCache.name;
+  showPage('scanner',document.querySelector('.nav-tab'));
+  searchCigar();
+}
+loadCigarOfTheDay();
+
+// ── LONG ASH CHALLENGE ────────────────────────────────────────────
+let ashPersonalBest = null;
+function loadAshBest(){try{const b=localStorage.getItem('tc_ashbest');if(b)ashPersonalBest=JSON.parse(b);}catch(e){}}
+function saveAshBest(){try{localStorage.setItem('tc_ashbest',JSON.stringify(ashPersonalBest));}catch(e){}}
+
+async function analyzeAsh(input){
+  if(!input.files[0])return;
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    const b64=e.target.result.split(',')[1];
+    document.getElementById('ash-photo').src=e.target.result;
+    document.getElementById('ash-result').classList.remove('show');
+    document.getElementById('ash-loading').classList.add('show');
+    try{
+      const prompt='Analyze this cigar ash photo. Return ONLY JSON with keys: estimated_length (e.g. 1.5 inches), construction_analysis (2-3 sentences on construction quality), why_contests_exist (2-3 sentences on long ash contest tradition), quality_verdict (Excellent, Very Good, Good, or Fair).';
+      const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-6',
+          max_tokens:500,
+          system:'You are an expert cigar sommelier and judge. Return ONLY valid JSON, no markdown.',
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
+            {type:'text',text:prompt}
+          ]}]
+        })
+      });
+      const data=await res.json();
+      if(data.error)throw new Error(data.error.message);
+      const text=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
+      const result=JSON.parse(text);
+      document.getElementById('ash-loading').classList.remove('show');
+      document.getElementById('ash-length-badge').textContent=result.estimated_length||'Measured';
+      document.getElementById('ash-analysis-text').textContent=result.construction_analysis||'';
+      document.getElementById('ash-edu-text').textContent=result.why_contests_exist||'';
+      loadAshBest();
+      var entry={length:result.estimated_length,verdict:result.quality_verdict,date:new Date().toLocaleDateString()};
+      if(!ashPersonalBest){ashPersonalBest=entry;}
+      else{var oldLen=parseFloat(ashPersonalBest.length)||0;var newLen=parseFloat(result.estimated_length)||0;if(newLen>oldLen)ashPersonalBest=entry;}
+      saveAshBest();
+      document.getElementById('ash-best-val').textContent=ashPersonalBest.length;
+      document.getElementById('ash-best-sub').textContent=ashPersonalBest.verdict+' · '+ashPersonalBest.date;
+      document.getElementById('ash-result').classList.add('show');
+    }catch(err){
+      document.getElementById('ash-loading').classList.remove('show');
+      console.error('Ash error:',err);
+      showToast('Could not analyze — try a clearer photo');
+    }
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function resetAsh(){
+  document.getElementById('ash-result').classList.remove('show');
+  document.getElementById('ash-input').value='';
+}
+
+// Load ash personal best on startup
+loadAshBest();
+
 </script>
 </body>
 </html>
