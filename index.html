@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1A1410">
 <title>Torcida — The Art of the Cigar</title>
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Philosopher:ital,wght@1,700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
 --gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#8B6914;
@@ -16,27 +18,27 @@
 --red:#8B3A2A;--red-l:#C4503A;
 --btn-bg:#2E2410;--btn-bg-h:#3D3018;--btn-border:#C9A84C;
 }
-body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padding-bottom:20px;}
+body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padding-bottom:20px;font-size:17px;line-height:1.5;}
 .app{max-width:780px;margin:0 auto;}
 .header{padding:20px 20px 14px;border-bottom:0.5px solid var(--border);background:rgba(201,168,76,0.03);}
 .header-top{display:flex;align-items:center;gap:12px;margin-bottom:3px;}
-.brand-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--gold);letter-spacing:1.5px;}
-.brand-sub{font-size:11px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;padding-left:44px;}
+.brand-title{font-family:'Philosopher',serif;font-size:34px;font-weight:700;font-style:italic;color:var(--gold);letter-spacing:2px;}
+.brand-sub{font-size:15px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;text-align:center;}
 .nav{display:flex;background:var(--surface);border-bottom:0.5px solid var(--border);overflow-x:auto;}
 .nav::-webkit-scrollbar{display:none;}
-.nav-tab{flex:1;min-width:60px;padding:12px 4px 10px;text-align:center;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'Crimson Pro',serif;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;transition:all 0.2s;border-bottom:2px solid transparent;}
+.nav-tab{flex:1;min-width:60px;padding:12px 4px 10px;text-align:center;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;transition:all 0.2s;border-bottom:2px solid transparent;}
 .nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.05);}
 .nav-tab:hover:not(.active){color:var(--gold-light);background:rgba(255,255,255,0.03);}
-.nav-icon{font-size:16px;display:block;margin-bottom:2px;}
-.page{display:none;padding:18px 16px;}
+.nav-icon{font-size:19.2px;display:block;margin-bottom:2px;}
+.page{display:none;padding:16px 14px;}
 .page.active{display:block;}
-.sec-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
 .sec-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
-.btn{padding:10px 18px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.18s;white-space:nowrap;letter-spacing:0.3px;}
+.btn{padding:10px 18px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:17px;font-weight:600;cursor:pointer;transition:all 0.18s;white-space:nowrap;letter-spacing:0.3px;}
 .btn:hover{background:var(--btn-bg-h);color:#FFE08A;border-color:var(--gold-light);}
 .btn-primary{background:#2A2008;border-color:var(--gold);border-width:1.5px;}
 .btn-primary:hover{background:#3A2E0C;color:#FFE08A;}
-.btn-sm{padding:6px 12px;font-size:12px;font-weight:600;}
+.btn-sm{padding:6px 12px;font-size:17px;font-weight:600;}
 .btn-ghost{border-color:rgba(201,168,76,0.35);color:var(--gold);background:transparent;}
 .btn-ghost:hover{color:var(--gold-light);border-color:var(--gold);background:rgba(201,168,76,0.07);}
 .btn-danger{border-color:rgba(196,80,58,0.6);color:#E8906A;background:rgba(139,58,42,0.2);}
@@ -46,25 +48,25 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 .scanner-box::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 29px,rgba(201,168,76,0.03) 30px);pointer-events:none;}
 .scanner-line{width:60%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto;animation:scan 2s ease-in-out infinite;}
 @keyframes scan{0%,100%{opacity:0.3;transform:scaleX(0.5);}50%{opacity:1;transform:scaleX(1);}}
-.scanner-text{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+.scanner-text{font-size:17px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
 .input-row{display:flex;gap:8px;margin-bottom:14px;}
-.search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text);font-family:'Crimson Pro',serif;font-size:15px;outline:none;}
+.search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:13px 15px;color:var(--text);font-family:'Crimson Pro',serif;font-size:18px;outline:none;}
 .search-input:focus{border-color:var(--border-s);}
 .search-input::placeholder{color:var(--dim);}
 .cigar-result{background:var(--surface);border:0.5px solid var(--border-s);border-radius:12px;padding:18px;margin-bottom:14px;display:none;}
 .cigar-result.show{display:block;animation:fadeIn 0.3s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.cigar-name{font-family:'Playfair Display',serif;font-size:19px;color:var(--gold-light);margin-bottom:3px;}
-.cigar-brand{font-size:12px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
+.cigar-name{font-family:'Playfair Display',serif;font-size:22.8px;color:var(--gold-light);margin-bottom:3px;}
+.cigar-brand{font-size:17px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
 .cigar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
 .stat-box{background:var(--surface2);border-radius:7px;padding:9px 11px;border:0.5px solid var(--border);}
-.stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:3px;}
-.stat-val{font-size:14px;color:var(--text);font-weight:500;}
+.stat-label{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:3px;}
+.stat-val{font-size:17px;color:var(--text);font-weight:500;}
 .notes-block{margin-bottom:12px;}
-.notes-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--gold-dark);margin-bottom:5px;font-weight:600;}
-.notes-text{font-size:13px;color:var(--muted);line-height:1.6;}
+.notes-label{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--gold-dark);margin-bottom:5px;font-weight:600;}
+.notes-text{font-size:17px;color:var(--muted);line-height:1.6;}
 .flavor-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
-.tag{background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;padding:2px 9px;font-size:11px;color:var(--muted);}
+.tag{background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;padding:2px 9px;font-size:15px;color:var(--muted);}
 .tag.gold{border-color:var(--gold-dark);color:var(--gold);background:rgba(201,168,76,0.08);}
 .result-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--border);}
 .cigar-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.2s;}
@@ -73,221 +75,287 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 .card-band.wish{background:var(--red-l);}
 .card-band.smoked{background:#5A7A4A;}
 .card-body{flex:1;min-width:0;}
-.card-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);margin-bottom:2px;}
-.card-brand{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.card-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:2px;}
+.card-brand{font-size:15px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
 .card-meta{display:flex;gap:8px;flex-wrap:wrap;}
-.meta-pill{font-size:11px;color:var(--dim);background:var(--surface2);padding:2px 7px;border-radius:10px;}
+.meta-pill{font-size:15px;color:var(--dim);background:var(--surface2);padding:2px 7px;border-radius:10px;}
 .card-actions{display:flex;gap:5px;align-items:flex-start;flex-shrink:0;}
 .qty-control{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--btn-border);border-radius:8px;padding:3px 7px;}
-.qty-btn{background:none;border:none;color:var(--gold-light);font-size:17px;cursor:pointer;padding:0 1px;line-height:1;font-weight:700;}
+.qty-btn{background:none;border:none;color:var(--gold-light);font-size:20.4px;cursor:pointer;padding:0 1px;line-height:1;font-weight:700;}
 .qty-btn:hover{color:#FFE08A;}
-.qty-num{font-size:14px;color:var(--gold-light);min-width:20px;text-align:center;font-weight:600;}
+.qty-num{font-size:17px;color:var(--gold-light);min-width:20px;text-align:center;font-weight:600;}
 .rating-stars{display:flex;gap:2px;margin:5px 0;}
-.star{font-size:15px;cursor:pointer;color:var(--dim);transition:color 0.1s;}
+.star{font-size:18px;cursor:pointer;color:var(--dim);transition:color 0.1s;}
 .star.lit{color:var(--gold);}
-.personal-note{font-size:12px;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.5;border-left:2px solid var(--border);padding-left:9px;}
+.personal-note{font-size:17px;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.5;border-left:2px solid var(--border);padding-left:9px;}
 .photo-strip{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;}
 .photo-thumb{width:60px;height:60px;object-fit:cover;border-radius:6px;border:0.5px solid var(--border);}
-.photo-add{width:60px;height:60px;border-radius:6px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--dim);font-size:20px;background:var(--surface2);transition:all 0.2s;}
+.photo-add{width:60px;height:60px;border-radius:6px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--dim);font-size:24px;background:var(--surface2);transition:all 0.2s;}
 .photo-add:hover{border-color:var(--gold-dark);color:var(--gold);}
 .ash-challenge-box{background:var(--surface);border:1px solid var(--gold-dark);border-radius:12px;padding:20px;margin-bottom:18px;position:relative;overflow:hidden;}
 .ash-challenge-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.06) 0%,transparent 70%);pointer-events:none;}
-.ash-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
-.ash-subtitle{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.ash-title{font-family:'Playfair Display',serif;font-size:20.4px;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.ash-subtitle{font-size:17px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
 .ash-upload-area{border:1.5px dashed var(--gold-dark);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:14px;background:var(--surface2);}
 .ash-upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.05);}
-.ash-upload-icon{font-size:32px;display:block;margin-bottom:7px;}
-.ash-upload-text{font-size:13px;color:var(--muted);}
-.ash-upload-sub{font-size:11px;color:var(--dim);margin-top:3px;}
+.ash-upload-icon{font-size:38.4px;display:block;margin-bottom:7px;}
+.ash-upload-text{font-size:17px;color:var(--muted);}
+.ash-upload-sub{font-size:15px;color:var(--dim);margin-top:3px;}
 .ash-result{display:none;margin-top:14px;animation:fadeIn 0.3s ease;}
 .ash-result.show{display:block;}
 .ash-photo-wrap{position:relative;display:inline-block;margin-bottom:12px;}
 .ash-photo{max-width:100%;max-height:220px;object-fit:cover;border-radius:8px;border:1px solid var(--border-s);display:block;}
-.ash-badge{position:absolute;top:8px;right:8px;background:rgba(201,168,76,0.92);color:#1A1410;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.ash-badge{position:absolute;top:8px;right:8px;background:rgba(201,168,76,0.92);color:#1A1410;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;padding:4px 10px;border-radius:20px;}
 .ash-analysis{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px;}
-.ash-analysis-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.ash-analysis-text{font-size:13px;color:var(--muted);line-height:1.7;}
+.ash-analysis-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.ash-analysis-text{font-size:17px;color:var(--muted);line-height:1.7;}
 .ash-edu-box{background:var(--surface);border:0.5px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 16px;margin-top:14px;}
-.ash-edu-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;font-weight:600;}
-.ash-edu-text{font-size:12px;color:var(--muted);line-height:1.7;}
+.ash-edu-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;font-weight:600;}
+.ash-edu-text{font-size:17px;color:var(--muted);line-height:1.7;}
 .ash-personal-best{display:flex;align-items:center;gap:10px;background:rgba(201,168,76,0.08);border:0.5px solid var(--gold-dark);border-radius:8px;padding:9px 13px;margin-top:12px;}
-.ash-best-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);}
-.ash-best-val{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold-light);font-weight:700;}
-.ash-best-sub{font-size:11px;color:var(--dim);}
+.ash-best-label{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);}
+.ash-best-val{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold-light);font-weight:700;}
+.ash-best-sub{font-size:15px;color:var(--dim);}
 .ash-loading{display:none;text-align:center;padding:14px;}
 .ash-loading.show{display:block;}
 
 .empty-state{text-align:center;padding:44px 20px;color:var(--dim);}
-.empty-icon{font-size:44px;display:block;margin-bottom:10px;opacity:0.5;}
-.empty-text{font-size:14px;margin-bottom:6px;color:var(--muted);}
-.empty-sub{font-size:12px;}
+.empty-icon{font-size:52.8px;display:block;margin-bottom:10px;opacity:0.5;}
+.empty-text{font-size:17px;margin-bottom:6px;color:var(--muted);}
+.empty-sub{font-size:17px;}
 .add-form{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;display:none;}
 .add-form.show{display:block;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .form-group{display:flex;flex-direction:column;gap:4px;}
 .form-group.full{grid-column:1/-1;}
-.form-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold-dark);}
-.form-input{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;outline:none;}
+.form-label{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold-dark);}
+.form-input{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;outline:none;}
 .form-input:focus{border-color:var(--border-s);}
 .form-actions{display:flex;gap:7px;margin-top:14px;}
-.smoke-note-area{width:100%;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;resize:vertical;min-height:72px;outline:none;}
+.smoke-note-area{width:100%;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;resize:vertical;min-height:72px;outline:none;}
 .smoke-note-area:focus{border-color:var(--border-s);}
 .summary-bar{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
 .summary-item{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 13px;flex:1;min-width:80px;}
-.summary-num{font-family:'Playfair Display',serif;font-size:21px;color:var(--gold);}
-.summary-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
+.summary-num{font-family:'Playfair Display',serif;font-size:25.2px;color:var(--gold);}
+.summary-lbl{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
 .loader{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-left:6px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface3);border:0.5px solid var(--border-s);color:var(--gold-light);padding:9px 18px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface3);border:0.5px solid var(--border-s);color:var(--gold-light);padding:9px 18px;border-radius:20px;font-size:17px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;}
 .quote-banner{background:var(--surface);border-bottom:0.5px solid var(--border);padding:18px 20px;text-align:center;}
-.quote-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
-.quote-ornament{color:var(--gold-dark);font-size:26px;font-family:'Playfair Display',serif;line-height:0.8;display:block;margin-bottom:5px;}
-.quote-text{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--gold-light);line-height:1.6;max-width:580px;margin:0 auto 7px;}
-.quote-attr{font-size:11px;color:var(--muted);letter-spacing:1px;}
+.quote-label{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.quote-ornament{color:var(--gold-dark);font-size:31.2px;font-family:'Playfair Display',serif;line-height:0.8;display:block;margin-bottom:5px;}
+.quote-text{font-family:'Playfair Display',serif;font-style:italic;font-size:18px;color:var(--gold-light);line-height:1.6;max-width:580px;margin:0 auto 7px;}
+.quote-attr{font-size:15px;color:var(--muted);letter-spacing:1px;}
 .info-pills{display:flex;gap:5px;padding:14px 16px 0;flex-wrap:wrap;}
-.pill{background:var(--btn-bg);border:1px solid var(--btn-border);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);cursor:pointer;transition:all 0.2s;font-family:'Crimson Pro',serif;font-weight:600;}
+.pill{background:var(--btn-bg);border:1px solid var(--btn-border);border-radius:20px;padding:5px 14px;font-size:15px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);cursor:pointer;transition:all 0.2s;font-family:'Crimson Pro',serif;font-weight:600;}
 .pill.active{background:#3A2E0C;border-color:var(--gold-light);color:var(--gold-light);}
 .pill:hover:not(.active){background:var(--btn-bg-h);color:var(--gold-light);border-color:var(--gold-light);}
 .info-sec{display:none;padding:16px;}
 .info-sec.active{display:block;}
-.info-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:5px;}
-.info-sub{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+.info-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:5px;}
+.info-sub{font-size:17px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
 .shapes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px;}
 .shape-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 10px;transition:border-color 0.2s;display:flex;flex-direction:column;align-items:center;}
 .shape-card:hover{border-color:var(--border-s);}
 .shape-visual{display:flex;justify-content:center;align-items:flex-end;height:96px;margin-bottom:9px;width:100%;}
-.shape-name{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-light);margin-bottom:2px;text-align:center;}
-.shape-dim{font-size:10px;color:var(--gold-dark);letter-spacing:0.5px;margin-bottom:4px;text-align:center;}
-.shape-desc{font-size:11px;color:var(--muted);line-height:1.4;text-align:center;}
+.shape-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:2px;text-align:center;}
+.shape-dim{font-size:13px;color:var(--gold-dark);letter-spacing:0.5px;margin-bottom:4px;text-align:center;}
+.shape-desc{font-size:15px;color:var(--muted);line-height:1.4;text-align:center;}
 .str-row{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;margin-bottom:7px;}
 .str-row:hover{border-color:var(--border-s);}
-.str-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);min-width:110px;}
+.str-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);min-width:110px;}
 .str-bar-wrap{flex:1;}
 .str-bar{height:5px;border-radius:3px;background:var(--surface3);}
 .str-fill{height:100%;border-radius:3px;}
-.str-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
-.str-ex{font-size:10px;color:var(--dim);margin-top:2px;font-style:italic;}
+.str-desc{font-size:15px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.str-ex{font-size:13px;color:var(--dim);margin-top:2px;font-style:italic;}
 .cuts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
 .cut-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;transition:border-color 0.2s;}
 .cut-card:hover{border-color:var(--border-s);}
 .cut-vis{display:flex;justify-content:center;margin-bottom:10px;height:76px;align-items:center;}
-.cut-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);margin-bottom:3px;}
-.cut-badge{display:inline-block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-bottom:7px;border:0.5px solid;}
-.cut-desc{font-size:11px;color:var(--muted);line-height:1.5;}
-.cut-pro{font-size:10px;color:#7AC49A;margin-top:5px;}
-.cut-con{font-size:10px;color:#E8906A;margin-top:2px;}
+.cut-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:3px;}
+.cut-badge{display:inline-block;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-bottom:7px;border:0.5px solid;}
+.cut-desc{font-size:15px;color:var(--muted);line-height:1.5;}
+.cut-pro{font-size:13px;color:#7AC49A;margin-top:5px;}
+.cut-con{font-size:13px;color:#E8906A;margin-top:2px;}
 .step{display:flex;gap:12px;margin-bottom:13px;padding:14px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;}
 .step:hover{border-color:var(--border-s);}
-.step-num{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,0.15);border:1px solid var(--gold-dark);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);flex-shrink:0;font-weight:700;}
-.step-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-light);margin-bottom:3px;}
-.step-text{font-size:12px;color:var(--muted);line-height:1.5;}
-.step-tip{font-size:11px;color:var(--gold-dark);margin-top:4px;padding-left:9px;border-left:2px solid var(--gold-dark);}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,0.15);border:1px solid var(--gold-dark);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);flex-shrink:0;font-weight:700;}
+.step-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:3px;}
+.step-text{font-size:17px;color:var(--muted);line-height:1.5;}
+.step-tip{font-size:15px;color:var(--gold-dark);margin-top:4px;padding-left:9px;border-left:2px solid var(--gold-dark);}
 .wrapper-swatch{height:24px;border-radius:5px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:4px;}
-.ornament-div{text-align:center;color:var(--gold-dark);font-size:16px;margin:14px 0;letter-spacing:6px;}
+.ornament-div{text-align:center;color:var(--gold-dark);font-size:19.2px;margin:14px 0;letter-spacing:6px;}
 
 /* ABOUT PAGE */
 .about-hero{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
 .about-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.07) 0%,transparent 70%);pointer-events:none;}
-.about-logo-word{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--gold);letter-spacing:4px;margin-bottom:6px;}
-.about-tagline{font-size:13px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;}
-.about-ornament{color:var(--gold-dark);font-size:22px;letter-spacing:8px;margin-bottom:18px;display:block;}
-.about-intro{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--gold-light);line-height:1.7;max-width:540px;margin:0 auto;}
+.about-logo-word{font-family:'Philosopher',serif;font-size:58px;font-weight:700;font-style:italic;color:var(--gold);letter-spacing:4px;margin-bottom:6px;}
+.about-tagline{font-size:17px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;}
+.about-ornament{color:var(--gold-dark);font-size:26.4px;letter-spacing:8px;margin-bottom:18px;display:block;}
+.about-intro{font-family:'Playfair Display',serif;font-style:italic;font-size:20.4px;color:var(--gold-light);line-height:1.7;max-width:540px;margin:0 auto;}
 .about-section{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:22px 20px;margin-bottom:14px;}
-.about-section-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.about-section-title{font-family:'Playfair Display',serif;font-size:20.4px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
 .about-section-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
-.about-body{font-size:14px;color:var(--muted);line-height:1.8;}
+.about-body{font-size:17px;color:var(--muted);line-height:1.7;}
 .about-body p{margin-bottom:12px;}
 .about-body p:last-child{margin-bottom:0;}
 .about-body strong{color:var(--gold-light);font-weight:600;}
 .tribute-block{background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:16px 18px;margin:14px 0;}
-.tribute-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--gold-light);line-height:1.7;margin-bottom:8px;}
-.tribute-attr{font-size:11px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;}
+.tribute-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:18px;color:var(--gold-light);line-height:1.7;margin-bottom:8px;}
+.tribute-attr{font-size:15px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;}
 .roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px;}
 .role-card{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px 12px;text-align:center;transition:border-color 0.2s;}
 .role-card:hover{border-color:var(--border-s);}
-.role-icon{font-size:26px;display:block;margin-bottom:8px;}
-.role-name{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-light);margin-bottom:4px;}
-.role-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+.role-icon{font-size:31.2px;display:block;margin-bottom:8px;}
+.role-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:4px;}
+.role-desc{font-size:15px;color:var(--muted);line-height:1.4;}
 .about-values{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
 .value-item{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px 12px;}
-.value-title{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
-.value-text{font-size:12px;color:var(--muted);line-height:1.5;}
+.value-title{font-size:17px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.value-text{font-size:17px;color:var(--muted);line-height:1.5;}
 .about-footer{text-align:center;padding:20px 0 8px;border-top:0.5px solid var(--border);margin-top:20px;}
-.about-footer-word{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold-dark);letter-spacing:4px;}
-.about-footer-sub{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.about-footer-word{font-family:'Playfair Display',serif;font-size:26.4px;color:var(--gold-dark);letter-spacing:4px;}
+.about-footer-sub{font-size:15px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
 /* ── EDIT MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.show{display:flex;animation:fadeIn 0.2s ease;}
 .modal-box{background:var(--surface);border:0.5px solid var(--border-s);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;animation:slideUp 0.25s ease;}
 @keyframes slideUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-.modal-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
-.modal-close{background:none;border:none;color:var(--dim);font-size:22px;cursor:pointer;padding:0 4px;line-height:1;}
+.modal-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{background:none;border:none;color:var(--dim);font-size:26.4px;cursor:pointer;padding:0 4px;line-height:1;}
 .modal-close:hover{color:var(--gold);}
 .modal-actions{display:flex;gap:8px;margin-top:16px;}
 
 /* ── SMOKE TIMER ── */
 .timer-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
-.timer-display{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);min-width:80px;letter-spacing:2px;}
-.timer-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:2px;}
-.timer-cigar{font-size:12px;color:var(--muted);font-style:italic;}
+.timer-display{font-family:'Playfair Display',serif;font-size:33.6px;color:var(--gold);min-width:80px;letter-spacing:2px;}
+.timer-label{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:2px;}
+.timer-cigar{font-size:17px;color:var(--muted);font-style:italic;}
 .timer-actions{display:flex;gap:6px;margin-left:auto;}
-.timer-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.18s;}
+.timer-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:17px;font-weight:600;cursor:pointer;transition:all 0.18s;}
 .timer-btn.active{background:#1A3A0A;border-color:#5A9A3A;color:#7AC49A;}
 .timer-btn.stop{background:#3A1010;border-color:var(--red-l);color:#E8906A;}
 
 /* ── HUMIDOR SEARCH ── */
 .humidor-search-row{display:flex;gap:8px;margin-bottom:12px;}
-.humidor-search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;outline:none;}
+.humidor-search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;outline:none;}
 .humidor-search-input:focus{border-color:var(--border-s);}
 .humidor-search-input::placeholder{color:var(--dim);}
-.sort-select{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--muted);font-family:'Crimson Pro',serif;font-size:12px;outline:none;cursor:pointer;}
+.sort-select{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--muted);font-family:'Crimson Pro',serif;font-size:17px;outline:none;cursor:pointer;}
 .sort-select:focus{border-color:var(--border-s);}
 
 /* ── AGING BADGE ── */
-.aging-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:0.5px;}
+.aging-badge{font-size:13px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:0.5px;}
 .aging-new{background:rgba(90,154,58,0.15);border:0.5px solid #5A9A3A;color:#7AC49A;}
 .aging-mid{background:rgba(201,168,76,0.15);border:0.5px solid var(--gold-dark);color:var(--gold);}
 .aging-long{background:rgba(196,128,58,0.15);border:0.5px solid #C4803A;color:#E8A86A;}
 
 /* ── COLLECTION VALUE ── */
 .value-summary{background:rgba(201,168,76,0.06);border:0.5px solid var(--gold-dark);border-radius:8px;padding:9px 13px;flex:1;min-width:80px;}
-.value-num{font-family:'Playfair Display',serif;font-size:21px;color:var(--gold);}
-.value-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
+.value-num{font-family:'Playfair Display',serif;font-size:25.2px;color:var(--gold);}
+.value-lbl{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
 
 /* ── SMOKED LOG FILTER ── */
 .smoked-filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
-.filter-pill{padding:4px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Crimson Pro',serif;font-size:11px;cursor:pointer;transition:all 0.15s;letter-spacing:0.5px;}
+.filter-pill{padding:4px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Crimson Pro',serif;font-size:15px;cursor:pointer;transition:all 0.15s;letter-spacing:0.5px;}
 .filter-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
-.smoked-search-input{flex:1;min-width:140px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:6px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;outline:none;}
+.smoked-search-input{flex:1;min-width:140px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:6px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;outline:none;}
 .smoked-search-input:focus{border-color:var(--border-s);}
 .smoked-search-input::placeholder{color:var(--dim);}
 
-/* ── CIGAR OF THE DAY ── */
-.cotd-banner{background:var(--surface);border:1px solid var(--gold-dark);border-radius:12px;padding:16px;margin:0 16px 0;position:relative;overflow:hidden;}
-.cotd-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none;}
-.cotd-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:6px;font-weight:600;}
-.cotd-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:2px;}
-.cotd-brand{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
-.cotd-note{font-size:12px;color:var(--muted);line-height:1.6;font-style:italic;}
-.cotd-actions{display:flex;gap:7px;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border);}
-.cotd-loading{text-align:center;padding:12px;color:var(--dim);font-size:12px;font-style:italic;}
 
+
+/* ── SMOKE BACKGROUND ── */
+.smoke-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
+.app{position:relative;z-index:1;}
+.modal-overlay{z-index:500;}
+.toast{z-index:999;}
+@keyframes drift1{0%{transform:translateY(100vh) translateX(0) scaleX(1);}50%{transform:translateY(40vh) translateX(30px) scaleX(1.2);}100%{transform:translateY(-20vh) translateX(-10px) scaleX(0.8);opacity:0;}}
+@keyframes drift2{0%{transform:translateY(100vh) translateX(0) scaleX(1);}50%{transform:translateY(50vh) translateX(-25px) scaleX(0.9);}100%{transform:translateY(-10vh) translateX(20px) scaleX(1.1);opacity:0;}}
+@keyframes drift3{0%{transform:translateY(100vh) translateX(0);}50%{transform:translateY(45vh) translateX(15px);}100%{transform:translateY(-15vh) translateX(-20px);opacity:0;}}
+.wisp{position:absolute;bottom:-100px;opacity:0;animation-timing-function:ease-in-out;animation-iteration-count:infinite;}
+.wisp1{left:15%;animation:drift1 18s 0s infinite;opacity:0;}
+.wisp2{left:40%;animation:drift2 22s 4s infinite;opacity:0;}
+.wisp3{left:70%;animation:drift1 20s 8s infinite;opacity:0;}
+.wisp4{left:55%;animation:drift3 25s 2s infinite;opacity:0;}
+.wisp5{left:25%;animation:drift2 19s 11s infinite;opacity:0;}
+/* ── MOBILE OPTIMIZATIONS ── */
+*{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overscroll-behavior-y:none;}
+input,select,textarea{font-size:17px !important;} /* Prevents iOS zoom on focus */
+
+/* Touch targets — Apple minimum 44x44pt */
+.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
+.btn-sm{min-height:44px;padding:10px 14px;}
+.btn-full{min-height:48px;}
+.nav-tab{min-height:52px;padding:10px 4px 8px;}
+.qty-btn{min-width:36px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;}
+.star{font-size:28px;padding:4px;min-width:36px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;} /* Larger star tap targets */
+.filter-pill{min-height:36px;display:inline-flex;align-items:center;}
+.pill{min-height:36px;display:inline-flex;align-items:center;}
+
+/* Single column forms on mobile */
+@media (max-width: 500px) {
+  .form-grid{grid-template-columns:1fr !important;}
+  .form-group.full{grid-column:1 !important;}
+  .cigar-grid{grid-template-columns:1fr 1fr !important;}
+  .about-values{grid-template-columns:1fr !important;}
+  .cuts-grid{grid-template-columns:1fr !important;}
+  .shapes-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr)) !important;}
+  .roles-grid{grid-template-columns:1fr 1fr !important;}
+  .timer-bar{flex-direction:column;gap:8px;}
+  .summary-bar{gap:8px;}
+  .summary-item,.value-summary{padding:8px 10px;}
+  .result-actions{gap:6px;}
+  .result-actions .btn{flex:1;min-width:0;text-align:center;}
+  .modal-box{padding:18px 14px 28px;}
+  .humidor-search-row{flex-direction:column;}
+  .sort-select{width:100%;}
+  .smoked-filter-row{gap:4px;}
+  .card-actions{flex-direction:row !important;flex-wrap:wrap;}
+}
+
+/* Smooth scrolling for lists */
+.page{-webkit-overflow-scrolling:touch;}
+
+/* Better input styling on iOS */
+input[type="date"]{appearance:none;-webkit-appearance:none;}
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
+
+/* Fix inline 10px font-size in wrapper guide */
+.wrapper-label{font-size:13px !important;color:var(--gold);}
 </style>
 </head>
 <body>
+<div class="smoke-bg" aria-hidden="true">
+  <svg class="wisp wisp1" width="60" height="200" viewBox="0 0 60 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M30 200 Q20 170 32 140 Q44 110 28 80 Q12 50 30 20 Q36 8 30 0" stroke="rgba(201,168,76,0.07)" stroke-width="18" stroke-linecap="round" fill="none"/>
+    <path d="M30 200 Q20 170 32 140 Q44 110 28 80 Q12 50 30 20 Q36 8 30 0" stroke="rgba(201,168,76,0.04)" stroke-width="30" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp2" width="50" height="180" viewBox="0 0 50 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25 180 Q35 155 22 125 Q9 95 28 65 Q40 45 24 15 Q20 5 25 0" stroke="rgba(201,168,76,0.06)" stroke-width="14" stroke-linecap="round" fill="none"/>
+    <path d="M25 180 Q35 155 22 125 Q9 95 28 65 Q40 45 24 15 Q20 5 25 0" stroke="rgba(201,168,76,0.03)" stroke-width="26" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp3" width="55" height="190" viewBox="0 0 55 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M27 190 Q18 162 30 130 Q42 98 25 68 Q10 42 28 14 Q32 5 27 0" stroke="rgba(201,168,76,0.05)" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <path d="M27 190 Q18 162 30 130 Q42 98 25 68 Q10 42 28 14 Q32 5 27 0" stroke="rgba(201,168,76,0.025)" stroke-width="28" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp4" width="45" height="170" viewBox="0 0 45 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 170 Q32 145 20 118 Q8 90 24 62 Q36 40 22 12 Q18 4 22 0" stroke="rgba(201,168,76,0.055)" stroke-width="12" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp5" width="50" height="185" viewBox="0 0 50 185" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25 185 Q15 158 27 126 Q39 94 23 64 Q9 38 26 10 Q30 3 25 0" stroke="rgba(201,168,76,0.045)" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <path d="M25 185 Q15 158 27 126 Q39 94 23 64 Q9 38 26 10 Q30 3 25 0" stroke="rgba(201,168,76,0.02)" stroke-width="28" stroke-linecap="round" fill="none"/>
+  </svg>
+</div>
 <div class="app">
   <div class="header">
-    <div class="header-top">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <ellipse cx="16" cy="22" rx="12" ry="5" fill="rgba(201,168,76,0.15)" stroke="#C9A84C" stroke-width="0.5"/>
-        <path d="M6 22 Q8 10 16 8 Q24 10 26 22" fill="rgba(201,168,76,0.08)" stroke="#C9A84C" stroke-width="0.8"/>
-        <path d="M16 8 Q18 4 20 3" stroke="#C9A84C" stroke-width="0.8" stroke-linecap="round"/>
-        <circle cx="21" cy="2.5" r="1.5" fill="#C9A84C" opacity="0.6"/>
-      </svg>
-      <span class="brand-title">Torcida</span>
+    <div class="header-top" style="justify-content:center;">
+      <span class="brand-title" style="letter-spacing:3px;">Torcida</span>
     </div>
-    <div class="brand-sub">The Art of the Cigar</div>
+    <div class="brand-sub" style="text-align:center;padding-left:0;">The Art of the Cigar</div>
   </div>
 
   <nav class="nav">
@@ -492,19 +560,7 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 
   <!-- GUIDE -->
   <div id="page-guide" class="page" style="padding:0;">
-    <div class="cotd-banner" id="cotd-banner">
-      <div class="cotd-loading" id="cotd-loading"><span class="loader"></span> Loading today's cigar...</div>
-      <div id="cotd-content" style="display:none;">
-        <div class="cotd-label">✦ Cigar of the Day</div>
-        <div class="cotd-name" id="cotd-name"></div>
-        <div class="cotd-brand" id="cotd-brand"></div>
-        <div class="cotd-note" id="cotd-note"></div>
-        <div class="cotd-actions">
-          <button class="btn btn-sm btn-primary" onclick="searchFromCotd()">Search This Cigar</button>
-        </div>
-      </div>
-    </div>
-    <div class="quote-banner" style="margin-top:14px;">
+    <div class="quote-banner">
       <div class="quote-label">Daily Cigar Wisdom</div>
       <span class="quote-ornament">"</span>
       <div class="quote-text" id="daily-quote"></div>
@@ -526,7 +582,7 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
       <div class="info-sub">Strength refers to nicotine content and body — not flavor intensity. Always eat before smoking a full-strength cigar.</div>
       <div id="str-track"></div>
       <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 15px;margin-top:14px;">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:9px;">Wrapper color guide</div>
+        <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:9px;">Wrapper color guide</div>
         <div id="wrapper-guide"></div>
       </div>
     </div>
@@ -541,7 +597,7 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
       <div id="light-steps"></div>
       <div class="ornament-div">— ✦ —</div>
       <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 15px;">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px;">Heat source guide</div>
+        <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px;">Heat source guide</div>
         <div id="flame-guide"></div>
       </div>
     </div>
@@ -559,18 +615,15 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
     <div class="about-section">
       <div class="about-section-title">What is Torcida</div>
       <div class="about-body">
-        <p>Torcida is a cigar companion app built for <strong>everyone who loves cigars</strong> — whether you smoked your first one last weekend or you've been collecting for decades. We believe the cigar world is at its best when it's open, generous, and welcoming to all.</p>
-        <p>Inside Torcida you'll find an <strong>AI-powered cigar scanner</strong> to identify and learn about any cigar, a personal <strong>humidor tracker</strong> to manage your collection, a <strong>wish list</strong> for the ones you're hunting, a <strong>smoking journal</strong> to capture every memory, and a full <strong>reference guide</strong> covering everything from shapes and strengths to how to properly light a cigar for the first time.</p>
-        <p>Whether you need to know the difference between a Robusto and a Churchill, or you just want to remember that perfect smoke on a Tuesday evening in September — <strong>Torcida is built for you.</strong></p>
+        <p>Torcida is your <strong>AI-powered cigar companion</strong> — built for everyone from the first-time smoker to the seasoned collector. Search any cigar for rich tasting notes and pairing recommendations, track your humidor, log every smoke, and explore the craft through a beautifully designed reference guide.</p>
+        <p><strong>One app. Every part of the ritual.</strong></p>
       </div>
     </div>
 
     <div class="about-section">
       <div class="about-section-title">Cigar Culture is for Everyone</div>
       <div class="about-body">
-        <p>Cigar culture has a long and storied history, but it has not always opened its arms wide enough. Torcida was built on a simple belief: <strong>the ritual of a great cigar belongs to anyone who wants it.</strong></p>
-        <p>You don't need to know the difference between a Habano and a Corojo wrapper to deserve a seat at the table. You don't need to have been smoking for twenty years. You don't need to speak a certain language, earn a certain income, or fit a certain image. <strong>All you need is curiosity and a willingness to slow down.</strong></p>
-        <p>The cigar is one of the few rituals left in modern life that genuinely demands patience. It cannot be rushed. It rewards attention. And in that shared slowness, something remarkable happens — <strong>strangers become friends, and conversations go deeper.</strong> That is the culture we want to build around Torcida.</p>
+        <p>You don't need twenty years of experience to deserve a seat at the table. <strong>All you need is curiosity and a willingness to slow down.</strong> Torcida was built to make the cigar world as welcoming to the newcomer as it is rewarding to the aficionado.</p>
         <div class="tribute-block">
           <div class="tribute-quote">"In the cigar lounge, the corner office and the first job blur together. The smoke is the same. The pause is the same. The moment is the same."</div>
           <div class="tribute-attr">— The Torcida Philosophy</div>
@@ -581,12 +634,8 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
     <div class="about-section">
       <div class="about-section-title">Why We Are Called Torcida</div>
       <div class="about-body">
-        <p>The name <strong>Torcida</strong> is a deliberate and heartfelt tribute to the people who make every premium cigar possible — the men and women whose skilled hands transform raw tobacco leaf into the cigars we love.</p>
-        <p>In Spanish, <em>torcida</em> is the feminine past participle of <em>torcer</em> — meaning something that has been <strong>carefully twisted and rolled by hand</strong>. It is what every premium cigar literally is. A thing made with patience, precision, and generational craft.</p>
-        <p>But we chose the feminine form intentionally. Because the cigar industry — particularly in Cuba, Nicaragua, Honduras, and the Dominican Republic — has always been built significantly on <strong>the labor, skill, and artistry of women.</strong> The escogedoras who sort and grade the leaves. The rezagadoras who select and match wrappers by color and texture. The torcedoras who roll cigars with a precision that takes years to master. Their names rarely appear on the bands. Their faces are rarely in the advertisements. <strong>But without them, there is no cigar.</strong></p>
-      </div>
-
-      <div class="roles-grid">
+        <p><strong>Torcida</strong> is the feminine past participle of "to roll" in Spanish and Portuguese — a deliberate tribute to the women whose skilled hands have built the premium cigar industry for generations. Their names are rarely on the bands, but <strong>without them, there is no cigar.</strong> In Portuguese, torcida also means a passionate, devoted fan base — which is exactly what we are building.</p>
+      </div><div class="roles-grid">
         <div class="role-card">
           <span class="role-icon">🌱</span>
           <div class="role-name">Veguero</div>
@@ -880,7 +929,7 @@ const strengths=[{name:'Mild',pct:20,fill:'#8BBF7A',desc:'Smooth and creamy. Gre
 const strTrack=document.getElementById('str-track');
 strengths.forEach(s=>{strTrack.innerHTML+=`<div class="str-row"><svg width="16" height="20" viewBox="0 0 16 20" style="flex-shrink:0"><path d="M8 2 C8 2 13 7 13 12 C13 15.9 10.8 18 8 18 C5.2 18 3 15.9 3 12 C3 7 8 2 8 2Z" fill="${s.fill}" opacity="0.85"/></svg><div class="str-name">${s.name}</div><div class="str-bar-wrap"><div class="str-bar"><div class="str-fill" style="width:${s.pct}%;background:${s.fill};"></div></div><div class="str-desc">${s.desc}</div><div class="str-ex">${s.ex}</div></div></div>`;});
 const wrappers=[{c:'#F5E6B8',l:'Claro'},{c:'#D4A866',l:'Natural'},{c:'#A0703A',l:'Colorado'},{c:'#7A4E22',l:'Colo. Maduro'},{c:'#4A2810',l:'Maduro'},{c:'#2C1808',l:'Oscuro'}];
-document.getElementById('wrapper-guide').innerHTML=`<div style="display:flex;gap:5px;flex-wrap:wrap;">${wrappers.map(w=>`<div style="text-align:center;flex:1;min-width:70px;"><div class="wrapper-swatch" style="background:${w.c};"></div><div style="font-size:10px;color:var(--gold);">${w.l}</div></div>`).join('')}</div><div style="font-size:11px;color:var(--dim);margin-top:8px;font-style:italic;">Darker wrappers suggest longer fermentation. Blend construction matters far more than wrapper color alone.</div>`;
+document.getElementById('wrapper-guide').innerHTML=`<div style="display:flex;gap:5px;flex-wrap:wrap;">${wrappers.map(w=>`<div style="text-align:center;flex:1;min-width:70px;"><div class="wrapper-swatch" style="background:${w.c};"></div><div style="font-size:13px;color:var(--gold);">${w.l}</div></div>`).join('')}</div><div style="font-size:11px;color:var(--dim);margin-top:8px;font-style:italic;">Darker wrappers suggest longer fermentation. Blend construction matters far more than wrapper color alone.</div>`;
 
 const cuts=[{name:'Straight cut',badge:'Most popular',bc:'#2A5A3A',bt:'#7AC49A',desc:'Clean horizontal cut. Works on all shapes.',pro:'Easy to master, universal',con:'Can unravel if cut too deep',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><line x1="12" y1="20" x2="68" y2="20" stroke="#E8C97A" stroke-width="1.5" stroke-dasharray="3,2"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">cut line</text></svg>`},{name:'V-cut',badge:'Wide ring',bc:'#2A3A5A',bt:'#7A9AC4',desc:'Wedge notch concentrates smoke.',pro:'Great airflow on 50+ ring gauges',con:'Can clog if too shallow',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><path d="M28 20 L40 30 L52 20" fill="#1A1410" stroke="#E8C97A" stroke-width="1.5"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">v-notch</text></svg>`},{name:'Punch cut',badge:'Precise',bc:'#3A2A5A',bt:'#9A7AC4',desc:'Circular punch. Compact, ideal for travel.',pro:'No unraveling risk',con:'Can restrict on tight caps',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><circle cx="40" cy="14" r="6" fill="#1A1410" stroke="#E8C97A" stroke-width="1.5"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">punch hole</text></svg>`},{name:'Shuriken',badge:'Advanced',bc:'#5A3A2A',bt:'#C49A7A',desc:'Spiral cuts maximize airflow and flavor.',pro:'Maximum draw',con:'Requires specialty cutter',svg:`<svg width="80" height="76" viewBox="0 0 80 76"><rect x="20" y="8" width="40" height="52" rx="7" fill="#7A3A1A" opacity="0.9"/><ellipse cx="40" cy="8" rx="14" ry="5" fill="#8B4A20"/><line x1="34" y1="8" x2="46" y2="20" stroke="#E8C97A" stroke-width="1.5"/><line x1="40" y1="6" x2="40" y2="22" stroke="#E8C97A" stroke-width="1.5"/><line x1="46" y1="8" x2="34" y2="20" stroke="#E8C97A" stroke-width="1.5"/><text x="40" y="72" text-anchor="middle" font-size="9" fill="#C9A84C" font-family="serif">spiral cuts</text></svg>`}];
 document.getElementById('cuts-grid').innerHTML=cuts.map(c=>`<div class="cut-card"><div class="cut-vis">${c.svg}</div><div class="cut-name">${c.name}</div><span class="cut-badge" style="background:${c.bc}25;border-color:${c.bc};color:${c.bt};">${c.badge}</span><div class="cut-desc">${c.desc}</div><div class="cut-pro">+ ${c.pro}</div><div class="cut-con">− ${c.con}</div></div>`).join('');
@@ -1044,45 +1093,12 @@ function setSmokedFilter(val,el){
   renderSmoked();
 }
 
-// ── CIGAR OF THE DAY ─────────────────────────────────────────────
-let cotdCache=null;
-async function loadCigarOfTheDay(){
-  const today=new Date().toDateString();
-  try{const cached=localStorage.getItem('tc_cotd');if(cached){const c=JSON.parse(cached);if(c.date===today){cotdCache=c;showCotd(c);return;}}}catch(e){}
-  try{
-    const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',max_tokens:300,
-        system:'You are an expert cigar sommelier. Return ONLY valid JSON.',
-        messages:[{role:'user',content:'Recommend one premium cigar for today, '+new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+'. Return JSON with: name, brand, strength, why_today (one sentence on why this cigar suits today — season, mood, occasion).'}]
-      })
-    });
-    const data=await res.json();
-    if(data.error)throw new Error();
-    const text=data.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim();
-    const cotd=JSON.parse(text);cotd.date=today;
-    localStorage.setItem('tc_cotd',JSON.stringify(cotd));
-    showCotd(cotd);
-  }catch(e){
-    document.getElementById("cotd-loading").textContent="Could not load today's cigar.";
-  }
-}
-function showCotd(c){
-  document.getElementById('cotd-loading').style.display='none';
-  document.getElementById('cotd-name').textContent=c.name||'';
-  document.getElementById('cotd-brand').textContent=(c.brand||'').toUpperCase()+' · '+( c.strength||'');
-  document.getElementById('cotd-note').textContent=c.why_today||'';
-  document.getElementById('cotd-content').style.display='block';
-  cotdCache=c;
-}
 function searchFromCotd(){
   if(!cotdCache)return;
   document.getElementById('cigar-search').value=cotdCache.name;
   showPage('scanner',document.querySelector('.nav-tab'));
   searchCigar();
 }
-loadCigarOfTheDay();
 
 // ── LONG ASH CHALLENGE ────────────────────────────────────────────
 let ashPersonalBest = null;
