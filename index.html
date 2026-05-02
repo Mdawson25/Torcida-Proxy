@@ -336,6 +336,19 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 .quiz-rec-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;}
 .quiz-rec-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;}
 .quiz-rec-brand{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── MULTI HUMIDOR ── */
+.humidor-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.humidor-tabs::-webkit-scrollbar{display:none;}
+.humidor-tab-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border-s);background:var(--surface);color:var(--muted);font-family:'Crimson Pro',serif;font-size:14px;cursor:pointer;transition:all 0.15s;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+.humidor-tab-btn.active{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:600;}
+.humidor-tab-btn.add-new{background:transparent;border:1.5px dashed var(--border-s);color:var(--gold);}
+.humidor-info-bar{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;}
+.humidor-info-col{flex:1;min-width:120px;}
+.humidor-info-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:3px;}
+.humidor-info-val{font-size:15px;color:var(--text);font-weight:600;}
+.humidor-info-sub{font-size:12px;color:var(--muted);}
+.humi-type-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(139,94,60,0.1);border:0.5px solid var(--border-s);color:var(--gold);margin-top:3px;}
 /* ── MOBILE OPTIMIZATIONS ── */
 *{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
 body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overscroll-behavior-y:none;}
@@ -427,9 +440,13 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     <div class="scanner-box">
       <span style="font-size:44px;display:block;margin-bottom:10px;">📷</span>
       <div class="scanner-line"></div>
-      <div class="scanner-text">Point your camera at a cigar band or barcode<br>to instantly identify it</div>
-      <button class="btn btn-primary" onclick="triggerCamera()">Open Camera Scanner</button>
-      <input type="file" id="cam-input" accept="image/*" capture="environment" style="display:none" onchange="handleScan(this)">
+      <div class="scanner-text">Take a photo of a cigar band or choose one from your gallery to instantly identify it</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="document.getElementById('cam-input-camera').click()" style="flex:1;min-width:130px;">📷 Take Photo</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('cam-input-gallery').click()" style="flex:1;min-width:130px;">🖼️ From Gallery</button>
+      </div>
+      <input type="file" id="cam-input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleScan(this)">
+      <input type="file" id="cam-input-gallery" accept="image/*" style="display:none" onchange="handleScan(this)">
     </div>
     <div class="sec-title">Search by Name</div>
     <div class="input-row">
@@ -466,6 +483,19 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         </div>
       </div>
       <div class="notes-block"><div class="notes-label">About</div><div class="notes-text" id="res-about"></div></div>
+      <div class="notes-block" id="res-price-block" style="display:none;">
+        <div class="notes-label">Price</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div style="font-size:13px;color:var(--muted);">Est. MSRP: <strong id="res-msrp-display" style="color:var(--text);"></strong> <span style="font-size:11px;color:var(--dim);font-style:italic;">— verify with retailer</span></div>
+          <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:160px;">
+            <label style="font-size:13px;color:var(--muted);white-space:nowrap;">Your Price:</label>
+            <div style="position:relative;flex:1;">
+              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;">$</span>
+              <input class="form-input" id="res-price-input" type="number" step="0.01" min="0" style="padding-left:24px;" placeholder="0.00">
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="result-actions">
         <button class="btn btn-sm btn-primary" onclick="addToHumidorFromResult()">+ Humidor</button>
         <button class="btn btn-sm" onclick="addToWishlistFromResult()">+ Wish List</button>
@@ -566,6 +596,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <button class="btn btn-primary btn-sm" onclick="searchSelectorCigar()">Search This Cigar</button>
         <button class="btn btn-ghost btn-sm" onclick="findCigar()">Try Another</button>
         <button class="btn btn-sm" style="background:#4A6A34;border-color:#4A6A34;color:#FFFDF7;" onclick="addSelectorToWishlist()">+ Wish List</button>
+        <button class="btn btn-sm btn-primary" onclick="addSelectorToHumidor()">+ Humidor</button>
       </div>
     </div>
     </div><!-- end cigar-selector-wrap -->
@@ -576,11 +607,41 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
   <!-- HUMIDOR -->
   <div id="page-humidor" class="page">
+
+    <!-- HUMIDOR SELECTOR TABS -->
+    <div class="humidor-tabs" id="humidor-tabs"></div>
+
+    <!-- ACTIVE HUMIDOR INFO BAR -->
+    <div class="humidor-info-bar" id="humidor-info-bar" style="display:none;">
+      <div class="humidor-info-col">
+        <div class="humidor-info-label">Type</div>
+        <div class="humidor-info-val" id="hib-type">—</div>
+        <div class="humi-type-badge" id="hib-target"></div>
+      </div>
+      <div class="humidor-info-col">
+        <div class="humidor-info-label">Humidity</div>
+        <div class="humidor-info-val" id="hib-humidity">—</div>
+        <div class="humidor-info-sub" id="hib-humidity-sub"></div>
+      </div>
+      <div class="humidor-info-col">
+        <div class="humidor-info-label">Temperature</div>
+        <div class="humidor-info-val" id="hib-temp">—</div>
+        <div class="humidor-info-sub" id="hib-temp-sub"></div>
+      </div>
+      <div style="width:100%;display:flex;gap:8px;margin-top:2px;">
+        <button class="btn btn-ghost btn-sm" onclick="editActiveHumidor()" style="flex:1;">✏️ Edit Humidor</button>
+        <button class="btn btn-sm" style="flex:1;background:#C4503A;border-color:#C4503A;color:#FFFDF7;" onclick="deleteActiveHumidor()">🗑 Delete</button>
+      </div>
+    </div>
+
+    <!-- SUMMARY BAR -->
     <div class="summary-bar">
       <div class="summary-item"><div class="summary-num" id="h-count">0</div><div class="summary-lbl">Cigars</div></div>
       <div class="summary-item"><div class="summary-num" id="h-total">0</div><div class="summary-lbl">Total Stock</div></div>
-      <div class="value-summary"><div class="value-num" id="h-value">$0</div><div class="value-lbl">Collection Value</div></div>
+      <div class="value-summary"><div class="value-num" id="h-value">$0</div><div class="value-lbl">Value</div></div>
     </div>
+
+    <!-- SEARCH + SORT -->
     <div class="humidor-search-row">
       <input class="humidor-search-input" id="h-search" placeholder="Search by name, brand, wrapper..." oninput="renderHumidor()">
       <select class="sort-select" id="h-sort" onchange="renderHumidor()">
@@ -591,6 +652,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <option value="aging">Aging (Oldest First)</option>
       </select>
     </div>
+
     <button class="btn btn-full" onclick="toggleAddForm('humidor-form')">+ Add Cigar to Humidor</button>
     <div class="add-form" id="humidor-form">
       <div class="sec-title" style="font-size:16px;">Add to Humidor</div>
@@ -604,15 +666,54 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" id="h-qty" type="number" value="1" min="1"></div>
         <div class="form-group"><label class="form-label">Purchase Date</label><input class="form-input" id="h-date" type="date"></div>
         <div class="form-group"><label class="form-label">Price Per Cigar ($)</label><input class="form-input" id="h-price" type="number" placeholder="0.00" step="0.01" min="0"></div>
-        <div class="form-group full"><label class="form-label">Box Code / Batch Notes</label><input class="form-input" id="h-notes" placeholder="Box code, source, aging notes — each purchase can be tracked separately"></div>
+        <div class="form-group full"><label class="form-label">Box Code / Batch Notes</label><input class="form-input" id="h-notes" placeholder="Box code, source, aging notes..."></div>
       </div>
       <div class="form-actions">
         <button class="btn btn-primary" onclick="addToHumidor()">Add to Humidor</button>
         <button class="btn btn-ghost" onclick="toggleAddForm('humidor-form')">Cancel</button>
       </div>
     </div>
-    <div class="sec-title">My Humidor</div>
-    <div id="humidor-list"><div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or from the Scanner</div></div></div>
+
+    <div class="sec-title" id="h-section-title">My Humidor</div>
+    <div id="humidor-list"></div>
+  </div>
+
+  <!-- NEW / EDIT HUMIDOR MODAL -->
+  <div class="modal-overlay" id="modal-new-humidor" onclick="if(event.target===this)closeModal('modal-new-humidor')">
+    <div class="modal-box">
+      <div class="modal-title"><span id="hm-modal-title">New Humidor</span><button class="modal-close" onclick="closeModal('modal-new-humidor')">✕</button></div>
+      <input type="hidden" id="hm-edit-id">
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Humidor Name</label><input class="form-input" id="hm-name" placeholder="e.g. Desktop, Travel, Cabinet..."></div>
+        <div class="form-group full">
+          <label class="form-label">Type of Humidor</label>
+          <select class="form-input" id="hm-type" onchange="suggestHumidorSettings()">
+            <option value="">Select type...</option>
+            <option value="Desktop">Desktop (Wood Box)</option>
+            <option value="Cabinet">Cabinet Humidor</option>
+            <option value="Coolidor">Coolidor (Beverage Cooler)</option>
+            <option value="Tupperdor">Tupperdor (Airtight Container)</option>
+            <option value="Travel">Travel Humidor</option>
+            <option value="Wineador">Wineador (Wine Cooler)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Humidity (%)</label>
+          <input class="form-input" id="hm-humidity" type="number" placeholder="65–70" min="55" max="80" step="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Temperature (°F)</label>
+          <input class="form-input" id="hm-temp" type="number" placeholder="65–70" min="55" max="80" step="1">
+        </div>
+        <div class="form-group full" id="hm-suggestion-box" style="display:none;">
+          <div class="info-box" id="hm-suggestion-text" style="font-size:13px;"></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="saveNewHumidor()">Save Humidor</button>
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-humidor')">Cancel</button>
+      </div>
+    </div>
   </div>
 
   <!-- WISHLIST -->
@@ -1107,6 +1208,38 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
             <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.1);border:0.5px solid #8B5E3C;padding:2px 9px;border-radius:10px;">Bahia · Arapiraca</div>
           </div>
           <div style="font-size:13px;color:var(--muted);line-height:1.7;">Brazilian tobacco — particularly from the Bahia and Arapiraca regions — is prized for its natural sweetness and dark, rustic wrappers. Brazilian maduro leaves ferment beautifully and are used in some of the world's finest maduro blends. The tobacco has a raw, earthy character that adds depth to complex filler blends. <strong>Flavor profile:</strong> molasses, dark earth, leather, raisin, dark chocolate.</div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #6A3A8A;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Costa Rica</div>
+            <div style="font-size:11px;color:#5A2A7A;background:rgba(106,58,138,0.08);border:0.5px solid #6A3A8A;padding:2px 9px;border-radius:10px;">Cartago · San José</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Costa Rican tobacco benefits from rich volcanic soil and a consistent tropical climate. Though a smaller producer than its Central American neighbors, Costa Rica grows wrapper and filler leaves prized for their natural sweetness and smooth combustion. The EL Rey del Mundo and Café Toraño brands have showcased Costa Rican leaf to great effect. <strong>Flavor profile:</strong> sweet wood, cream, mild earth, light spice, toast.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #2A5A6A;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Indonesia</div>
+            <div style="font-size:11px;color:#1A4A5A;background:rgba(42,90,106,0.08);border:0.5px solid #2A5A6A;padding:2px 9px;border-radius:10px;">Sumatra · Java · Besuki</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Indonesia is one of the world's most important tobacco-producing countries, with three distinct growing regions each producing unique leaf. Sumatra wrapper is legendary — thin, silky, and beautifully veined with a characteristic earthy sweetness that has been prized by European cigar makers for centuries. Java and Besuki leaves are commonly used as binders in Dutch and German-style cigars. <strong>Flavor profile:</strong> earth, dark spice, cocoa, aged wood, subtle sweetness.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #5A6A2A;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Mexico</div>
+            <div style="font-size:11px;color:#3A4A1A;background:rgba(90,106,42,0.08);border:0.5px solid #5A6A2A;padding:2px 9px;border-radius:10px;">San Andrés Valley</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">The San Andrés Valley in Veracruz is Mexico's premium tobacco heartland. San Andrés Maduro wrapper is one of the most celebrated maduro leaves in the world — dark, oily, naturally sweet, and exceptionally smooth when fermented properly. It has been used by master blenders from Carlos Toraño to Arturo Fuente as the foundation for iconic maduro blends. <strong>Flavor profile:</strong> dark chocolate, espresso, earth, dried fruit, natural sweetness.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #4A3A2A;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Cameroon</div>
+            <div style="font-size:11px;color:#3A2A1A;background:rgba(74,58,42,0.08);border:0.5px solid #4A3A2A;padding:2px 9px;border-radius:10px;">Central Africa</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Cameroon wrapper is one of the most distinctive and sought-after in the premium cigar world. Grown in the rich equatorial soil of Central Africa, it produces a toothy, slightly rough-textured leaf with a unique flavor profile found nowhere else. Cameroon tobacco was the foundation of the original Davidoff line and remains deeply associated with the golden era of Dominican cigar making. Production is limited, making authentic Cameroon wrappers increasingly rare and valuable. <strong>Flavor profile:</strong> cedar, hay, subtle sweetness, mild pepper, barnyard, distinctive earthiness.</div>
+        </div>
         </div>
       </div>
     </div>
@@ -1365,6 +1498,16 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     </div>
   </div>
 </div>
+
+  <!-- HUMIDOR PICKER MODAL -->
+  <div class="modal-overlay" id="modal-pick-humidor" onclick="if(event.target===this)closeModal('modal-pick-humidor')">
+    <div class="modal-box">
+      <div class="modal-title">Add to Which Humidor? <button class="modal-close" onclick="closeModal('modal-pick-humidor')">✕</button></div>
+      <input type="hidden" id="pick-humidor-action">
+      <input type="hidden" id="pick-humidor-data">
+      <div id="pick-humidor-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;"></div>
+    </div>
+  </div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1378,9 +1521,244 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 let humidor=[],wishlist=[],smoked=[],currentResult=null,newRatingVal=0,pendingPhotos=[],pairingRatingVal=0;
 let attrRatings={draw:0,burn:0,flavor:0,construction:0};
 let editRatingVal=0;
+
+// ── MULTI HUMIDOR SYSTEM ─────────────────────────────────────────
+var humidors=[];
+var activeHumidorId=null;
+
+function getActiveHumidor(){
+  return humidors.find(function(h){return h.id===activeHumidorId;})||humidors[0]||null;
+}
+
+function migrateHumidor(){
+  if(humidors.length===0 && humidor.length>0){
+    var defaultH={id:'humi_default',name:'My Humidor',type:'Desktop',humidity:68,temp:68,cigars:humidor.slice()};
+    humidors=[defaultH];
+    activeHumidorId='humi_default';
+    humidor=[];
+    saveHumidors();
+  } else if(humidors.length===0){
+    var h={id:'humi_'+Date.now(),name:'My Humidor',type:'Desktop',humidity:68,temp:68,cigars:[]};
+    humidors=[h];
+    activeHumidorId=h.id;
+    saveHumidors();
+  }
+  if(!activeHumidorId||!humidors.find(function(h){return h.id===activeHumidorId;})){
+    activeHumidorId=humidors[0].id;
+  }
+}
+
+function saveHumidors(){
+  try{localStorage.setItem('tc_humidors',JSON.stringify(humidors));
+      localStorage.setItem('tc_active_humidor',activeHumidorId);}catch(e){}
+}
+
+function loadHumidors(){
+  try{
+    var h=localStorage.getItem('tc_humidors');
+    if(h)humidors=JSON.parse(h);
+    var a=localStorage.getItem('tc_active_humidor');
+    if(a)activeHumidorId=a;
+  }catch(e){}
+  migrateHumidor();
+}
+
+function renderHumidorTabs(){
+  var tabs=document.getElementById('humidor-tabs');
+  if(!tabs)return;
+  tabs.innerHTML='';
+  humidors.forEach(function(h){
+    var btn=document.createElement('button');
+    btn.className='humidor-tab-btn'+(h.id===activeHumidorId?' active':'');
+    btn.textContent=h.name;
+    btn.onclick=(function(hid){return function(){switchHumidor(hid);};})(h.id);
+    tabs.appendChild(btn);
+  });
+  var addBtn=document.createElement('button');
+  addBtn.className='humidor-tab-btn add-new';
+  addBtn.textContent='+ New';
+  addBtn.onclick=function(){openNewHumidorModal();};
+  tabs.appendChild(addBtn);
+}
+
+function switchHumidor(id){
+  activeHumidorId=id;
+  saveHumidors();
+  renderHumidorTabs();
+  renderHumidorInfoBar();
+  renderHumidor();
+}
+
+var HUMIDOR_SETTINGS={
+  'Desktop':   {humidity:'65–70%',temp:'65–70°F',suggestion:'Boveda 65 or 69 packs work perfectly. Season the Spanish cedar before first use and rotate cigars monthly.'},
+  'Cabinet':   {humidity:'65–70%',temp:'65–70°F',suggestion:'Use an electronic humidifier like Cigar Oasis for consistent control. A digital hygrometer is essential at this scale.'},
+  'Coolidor':  {humidity:'65–68%',temp:'60–68°F',suggestion:'The airtight seal means Boveda packs last longer. Line with Spanish cedar sheets for best results. Check seal quarterly.'},
+  'Tupperdor': {humidity:'62–65%',temp:'65–72°F',suggestion:'A single Boveda 62 or 65 pack is ideal. The airtight seal is very efficient — check humidity monthly.'},
+  'Travel':    {humidity:'65–70%',temp:'65–75°F',suggestion:'Use one Boveda pack sized for the case. Avoid direct sunlight and temperature extremes during transport.'},
+  'Wineador':  {humidity:'65–68%',temp:'62–66°F',suggestion:'Pair with an electronic humidifier. The thermoelectric cooler handles temperature — set to 65°F for ideal aging.'},
+};
+
+function suggestHumidorSettings(){
+  var type=document.getElementById('hm-type').value;
+  var box=document.getElementById('hm-suggestion-box');
+  var txt=document.getElementById('hm-suggestion-text');
+  if(!type){box.style.display='none';return;}
+  var s=HUMIDOR_SETTINGS[type];
+  if(!s){box.style.display='none';return;}
+  document.getElementById('hm-humidity').value=parseInt(s.humidity);
+  document.getElementById('hm-temp').value=parseInt(s.temp);
+  txt.innerHTML='<strong style="color:var(--gold);">Suggested for '+type+'</strong><br>Humidity: '+s.humidity+' &nbsp;·&nbsp; Temperature: '+s.temp+'<br><span style="color:var(--muted);font-size:12px;">'+s.suggestion+'</span>';
+  box.style.display='block';
+}
+
+function renderHumidorInfoBar(){
+  var h=getActiveHumidor();
+  var bar=document.getElementById('humidor-info-bar');
+  var title=document.getElementById('h-section-title');
+  if(!h){if(bar)bar.style.display='none';return;}
+  if(bar){
+    bar.style.display='flex';
+    document.getElementById('hib-type').textContent=h.type||'Desktop';
+    document.getElementById('hib-target').textContent=h.name;
+    document.getElementById('hib-humidity').textContent=(h.humidity||68)+'%';
+    document.getElementById('hib-humidity-sub').textContent='Target RH';
+    document.getElementById('hib-temp').textContent=(h.temp||68)+'°F';
+    document.getElementById('hib-temp-sub').textContent='Target temp';
+  }
+  if(title)title.textContent=h.name;
+}
+
+function openNewHumidorModal(editId){
+  document.getElementById('hm-edit-id').value=editId||'';
+  document.getElementById('hm-modal-title').textContent=editId?'Edit Humidor':'New Humidor';
+  if(editId){
+    var h=humidors.find(function(x){return x.id===editId;});
+    if(h){
+      document.getElementById('hm-name').value=h.name||'';
+      document.getElementById('hm-type').value=h.type||'';
+      document.getElementById('hm-humidity').value=h.humidity||68;
+      document.getElementById('hm-temp').value=h.temp||68;
+      suggestHumidorSettings();
+    }
+  } else {
+    document.getElementById('hm-name').value='';
+    document.getElementById('hm-type').value='';
+    document.getElementById('hm-humidity').value='';
+    document.getElementById('hm-temp').value='';
+    document.getElementById('hm-suggestion-box').style.display='none';
+  }
+  openModal('modal-new-humidor');
+}
+
+function editActiveHumidor(){
+  var h=getActiveHumidor();
+  if(h)openNewHumidorModal(h.id);
+}
+
+function saveNewHumidor(){
+  var editId=document.getElementById('hm-edit-id').value;
+  var name=document.getElementById('hm-name').value.trim()||'My Humidor';
+  var type=document.getElementById('hm-type').value||'Desktop';
+  var humidity=parseInt(document.getElementById('hm-humidity').value)||68;
+  var temp=parseInt(document.getElementById('hm-temp').value)||68;
+  if(editId){
+    var h=humidors.find(function(x){return x.id===editId;});
+    if(h){h.name=name;h.type=type;h.humidity=humidity;h.temp=temp;}
+  } else {
+    var newH={id:'humi_'+Date.now(),name:name,type:type,humidity:humidity,temp:temp,cigars:[]};
+    humidors.push(newH);
+    activeHumidorId=newH.id;
+  }
+  saveHumidors();
+  closeModal('modal-new-humidor');
+  renderHumidorTabs();
+  renderHumidorInfoBar();
+  renderHumidor();
+  showToast(editId?'Humidor updated ✓':'New humidor created ✓');
+}
+
+function deleteActiveHumidor(){
+  var h=getActiveHumidor();
+  if(!h)return;
+  if(humidors.length===1){showToast('You need at least one humidor');return;}
+  if(!confirm('Delete '+h.name+'? All cigars in this humidor will be removed.'))return;
+  humidors=humidors.filter(function(x){return x.id!==h.id;});
+  activeHumidorId=humidors[0].id;
+  saveHumidors();
+  renderHumidorTabs();
+  renderHumidorInfoBar();
+  renderHumidor();
+  showToast(h.name+' deleted');
+}
+
+
+// ── HUMIDOR PICKER ───────────────────────────────────────────────
+function pickHumidor(action, data){
+  // If only one humidor, skip the picker and act immediately
+  if(humidors.length===1){
+    executeHumidorAction(action, data, humidors[0].id);
+    return;
+  }
+  // Show picker
+  document.getElementById('pick-humidor-action').value=action;
+  document.getElementById('pick-humidor-data').value=JSON.stringify(data);
+  var list=document.getElementById('pick-humidor-list');
+  list.innerHTML='';
+  humidors.forEach(function(h){
+    var btn=document.createElement('button');
+    btn.style.cssText='width:100%;background:var(--surface);border:1px solid var(--border-s);border-radius:10px;padding:13px 16px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;';
+    var left=document.createElement('div');
+    var name=document.createElement('div');
+    name.style.cssText='font-size:16px;color:var(--text);font-weight:600;';
+    name.textContent=h.name;
+    var meta=document.createElement('div');
+    meta.style.cssText='font-size:12px;color:var(--muted);margin-top:2px;';
+    meta.textContent=(h.type||'Desktop')+' · '+(h.cigars?h.cigars.length:0)+' cigars · $'+((h.cigars||[]).reduce(function(a,c){return a+((c.price||0)*(c.qty||1));},0)).toFixed(0)+' value';
+    left.appendChild(name);left.appendChild(meta);
+    var arrow=document.createElement('span');
+    arrow.textContent='→';
+    arrow.style.cssText='color:var(--gold);font-size:20px;';
+    btn.appendChild(left);btn.appendChild(arrow);
+    btn.onclick=(function(hid){return function(){
+      closeModal('modal-pick-humidor');
+      var a=document.getElementById('pick-humidor-action').value;
+      var d=JSON.parse(document.getElementById('pick-humidor-data').value||'{}');
+      executeHumidorAction(a,d,hid);
+    };})(h.id);
+    list.appendChild(btn);
+  });
+  openModal('modal-pick-humidor');
+}
+
+function executeHumidorAction(action, data, humidorId){
+  var h=humidors.find(function(x){return x.id===humidorId;});
+  if(!h)return;
+  if(action==='fromResult'){
+    if(!currentResult)return;
+    var priceEl=document.getElementById('res-price-input');
+    var userPrice=priceEl?parseFloat(priceEl.value)||0:0;
+    h.cigars.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1,price:userPrice,msrp:currentResult.msrp||0});
+    save();saveHumidors();renderHumidor();
+    showToast('Added to '+h.name+' ✓');
+  } else if(action==='fromWishlist'){
+    var wid=data.wid;
+    var c=wishlist.find(function(w){return w.id===wid;});
+    if(!c)return;
+    h.cigars.push({id:Date.now(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});
+    wishlist=wishlist.filter(function(w){return w.id!==wid;});
+    save();saveHumidors();renderWishlist();renderHumidor();
+    showToast('Moved to '+h.name+' ✓');
+  } else if(action==='fromSelector'){
+    var rec=data;
+    h.cigars.push({id:Date.now(),brand:rec.brand||'',name:rec.name||'',size:rec.vitola||'',wrapper:'',strength:rec.strength||'',notes:'Recommended by Cigar Selector',qty:1});
+    save();saveHumidors();renderHumidor();
+    showToast(rec.name+' added to '+h.name+' ✓');
+  }
+}
+
 let timerInterval=null,timerSeconds=0,timerRunning=false;
 let smokedFilter='all';
-function loadData(){
+function loadData(){loadHumidors();
   try{const h=localStorage.getItem('tc_humidor');if(h)humidor=JSON.parse(h);}catch(e){}
   try{const w=localStorage.getItem('tc_wishlist');if(w)wishlist=JSON.parse(w);}catch(e){}
   try{const s=localStorage.getItem('tc_smoked');if(s)smoked=JSON.parse(s);}catch(e){}
@@ -1402,9 +1780,9 @@ function showPage(id,tab){
 function showInfo(id,pill){document.querySelectorAll('.info-sec').forEach(function(s){s.classList.remove('active');});document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('active');});document.getElementById('info-'+id).classList.add('active');pill.classList.add('active');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
 function toggleAddForm(id){const f=document.getElementById(id);f.classList.toggle('show');if(f.classList.contains('show'))f.scrollIntoView({behavior:'smooth',block:'nearest'});}
-function triggerCamera(){document.getElementById('cam-input').click();}
+function triggerCamera(){document.getElementById('cam-input-camera').click();}
 function handleScan(input){if(!input.files[0])return;document.getElementById('cigar-search').value='Identifying cigar...';const reader=new FileReader();reader.onload=async function(e){await identifyCigarFromImage(e.target.result.split(',')[1]);};reader.readAsDataURL(input.files[0]);}
-async function identifyCigarFromImage(b64){const btn=document.getElementById('search-btn');btn.innerHTML='Searching<span class="loader"></span>';btn.disabled=true;try{const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify this cigar. Return ONLY JSON with: name,brand,size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),pairing,about(2 sentences),cocktail_name,cocktail_desc,cocktail_recipe(full recipe with ingredients and steps using newlines),cocktail_recipe_search(3-5 word search query),zero_proof_recipe(full zero proof recipe with ingredients and steps using newlines).'}]}]})});const data=await res.json();const cigar=JSON.parse(data.content.map(function(i){ return i.text || ''; }).join('').replace(/```json|```/g,'').trim());displayResult(cigar);document.getElementById('cigar-search').value=cigar.name;}catch(e){showToast('Could not identify — try searching by name');}btn.innerHTML='Search';btn.disabled=false;}
+async function identifyCigarFromImage(b64){const btn=document.getElementById('search-btn');btn.innerHTML='Searching<span class="loader"></span>';btn.disabled=true;try{const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify this cigar. Return ONLY JSON with: name,brand,size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),pairing,about(2 sentences),msrp(current retail price per cigar in USD as number only, premium typically $15-80+),cocktail_name,cocktail_desc,cocktail_recipe(full recipe with ingredients and steps using newlines),cocktail_recipe_search(3-5 word search query),zero_proof_recipe(full zero proof recipe with ingredients and steps using newlines).'}]}]})});const data=await res.json();const cigar=JSON.parse(data.content.map(function(i){ return i.text || ''; }).join('').replace(/```json|```/g,'').trim());displayResult(cigar);document.getElementById('cigar-search').value=cigar.name;}catch(e){showToast('Could not identify — try searching by name');}btn.innerHTML='Search';btn.disabled=false;}
 async function searchCigar(){
   const q=document.getElementById('cigar-search').value.trim();
   if(!q)return;
@@ -1424,7 +1802,7 @@ async function searchCigar(){
         system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown, no explanation.',
         messages:[{
           role:'user',
-          content:'Provide detailed info about this cigar: "'+q+'". Return a JSON object with these exact keys: name, brand, size, wrapper, strength, rating, tasting_notes, flavor_tags (array of 6 words), pairing, about, cocktail_name (a signature cocktail that pairs well), cocktail_desc (one sentence why it pairs), cocktail_recipe (ingredients list then steps, each on new line), cocktail_recipe_search (3-5 word Google search query), zero_proof_recipe (non-alcoholic version, ingredients then steps, each on new line).'
+          content:'Provide detailed info about this cigar: "'+q+'". Return a JSON object with these exact keys: name, brand, size, wrapper, strength, rating, tasting_notes, flavor_tags (array of 6 words), pairing, about, msrp (current retail price per cigar in USD as a number only - be accurate and current, premium cigars are typically $15-30, ultra-premium $30-80+, budget $5-15, e.g. 22.00), cocktail_name (a signature cocktail that pairs well), cocktail_desc (one sentence why it pairs), cocktail_recipe (ingredients list then steps, each on new line), cocktail_recipe_search (3-5 word Google search query), zero_proof_recipe (non-alcoholic version, ingredients then steps, each on new line).'
         }]
       })
     });
@@ -1445,11 +1823,20 @@ function displayResult(cigar){
   currentResult=cigar;
   document.getElementById('res-name').textContent=cigar.name||'Unknown';
   document.getElementById('res-brand').textContent=(cigar.brand||'').toUpperCase();
-  document.getElementById('res-grid').innerHTML=[['Size',cigar.size],['Wrapper',cigar.wrapper],['Strength',cigar.strength],['Rating',cigar.rating]].filter(([,v])=>v).map(([l,v])=>'<div class="stat-box"><div class="stat-label">'+l+'</div><div class="stat-val">'+v+'</div></div>').join('');
+  var gridItems=[['Size',cigar.size],['Wrapper',cigar.wrapper],['Strength',cigar.strength],['Rating',cigar.rating]];if(cigar.msrp)gridItems.push(['Est. MSRP','$'+parseFloat(cigar.msrp).toFixed(2)]);document.getElementById('res-grid').innerHTML=gridItems.filter(function(x){return x[1];}).map(function(x){return '<div class="stat-box"><div class="stat-label">'+x[0]+'</div><div class="stat-val">'+x[1]+'</div></div>';}).join('');
   document.getElementById('res-tasting').textContent=cigar.tasting_notes||'';
   document.getElementById('res-tags').innerHTML=(cigar.flavor_tags||[]).map(function(t){return '<span class="tag gold">'+t+'</span>';}).join('');
   document.getElementById('res-pairing').textContent=cigar.pairing||'';
   document.getElementById('res-about').textContent=cigar.about||'';
+  // MSRP / price block
+  if(cigar.msrp){
+    document.getElementById('res-msrp-display').textContent='$'+parseFloat(cigar.msrp).toFixed(2);
+    document.getElementById('res-price-input').value=parseFloat(cigar.msrp).toFixed(2);
+    document.getElementById('res-price-block').style.display='block';
+  } else {
+    document.getElementById('res-price-block').style.display='none';
+    document.getElementById('res-price-input').value='';
+  }
   // Cocktail pairing
   if(cigar.cocktail_name){
     document.getElementById('cocktail-name').textContent=cigar.cocktail_name;
@@ -1493,34 +1880,7 @@ function toggleRecipe(type){
     fullBtn.classList.remove('active');
   }
 }
-function addToHumidorFromResult(){if(!currentResult)return;humidor.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1});save();renderHumidor();showToast('Added to Humidor ✓');}
-function addToWishlistFromResult(){if(!currentResult)return;wishlist.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',price:'',reason:currentResult.tasting_notes||''});save();renderWishlist();showToast('Added to Wish List ✓');}
-function addToSmokedFromResult(){if(!currentResult)return;smoked.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,date:new Date().toISOString().split('T')[0],location:'',rating:0,notes:'',photos:[]});save();renderSmoked();showToast('Added to Smoking Log ✓');}
-function addToHumidor(){const name=document.getElementById('h-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}var batchId='batch_'+Date.now();humidor.push({id:Date.now(),batchId:batchId,brand:document.getElementById('h-brand').value,name,size:document.getElementById('h-size').value,wrapper:document.getElementById('h-wrapper').value,strength:document.getElementById('h-strength').value,notes:document.getElementById('h-notes').value,qty:parseInt(document.getElementById('h-qty').value)||1,price:parseFloat(document.getElementById('h-price').value)||0,purchaseDate:document.getElementById('h-date').value||null});['h-brand','h-name','h-size','h-wrapper','h-notes'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('h-qty').value=1;document.getElementById('h-price').value='';document.getElementById('h-date').value='';save();renderHumidor();toggleAddForm('humidor-form');showToast('Added to Humidor ✓');}
-function addToWishlist(){const name=document.getElementById('w-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}wishlist.push({id:Date.now(),brand:document.getElementById('w-brand').value,name,size:document.getElementById('w-size').value,price:document.getElementById('w-price').value,reason:document.getElementById('w-reason').value});['w-brand','w-name','w-size','w-price','w-reason'].forEach(function(id){document.getElementById(id).value='';});save();renderWishlist();toggleAddForm('wish-form');showToast('Added to Wish List ✓');}
-
-function smokeFromHumidor(id){
-  var c=humidor.find(function(h){return h.id===id;});
-  if(!c)return;
-  // Decrement qty
-  c.qty=Math.max(0,(c.qty||1)-1);
-  if(c.qty===0){
-    if(!confirm('Last one! Remove '+c.name+' from humidor?')){c.qty=1;return;}
-    humidor=humidor.filter(function(h){return h.id!==id;});
-  }
-  // Pre-fill smoked log
-  document.getElementById('s-brand').value=c.brand||'';
-  document.getElementById('s-name').value=c.name;
-  document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
-  save();
-  renderHumidor();
-  showToast('Removed from humidor — log to your Journal below!');
-  // Navigate to smoked tab and open form
-  var smokedTab=document.querySelectorAll('.nav-tab')[3];
-  if(smokedTab)showPage('smoked',smokedTab);
-  var f=document.getElementById('smoked-form');
-  if(f){f.classList.add('show');setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'start'});},200);}
-}
+function addToHumidorFromResult(){if(!currentResult)return;pickHumidor('fromResult',{});}
 function setRating(n){newRatingVal=n;document.querySelectorAll('#new-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<n)});}
 function setAttrRating(attr,n){
   attrRatings[attr]=n;
@@ -1560,10 +1920,12 @@ function logSmoke(){
   save();renderSmoked();toggleAddForm('smoked-form');showToast('Smoke logged ✓');
 }
 function changeQty(id,delta){const c=humidor.find(function(h){return h.id===id;});if(!c)return;c.qty=Math.max(0,(c.qty||1)+delta);if(c.qty===0){humidor=humidor.filter(function(h){return h.id!==id;});showToast('Removed from Humidor');}save();renderHumidor();}
-function moveToHumidor(id){const c=wishlist.find(function(w){return w.id===id;});if(!c)return;humidor.push({id:Date.now(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(function(w){return w.id!==id;});save();renderWishlist();renderHumidor();showToast('Moved to Humidor ✓');}
+function moveToHumidor(id){pickHumidor('fromWishlist',{wid:id});}
 function removeWish(id){wishlist=wishlist.filter(function(w){return w.id!==id;});save();renderWishlist();}
 function removeSmoked(id){smoked=smoked.filter(function(s){return s.id!==id;});save();renderSmoked();}
 function renderHumidor(){
+  var ah=getActiveHumidor();
+  var humidor=ah?ah.cigars:[];
   var total=humidor.reduce(function(a,c){return a+(c.qty||1);},0);
   var value=humidor.reduce(function(a,c){return a+((c.price||0)*(c.qty||1));},0);
   document.getElementById('h-count').textContent=humidor.length;
@@ -1630,7 +1992,7 @@ function renderSmoked(){
     return '<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+datePill+' '+locPill+'</div>'+stars+attrHtml+drinkHtml+note+'</div><div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;"><button class="btn btn-sm btn-ghost" onclick="openEditSmoked('+c.id+')">Edit</button><button class="btn btn-sm btn-danger" onclick="removeSmoked('+c.id+')">&#x2715;</button></div></div>'+photos+'</div>';
   }).join('');
 }
-function renderAll(){renderHumidor();renderWishlist();renderSmoked();}
+function renderAll(){renderHumidorTabs();renderHumidorInfoBar();renderHumidor();renderWishlist();renderSmoked();}
 
 const quotes=[{q:"A good cigar is as great a comfort to a man as a good cry to a woman.",a:"Edward Bulwer-Lytton"},{q:"The cigar is the perfect complement of a good life.",a:"Zino Davidoff"},{q:"If I had taken my doctor's advice and quit smoking when he advised me to, I wouldn't have lived to go to his funeral.",a:"George Burns"},{q:"A woman is just a woman, but a good cigar is a smoke.",a:"Rudyard Kipling"},{q:"Happiness is a good cigar and a good book.",a:"Groucho Marx"},{q:"There are two things a man never forgets: his first love and his first cigar.",a:"Anonymous"},{q:"The most precious things in life cannot be seen or touched — they are felt with the heart and tasted in a fine cigar.",a:"Zino Davidoff"},{q:"Life is too short to smoke bad cigars.",a:"Anonymous"},{q:"A fine cigar is the punctuation mark of a civilized life.",a:"Anonymous"},{q:"Smoke slowly. Think deeply. Ash gracefully.",a:"Anonymous"},{q:"The first third is introduction, the second third is conversation, the final third is revelation.",a:"Cigar Aficionado"},{q:"No matter what Aristotle and the Philosophers say, nothing is equal to tobacco.",a:"Molière"},{q:"Every cigar is a small autobiography.",a:"Anonymous"},{q:"Age and experience taught me one thing: never rush a fine cigar or a good conversation.",a:"Anonymous"},{q:"In every puff there is a pause — and in every pause, wisdom.",a:"Anonymous"},{q:"A day without a cigar is just a day.",a:"Anonymous"},{q:"The true aficionado does not smoke cigars — he contemplates them.",a:"Anonymous"},{q:"Find a porch, a sunset, and a well-constructed cigar. The rest follows.",a:"Anonymous"},{q:"A premium cigar demands nothing but your full, unhurried attention.",a:"Anonymous"},{q:"A cigar shared among friends is worth twice the smoke.",a:"Anonymous"}];
 function setDailyQuote(){const q=quotes[Math.floor(Date.now()/86400000)%quotes.length];document.getElementById('daily-quote').textContent=q.q;document.getElementById('daily-attr').textContent='— '+q.a;}
@@ -1673,6 +2035,7 @@ function closeModal(id){document.getElementById(id).classList.remove('show');doc
 
 // HUMIDOR EDIT
 function openEditHumidor(id){
+  var ah=getActiveHumidor();var humidor=ah?ah.cigars:[];
   const c=humidor.find(function(h){return h.id===id;});if(!c)return;
   document.getElementById('edit-h-id').value=id;
   document.getElementById('edit-h-brand').value=c.brand||'';
@@ -1688,6 +2051,7 @@ function openEditHumidor(id){
 }
 function saveEditHumidor(){
   const id=parseInt(document.getElementById('edit-h-id').value);
+  var ah=getActiveHumidor();var humidor=ah?ah.cigars:[];
   const c=humidor.find(function(h){return h.id===id;});if(!c)return;
   c.brand=document.getElementById('edit-h-brand').value;
   c.name=document.getElementById('edit-h-name').value;
@@ -1698,12 +2062,12 @@ function saveEditHumidor(){
   c.purchaseDate=document.getElementById('edit-h-date').value||null;
   c.price=parseFloat(document.getElementById('edit-h-price').value)||0;
   c.notes=document.getElementById('edit-h-notes').value;
-  save();renderHumidor();closeModal('modal-humidor');showToast('Humidor entry updated ✓');
+  save();saveHumidors();renderHumidor();closeModal('modal-humidor');showToast('Humidor entry updated ✓');
 }
 function deleteFromHumidor(){
   const id=parseInt(document.getElementById('edit-h-id').value);
-  humidor=humidor.filter(function(h){return h.id!==id;});
-  save();renderHumidor();closeModal('modal-humidor');showToast('Removed from Humidor');
+  var ah=getActiveHumidor();if(ah)ah.cigars=ah.cigars.filter(function(h){return h.id!==id;});
+  save();saveHumidors();renderHumidor();closeModal('modal-humidor');showToast('Removed from Humidor');
 }
 
 // WISHLIST EDIT
@@ -1916,6 +2280,11 @@ function addSelectorToWishlist(){
   wishlist.push({id:Date.now(),name:rec.name,brand:rec.brand||'',size:rec.vitola||'',reason:'Recommended by Cigar Selector'});
   save();renderWishlist();
   showToast(rec.name+' added to Wish List ✓');
+}
+function addSelectorToHumidor(){
+  var rec=document.getElementById('selector-result')._rec;
+  if(!rec)return;
+  pickHumidor('fromSelector',rec);
 }
 
 // ── STRENGTH FINDER QUIZ ────────────────────────────────────────
