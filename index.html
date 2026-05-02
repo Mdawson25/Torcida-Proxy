@@ -324,6 +324,18 @@ body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padd
 .selector-hint{font-size:12px;color:var(--dim);font-style:italic;margin-bottom:14px;}
 
 #cigar-selector-wrap{display:none;}
+
+.quiz-question{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:600;margin-bottom:12px;line-height:1.4;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{background:var(--surface);border:1px solid var(--border-s);border-radius:10px;padding:12px 14px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:15px;color:var(--muted);transition:all 0.15s;-webkit-tap-highlight-color:transparent;line-height:1.5;}
+.quiz-opt:hover{border-color:var(--gold);color:var(--text);background:rgba(139,94,60,0.05);}
+.quiz-opt.selected{border-color:#8B5E3C;background:#8B5E3C;color:#FFFDF7;font-weight:600;}
+.quiz-progress{display:flex;gap:4px;margin-bottom:14px;}
+.quiz-dot{height:4px;border-radius:2px;background:var(--border);flex:1;transition:background 0.2s;}
+.quiz-dot.done{background:#8B5E3C;}
+.quiz-rec-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;}
+.quiz-rec-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;}
+.quiz-rec-brand{font-size:12px;color:var(--muted);margin-top:2px;}
 /* ── MOBILE OPTIMIZATIONS ── */
 *{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
 body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overscroll-behavior-y:none;}
@@ -405,7 +417,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     <button class="nav-tab active" onclick="showPage('scanner',this)"><span class="nav-icon">🔍</span><span class="nav-label">Find My Cigar</span></button>
     <button class="nav-tab" onclick="showPage('humidor',this)"><span class="nav-icon">📦</span><span class="nav-label">Humidor</span></button>
     <button class="nav-tab" onclick="showPage('wishlist',this)"><span class="nav-icon">✨</span><span class="nav-label">Wish List</span></button>
-    <button class="nav-tab" onclick="showPage('smoked',this)"><span class="nav-icon">💨</span><span class="nav-label">Smoked</span></button>
+    <button class="nav-tab" onclick="showPage('smoked',this)"><span class="nav-icon">📒</span><span class="nav-label">Journal</span></button>
     <button class="nav-tab" onclick="showPage('guide',this)"><span class="nav-icon">📖</span><span class="nav-label">Guide</span></button>
     <button class="nav-tab" onclick="showPage('about',this)"><span class="nav-icon">🌿</span><span class="nav-label">About</span></button>
   </nav>
@@ -457,7 +469,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="result-actions">
         <button class="btn btn-sm btn-primary" onclick="addToHumidorFromResult()">+ Humidor</button>
         <button class="btn btn-sm" onclick="addToWishlistFromResult()">+ Wish List</button>
-        <button class="btn btn-sm" onclick="addToSmokedFromResult()">+ Log Smoked</button>
+        <button class="btn btn-sm" onclick="addToSmokedFromResult()">+ Add to Journal</button>
       </div>
     </div>
 
@@ -629,7 +641,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   <!-- SMOKED -->
   <div id="page-smoked" class="page">
     <div class="summary-bar">
-      <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Logged</div></div>
+      <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Journal</div></div>
       <div class="summary-item"><div class="summary-num" id="s-avg">—</div><div class="summary-lbl">Avg Rating</div></div>
     </div>
     <!-- SMOKE TIMER -->
@@ -685,9 +697,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%;" onclick="resetAsh()">Try Another Photo</button>
       </div>
     </div>
-    <button class="btn btn-full" onclick="toggleAddForm('smoked-form')">+ Log a Smoke</button>
+    <button class="btn btn-full" onclick="toggleAddForm('smoked-form')">+ Log to Your Journal</button>
     <div class="add-form" id="smoked-form">
-      <div class="sec-title" style="font-size:16px;">Log a Smoke</div>
+      <div class="sec-title" style="font-size:16px;">Log to Your Journal</div>
       <div class="form-grid">
         <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="s-brand" placeholder="Rocky Patel"></div>
         <div class="form-group">
@@ -778,15 +790,15 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <button class="btn btn-ghost" onclick="toggleAddForm('smoked-form')">Cancel</button>
       </div>
     </div>
-    <div class="sec-title">Smoking Log</div>
+    <div class="sec-title">Your Journal</div>
     <div class="smoked-filter-row">
-      <input class="smoked-search-input" id="s-search" placeholder="Search smokes..." oninput="renderSmoked()">
+      <input class="smoked-search-input" id="s-search" placeholder="Search your Journal..." oninput="renderSmoked()">
       <div class="filter-pill active" onclick="setSmokedFilter('all',this)">All</div>
       <div class="filter-pill" onclick="setSmokedFilter('5',this)">★★★★★</div>
       <div class="filter-pill" onclick="setSmokedFilter('4',this)">★★★★+</div>
       <div class="filter-pill" onclick="setSmokedFilter('3',this)">★★★+</div>
     </div>
-    <div id="smoked-list"><div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">No smokes logged yet</div><div class="empty-sub">Track smokes, ratings, and tasting notes</div></div></div>
+    <div id="smoked-list"><div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">Your Journal is empty</div><div class="empty-sub">Start logging your smokes, ratings, and tasting notes</div></div></div>
   </div>
 
   <!-- GUIDE -->
@@ -802,6 +814,10 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="pill" onclick="showInfo('strength',this)">Strength</div>
       <div class="pill" onclick="showInfo('cuts',this)">Cuts</div>
       <div class="pill" onclick="showInfo('lighting',this)">How to Light</div>
+      <div class="pill" onclick="showInfo('humidorcare',this)">Humidor Care</div>
+      <div class="pill" onclick="showInfo('leafwrapper',this)">Leaves &amp; Wrappers</div>
+      <div class="pill" onclick="showInfo('origins',this)">Origins</div>
+      <div class="pill" onclick="showInfo('quizpill',this)">Strength Finder</div>
     </div>
     <div id="info-shapes" class="info-sec active">
       <div class="info-title">Shapes &amp; sizes</div>
@@ -831,6 +847,342 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px;">Heat source guide</div>
         <div id="flame-guide"></div>
       </div>
+    </div>
+
+    <div id="info-humidorcare" class="info-sec">
+      <div class="info-title">Humidor Care</div>
+      <div class="info-sub">A well-maintained humidor is the difference between a cigar that sings and one that disappoints. These are the fundamentals every collector should know.</div>
+
+      <!-- HUMIDITY RANGES -->
+      <div class="ornament-div" style="margin:14px 0 10px;">Humidity</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">65–70% RH</div>
+            <div style="background:rgba(74,106,52,0.15);border:0.5px solid #5A8A3A;color:#3A6820;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Ideal</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">The sweet spot for most premium cigars. Preserves oils, maintains draw, and allows slow graceful aging. Most collectors aim for 68–69%.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">62–65% RH</div>
+            <div style="background:rgba(139,94,60,0.12);border:0.5px solid #8B5E3C;color:#5C3A1E;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Drier Storage</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">Preferred by many aficionados for long-term aging. A drier environment draws out more complexity over years. Cigars burn slower and cooler at this range.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">70–72% RH</div>
+            <div style="background:rgba(196,80,58,0.1);border:0.5px solid #C4503A;color:#8B2A1A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Upper Limit</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">Acceptable for short-term storage but risky long-term. Above 72% risks mold, tobacco beetle eggs hatching, and wrapper damage. Never exceed 75%.</div>
+        </div>
+      </div>
+
+      <!-- TEMPERATURE RANGES -->
+      <div class="ornament-div" style="margin:14px 0 10px;">Temperature</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">65–70°F / 18–21°C</div>
+            <div style="background:rgba(74,106,52,0.15);border:0.5px solid #5A8A3A;color:#3A6820;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Ideal</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">Promotes slow, even aging. At 70°F / 21°C you are right at the threshold where tobacco beetles become active — staying just below is important.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">Above 72°F / 22°C</div>
+            <div style="background:rgba(196,80,58,0.1);border:0.5px solid #C4503A;color:#8B2A1A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Danger Zone</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">Tobacco beetles hatch above 72°F and will tunnel through your entire collection. If temperatures spike, quarantine new cigars in a sealed bag in the freezer for 72 hours before adding to your humidor.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">Below 60°F / 15°C</div>
+            <div style="background:rgba(139,94,60,0.12);border:0.5px solid #8B5E3C;color:#5C3A1E;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Too Cold</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">Very cold temperatures stall aging and can cause the wrapper to crack. Cigars become brittle and may lose essential oils. Not recommended for long-term storage.</div>
+        </div>
+      </div>
+
+      <!-- TYPES OF HUMIDORS -->
+      <div class="ornament-div" style="margin:14px 0 10px;">Types of Humidors</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Desktop Humidor</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">The classic. A wooden box — typically Spanish cedar lined — that sits on a desk or shelf. Holds 25 to 150 cigars. The Spanish cedar interior absorbs and releases moisture naturally and repels tobacco beetles. Best for everyday collections.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Cabinet Humidor</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">A freestanding cabinet that holds hundreds to thousands of cigars. Often temperature-controlled as well as humidity-controlled. Used by serious collectors and retailers. Requires a more powerful humidification system.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Coolidor</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">A beverage cooler repurposed as a humidor. Airtight seal makes it extremely efficient at holding humidity. Holds hundreds of cigars at a fraction of the cost of a cabinet humidor. Line the inside with Spanish cedar sheets for best results.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Tupperdor</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">An airtight plastic container — such as a Tupperware or Sistema box — used as a budget humidor. Surprisingly effective due to the airtight seal. Great for beginners or travel storage. Add a small Boveda pack and you are ready to go.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Travel Humidor</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">A compact hard case designed to carry 3 to 10 cigars safely. Usually crushproof and waterproof. Essential for protecting cigars in transit. Not suitable for long-term storage but perfect for your bag or carry-on.</div>
+        </div>
+      </div>
+
+      <!-- SETUP GUIDE -->
+      <div class="ornament-div" style="margin:14px 0 10px;">How to Set Up a New Humidor</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#8B5E3C;color:#FFFDF7;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">1</div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Season the wood</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Place a small dish of distilled water or a damp sponge inside the empty humidor. Close the lid and leave for 24–48 hours. This slowly hydrates the Spanish cedar so it does not absorb all the moisture from your cigars when you first load it. Never use tap water — minerals cause residue and mold.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#8B5E3C;color:#FFFDF7;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">2</div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Calibrate your hygrometer</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Place your hygrometer in a sealed bag with a damp paper towel for 1 hour. It should read 96–100% RH. If it reads differently, note the offset and apply it when reading your humidor. Digital hygrometers are more accurate than analog and cost under $15.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#8B5E3C;color:#FFFDF7;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">3</div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Install your humidification device</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Place your chosen humidification source and your hygrometer inside. Close the lid. Check after 24 hours — you want to see 65–70% RH before adding cigars. If it is still too low, repeat the seasoning step.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#8B5E3C;color:#FFFDF7;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">4</div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Load your cigars gradually</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Do not fill a new humidor all at once. Add cigars in batches over several days, monitoring the humidity after each addition. A humidor full of dry cigars will quickly absorb moisture and drop your RH. Gradual loading keeps everything stable.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#8B5E3C;color:#FFFDF7;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">5</div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Rotate your cigars monthly</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Swap top and bottom rows once a month to ensure even humidity distribution. Cigars closest to the humidification source age faster. Rotation gives every cigar equal exposure and prevents uneven aging.</div></div>
+        </div>
+      </div>
+
+      <!-- HUMIDITY CONTROL OPTIONS -->
+      <div class="ornament-div" style="margin:14px 0 10px;">Humidity &amp; Temperature Control Options</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;">
+        <div style="background:var(--surface);border-left:3px solid #5A8A3A;border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Boveda Packs ⭐ Most Recommended</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">Two-way humidity control packets that both add and absorb moisture to maintain a precise RH — available in 62%, 65%, 69%, and 72%. Simply place inside your humidor and replace every 2–3 months. Zero maintenance, extremely reliable, and affordable. The gold standard for desktop and tupperdor use.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Electronic Humidifier</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">A small fan-powered device that pumps humidity into your humidor at a set level. Best for larger collections and cabinet humidors. Requires refilling with distilled water every 2–4 weeks. Cigar Oasis is the most respected brand. More consistent than passive options for large collections.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Propylene Glycol Solution</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">A 50/50 mix of propylene glycol and distilled water used to fill foam or crystal humidification devices. Naturally self-regulates to approximately 70% RH. Inexpensive and effective for smaller humidors. Requires refilling monthly and occasional cleaning to prevent mold.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Gel Crystals / Beads</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">Silica gel crystals or beads that can be charged to a specific humidity level. They both absorb excess moisture and release moisture when levels drop. Long-lasting, rechargeable, and visually indicate when they need attention by changing color. A good middle ground between Boveda and electronic options.</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;margin-bottom:3px;">Wine Cooler / Wineador</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.6;">A thermoelectric wine cooler repurposed as a climate-controlled humidor. Maintains both temperature and humidity when paired with an electronic humidifier. Holds 150 to 300+ cigars. The ultimate upgrade for the serious collector — controls both humidity and temperature simultaneously and keeps beetles completely at bay.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="info-leafwrapper" class="info-sec">
+      <div class="info-title">Leaves &amp; Wrappers</div>
+      <div class="info-sub">The wrapper is the first thing you see and the last leaf applied — yet it contributes up to 60% of a cigar's flavor. Understanding leaf types transforms how you choose and appreciate a cigar.</div>
+
+      <div class="ornament-div" style="margin:14px 0 10px;">Wrapper Colors</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:18px;height:44px;border-radius:4px;background:#D4A96A;flex-shrink:0;margin-top:2px;"></div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Claro — Very Light</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Shade-grown under cloth to prevent chlorophyll development. Extremely light tan color. Mild, smooth, and creamy flavor. Less common today but beloved by those who prefer a delicate smoke. Associated with Connecticut Shade wrappers.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:18px;height:44px;border-radius:4px;background:#C49A52;flex-shrink:0;margin-top:2px;"></div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Colorado Claro — Light Brown</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">A light to medium brown with a slight golden hue. Balanced and approachable — mild to medium strength with notes of cream, cedar, and light spice. Excellent for beginners. Ecuador Connecticut wrappers fall here.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:18px;height:44px;border-radius:4px;background:#A0702A;flex-shrink:0;margin-top:2px;"></div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Colorado — Medium Brown</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">The most common wrapper shade. Rich reddish-brown with complex flavors — cedar, leather, earth, and subtle sweetness. Medium body, excellent balance. Found on many Honduran and Dominican cigars.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:18px;height:44px;border-radius:4px;background:#7A4E18;flex-shrink:0;margin-top:2px;"></div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Colorado Maduro — Dark Brown</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">A deep, rich brown that transitions toward maduro. Fuller body with prominent chocolate, espresso, and dried fruit notes. The wrapper has been fermented longer than a colorado but not as long as a true maduro.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:18px;height:44px;border-radius:4px;background:#3A2008;flex-shrink:0;margin-top:2px;border:0.5px solid rgba(201,168,76,0.3);"></div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Maduro — Very Dark Brown to Black</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Fermented for months at high temperature and pressure. The process breaks down oils into sugars, creating natural sweetness alongside deep chocolate, coffee, and earth notes. Counter-intuitively, a true maduro is not necessarily stronger — it is richer and sweeter. One of the most beloved wrapper styles.</div></div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:18px;height:44px;border-radius:4px;background:#E8E0C0;border:0.5px solid #C49A52;flex-shrink:0;margin-top:2px;"></div>
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Candela — Green</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Flash-cured at high heat to lock in chlorophyll, producing a distinctive green wrapper. Very mild, grassy, and slightly sweet. Rarely seen today but popular in the 1960s. An acquired taste that cigar historians appreciate.</div></div>
+        </div>
+      </div>
+
+      <div class="ornament-div" style="margin:14px 0 10px;">Leaf Priming — Where the Leaf Grows</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;">Tobacco leaves are harvested in passes called <em>primings</em> from the bottom of the plant upward. Position on the plant determines character.</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:18px;">
+        <div style="background:var(--surface);border-left:3px solid #5A8A3A;border-radius:0 10px 10px 0;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);">Volado — Bottom Leaves</div><div style="font-size:13px;color:var(--muted);">Mild, burns easily. Used as filler for combustion.</div></div>
+          <div style="font-size:11px;color:#3A6820;background:rgba(74,106,52,0.12);padding:2px 8px;border-radius:10px;">Mild</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);">Seco — Middle Leaves</div><div style="font-size:13px;color:var(--muted);">Balanced flavor and aroma. The backbone of most blends.</div></div>
+          <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.12);padding:2px 8px;border-radius:10px;">Medium</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid #C4503A;border-radius:0 10px 10px 0;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);">Ligero — Top Leaves</div><div style="font-size:13px;color:var(--muted);">Most sun exposure — thick, oily, full-bodied. Adds power and complexity.</div></div>
+          <div style="font-size:11px;color:#8B2A1A;background:rgba(196,80,58,0.1);padding:2px 8px;border-radius:10px;">Full</div>
+        </div>
+        <div style="background:var(--surface);border-left:3px solid #8B5E3C;border-radius:0 10px 10px 0;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);">Medio Tiempo — Crown Leaves</div><div style="font-size:13px;color:var(--muted);">Rarest and most prized. Found only on the top two leaves of certain plants. Exceptional complexity. Very scarce.</div></div>
+          <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.15);padding:2px 8px;border-radius:10px;">Rare</div>
+        </div>
+      </div>
+
+      <div class="ornament-div" style="margin:14px 0 10px;">Binder &amp; Filler</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:3px;">The Binder</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;">A single leaf that wraps around the filler bunch to hold it together before the wrapper is applied. The binder contributes significantly to the cigar's draw and can add its own flavor notes. Often a thicker, coarser leaf than the wrapper.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:3px;">The Filler</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;">A blend of 3 to 5 different leaves rolled together at the core. This is where the master blender's art lives — the specific combination of volado, seco, and ligero leaves determines the cigar's flavor arc from first third to final third. Most filler blends use leaves from multiple countries.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="info-origins" class="info-sec">
+      <div class="info-title">Countries of Origin</div>
+      <div class="info-sub">Tobacco's character is inseparable from the soil it grows in. Each region produces leaves with a distinct personality shaped by climate, altitude, and centuries of tradition.</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #C9A84C;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Cuba</div>
+            <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.1);border:0.5px solid #8B5E3C;padding:2px 9px;border-radius:10px;">Vuelta Abajo</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">The origin of everything. The Vuelta Abajo region in Pinar del Río is considered the finest tobacco-growing land on earth — a perfect combination of red clay soil, subtropical climate, and centuries of expertise. Cuban tobacco is known for its complex earthiness, subtle sweetness, and a finish that evolves over the length of the smoke. Cohiba, Montecristo, Partagás, Romeo y Julieta, and H. Upmann define the canon. <strong>Flavor profile:</strong> earth, cedar, leather, cream, subtle spice.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #5A8A3A;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Nicaragua</div>
+            <div style="font-size:11px;color:#3A6820;background:rgba(74,106,52,0.1);border:0.5px solid #5A8A3A;padding:2px 9px;border-radius:10px;">Jalapa · Estelí · Ometepe</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">The new world power in premium cigars. Nicaragua's volcanic soil and diverse microclimates produce tobacco with remarkable complexity and body — often compared favorably to Cuba. The Jalapa valley is known for sweeter, more refined leaves while Estelí produces the bold, peppery, full-bodied tobacco that defines Nicaraguan strength. Padron, Oliva, AJ Fernandez, and Perdomo are the great names. <strong>Flavor profile:</strong> pepper, dark chocolate, earth, leather, coffee, cedar.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #8B5E3C;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Honduras</div>
+            <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.1);border:0.5px solid #8B5E3C;padding:2px 9px;border-radius:10px;">Jamastran Valley</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">The Jamastran Valley has some of the most fertile tobacco soil in Central America. Honduran tobacco tends toward a rich, hearty medium-full body with natural sweetness and excellent combustion properties. Often used as binder or filler in blends from multiple factories. Rocky Patel, Camacho, and Alec Bradley showcase Honduran tobacco at its best. <strong>Flavor profile:</strong> sweet wood, nuts, earth, mild pepper, honey.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #7A4E18;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Dominican Republic</div>
+            <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.1);border:0.5px solid #8B5E3C;padding:2px 9px;border-radius:10px;">Cibao Valley</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">The Dominican Republic became the center of premium cigar production after the Cuban embargo and remains one of the world's most important sources. Dominican tobacco is celebrated for its smoothness, elegance, and refined character. The Cibao Valley produces exceptionally light and aromatic leaves. Arturo Fuente, Davidoff, and La Gloria Cubana are rooted here. <strong>Flavor profile:</strong> cream, cedar, floral, light spice, nuts.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #3A6820;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Ecuador</div>
+            <div style="font-size:11px;color:#3A6820;background:rgba(74,106,52,0.1);border:0.5px solid #5A8A3A;padding:2px 9px;border-radius:10px;">Under the Cloud Forest</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Ecuador's unique natural cloud cover at high altitude creates a permanent diffused light canopy — mimicking shade-grown conditions without artificial cloth. This produces extraordinarily silky, smooth wrapper leaves with minimal veins. Ecuador Connecticut wrappers are among the most prized in the world, used by factories from Nicaragua to the Dominican Republic. <strong>Flavor profile:</strong> cream, vanilla, cedar, light earth, floral.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #1A4A7A;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Connecticut, USA</div>
+            <div style="font-size:11px;color:#1A3A5A;background:rgba(26,74,122,0.08);border:0.5px solid #1A4A7A;padding:2px 9px;border-radius:10px;">Connecticut Valley</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Connecticut Shade-grown tobacco is one of the most important wrapper varieties in the world. Grown under white cloth tents along the Connecticut River Valley, the leaves develop with delicate texture and subtle flavor. Connecticut Broadleaf is darker and fuller, used for maduro-style wrappers. General Cigar's Connecticut Shade is the benchmark. <strong>Flavor profile:</strong> cream, hay, light wood, mild sweetness.</div>
+        </div>
+
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #8B3A2A;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;">Brazil</div>
+            <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.1);border:0.5px solid #8B5E3C;padding:2px 9px;border-radius:10px;">Bahia · Arapiraca</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Brazilian tobacco — particularly from the Bahia and Arapiraca regions — is prized for its natural sweetness and dark, rustic wrappers. Brazilian maduro leaves ferment beautifully and are used in some of the world's finest maduro blends. The tobacco has a raw, earthy character that adds depth to complex filler blends. <strong>Flavor profile:</strong> molasses, dark earth, leather, raisin, dark chocolate.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="info-quizpill" class="info-sec">
+      <div class="info-title">Strength Finder</div>
+      <div class="info-sub">Answer five quick questions and we'll recommend the perfect starting strength and three specific cigars matched to your palate.</div>
+      <div id="quiz-container" style="margin-top:16px;">
+
+        <div id="quiz-q1" class="quiz-step">
+          <div class="quiz-question">What drinks do you usually enjoy?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="quizAnswer(1,'light')">Light beer, white wine, or sparkling water</div>
+            <div class="quiz-opt" onclick="quizAnswer(1,'medium')">IPA, red wine, or cocktails</div>
+            <div class="quiz-opt" onclick="quizAnswer(1,'full')">Bourbon, scotch, dark rum, or espresso</div>
+          </div>
+        </div>
+
+        <div id="quiz-q2" class="quiz-step" style="display:none;">
+          <div class="quiz-question">How often do you smoke anything — cigars, pipes, or cigarettes?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="quizAnswer(2,'light')">Never or very rarely</div>
+            <div class="quiz-opt" onclick="quizAnswer(2,'medium')">Occasionally — a few times a month</div>
+            <div class="quiz-opt" onclick="quizAnswer(2,'full')">Regularly — at least weekly</div>
+          </div>
+        </div>
+
+        <div id="quiz-q3" class="quiz-step" style="display:none;">
+          <div class="quiz-question">What flavors appeal to you most in food and drink?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="quizAnswer(3,'light')">Sweet, fruity, or creamy</div>
+            <div class="quiz-opt" onclick="quizAnswer(3,'medium')">Savory, nutty, or chocolatey</div>
+            <div class="quiz-opt" onclick="quizAnswer(3,'full')">Bold, bitter, or intensely spiced</div>
+          </div>
+        </div>
+
+        <div id="quiz-q4" class="quiz-step" style="display:none;">
+          <div class="quiz-question">What is the occasion for most of your smokes?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="quizAnswer(4,'light')">Morning coffee, relaxing alone, or a quick break</div>
+            <div class="quiz-opt" onclick="quizAnswer(4,'medium')">After dinner, social gatherings, or celebrations</div>
+            <div class="quiz-opt" onclick="quizAnswer(4,'full')">Special events, late evenings, or paired with aged spirits</div>
+          </div>
+        </div>
+
+        <div id="quiz-q5" class="quiz-step" style="display:none;">
+          <div class="quiz-question">How long do you prefer your smoke to last?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="quizAnswer(5,'light')">30–45 minutes — I like a shorter, satisfying smoke</div>
+            <div class="quiz-opt" onclick="quizAnswer(5,'medium')">45–75 minutes — a comfortable leisurely smoke</div>
+            <div class="quiz-opt" onclick="quizAnswer(5,'full')">90 minutes or more — I want the full experience</div>
+          </div>
+        </div>
+
+        <div id="quiz-loading" style="display:none;text-align:center;padding:20px;">
+          <span class="loader"></span>
+          <div style="margin-top:10px;font-size:14px;color:var(--muted);font-style:italic;">Finding your perfect match...</div>
+        </div>
+
+        <div id="quiz-result" style="display:none;">
+          <div style="background:var(--surface);border:1px solid var(--border-s);border-radius:12px;padding:16px;margin-bottom:12px;">
+            <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Your Strength Profile</div>
+            <div id="quiz-strength" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text);font-weight:600;margin-bottom:4px;"></div>
+            <div id="quiz-profile-text" style="font-size:14px;color:var(--muted);line-height:1.7;"></div>
+          </div>
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Your Three Starter Cigars</div>
+          <div id="quiz-recommendations" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="resetQuiz()">Retake Quiz</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    </div>
     </div>
   </div>
 
@@ -901,6 +1253,14 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
       <div class="about-body" style="margin-top:16px;">
         <p>In Portuguese, <em>torcida</em> also means a <strong>passionate fan base</strong> — the devoted community that shows up with energy, loyalty, and love. That is exactly what we hope Torcida the app becomes: <strong>a community of passionate people who show up for the craft, for each other, and for the culture.</strong></p>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-section-title">The Journal</div>
+      <div class="about-body">
+        <p>A <strong>journal</strong> is the master blender's logbook — the private journal where every blend experiment, every leaf combination, every aging note, and every tasting observation is recorded by hand. The great factories of Cuba, Nicaragua, and Honduras have kept journals for generations. They are the accumulated wisdom of the craft.</p>
+        <p>When you log a smoke in Torcida, you are keeping your own journal. Your tasting notes, your pairings, your ratings — they are your record of the journey. <strong>Every entry honors the tradition of those who came before you.</strong></p>
       </div>
     </div>
 
@@ -982,7 +1342,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <!-- Smoked Edit Modal -->
 <div class="modal-overlay" id="modal-smoked" onclick="if(event.target===this)closeModal('modal-smoked')">
   <div class="modal-box">
-    <div class="modal-title">Edit Smoke Log <button class="modal-close" onclick="closeModal('modal-smoked')">✕</button></div>
+    <div class="modal-title">Edit Journal Entry <button class="modal-close" onclick="closeModal('modal-smoked')">✕</button></div>
     <input type="hidden" id="edit-s-id">
     <div class="form-grid">
       <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-s-brand"></div>
@@ -1154,7 +1514,7 @@ function smokeFromHumidor(id){
   document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
   save();
   renderHumidor();
-  showToast('Removed from humidor — log your smoke below!');
+  showToast('Removed from humidor — log to your Journal below!');
   // Navigate to smoked tab and open form
   var smokedTab=document.querySelectorAll('.nav-tab')[3];
   if(smokedTab)showPage('smoked',smokedTab);
@@ -1245,7 +1605,7 @@ function renderSmoked(){
   if(minRating>0)sList=sList.filter(function(c){return c.rating>=minRating;});
   var el=document.getElementById('smoked-list');
   if(!sList.length){
-    el.innerHTML=q||minRating?'<div class="empty-state"><div class="empty-text">No smokes match your filter</div></div>':'<div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">No smokes logged yet</div><div class="empty-sub">Track smokes, ratings, and tasting notes</div></div>';
+    el.innerHTML=q||minRating?'<div class="empty-state"><div class="empty-text">No smokes match your filter</div></div>':'<div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">Your Journal is empty</div><div class="empty-sub">Start logging your smokes, ratings, and tasting notes</div></div>';
     return;
   }
   el.innerHTML=sList.map(function(c){
@@ -1543,7 +1903,8 @@ async function findCigar(){
 function searchSelectorCigar(){
   var rec=document.getElementById('selector-result')._rec;
   if(!rec)return;
-  document.getElementById('cigar-search').value=rec.name;
+  var q=(rec.brand?rec.brand+' ':'')+rec.name;
+  document.getElementById('cigar-search').value=q.trim();
   var scannerTab=document.querySelectorAll('.nav-tab')[0];
   if(scannerTab)showPage('scanner',scannerTab);
   searchCigar();
@@ -1556,30 +1917,93 @@ function addSelectorToWishlist(){
   save();renderWishlist();
   showToast(rec.name+' added to Wish List ✓');
 }
-// ── SMOKE TIMER ──────────────────────────────────────────────────
-function confirmStartTimer(){
-  // Clear any existing timer first
-  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
-  // Get cigar name — use placeholder text if empty
-  var inputEl=document.getElementById('timer-cigar-input');
-  var name=inputEl.value.trim()||'Cigar';
-  // Reset and start
-  timerSeconds=0;
-  timerRunning=true;
-  // Update display
-  document.getElementById('timer-cigar-name').textContent=name;
-  document.getElementById('timer-display').textContent='00:00';
-  document.getElementById('timer-input-wrap').style.display='none';
-  document.getElementById('timer-running-wrap').style.display='flex';
-  // Start interval
-  timerInterval=setInterval(function(){
-    timerSeconds++;
-    var m=Math.floor(timerSeconds/60).toString().padStart(2,'0');
-    var s=(timerSeconds%60).toString().padStart(2,'0');
-    document.getElementById('timer-display').textContent=m+':'+s;
-  },1000);
-  showToast('Timer started — smoking '+name);
+
+// ── STRENGTH FINDER QUIZ ────────────────────────────────────────
+var quizAnswers={};
+var quizCurrentQ=1;
+function quizAnswer(q,val){
+  quizAnswers[q]=val;
+  var el=document.getElementById('quiz-q'+q);
+  el.querySelectorAll('.quiz-opt').forEach(function(o){o.classList.remove('selected');});
+  event.target.classList.add('selected');
+  setTimeout(function(){
+    if(q<5){
+      el.style.display='none';
+      document.getElementById('quiz-q'+(q+1)).style.display='block';
+    } else {
+      el.style.display='none';
+      submitQuiz();
+    }
+  },300);
 }
+function resetQuiz(){
+  quizAnswers={};
+  for(var i=1;i<=5;i++){
+    var step=document.getElementById('quiz-q'+i);
+    if(step){
+      step.style.display=i===1?'block':'none';
+      step.querySelectorAll('.quiz-opt').forEach(function(o){o.classList.remove('selected');});
+    }
+  }
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-loading').style.display='none';
+}
+async function submitQuiz(){
+  document.getElementById('quiz-loading').style.display='block';
+  try{
+    var answers=JSON.stringify(quizAnswers);
+    console.log('Quiz answers being sent:',answers);
+    if(!answers||answers==='{}'){showToast('Please answer all questions first');document.getElementById('quiz-loading').style.display='none';resetQuiz();return;}
+    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:600,
+        system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',
+        messages:[{role:'user',content:'Based on these quiz answers about a cigar beginner (1=light preference, medium=medium, full=full): '+answers+'. Return JSON with: recommended_strength (one of: Mild, Mild-Medium, Medium, Medium-Full, Full), profile_description (2 sentences about their palate and what they will enjoy), cigars (array of exactly 3 objects each with name, brand, why - one sentence why it matches them). Choose accessible, well-reviewed cigars.'}]
+      })
+    });
+    var data=await res.json();
+    if(data.error)throw new Error(data.error.message||'Error');
+    var text=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
+    var match=text.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('No JSON');
+    var result=JSON.parse(match[0]);
+    document.getElementById('quiz-loading').style.display='none';
+    document.getElementById('quiz-strength').textContent=result.recommended_strength||'';
+    document.getElementById('quiz-profile-text').textContent=result.profile_description||'';
+    var recsEl=document.getElementById('quiz-recommendations');
+    window._quizCigars=result.cigars||[];
+    recsEl.innerHTML=window._quizCigars.map(function(c,idx){
+      return '<div class="quiz-rec-card"><div><div class="quiz-rec-name">'+c.name+'</div><div class="quiz-rec-brand">'+(c.brand||'')+(c.why?' · '+c.why:'')+'</div></div><button class="btn btn-sm btn-ghost" onclick="searchFromQuizIdx('+idx+')" style="flex-shrink:0;margin-left:8px;">Search</button></div>';
+    }).join('');
+    document.getElementById('quiz-result').style.display='block';
+  }catch(err){
+    document.getElementById('quiz-loading').style.display='none';
+    console.error('Quiz error full:',err,err.message);
+    showToast('Quiz error: '+( err.message||'unknown').slice(0,50));
+    resetQuiz();
+  }
+}
+function searchFromQuizIdx(idx){
+  var cigars=window._quizCigars||[];
+  var c=cigars[idx];
+  if(!c)return;
+  var q=(c.brand?c.brand+' ':'')+c.name;
+  document.getElementById('cigar-search').value=q.trim();
+  var tab=document.querySelectorAll('.nav-tab')[0];
+  if(tab)showPage('scanner',tab);
+  searchCigar();
+}
+function searchFromQuiz(name,brand){
+  var q=(brand?brand+' ':'')+( name||'');
+  document.getElementById('cigar-search').value=q.trim();
+  var tab=document.querySelectorAll('.nav-tab')[0];
+  if(tab)showPage('scanner',tab);
+  searchCigar();
+}
+
 function startTimer(){confirmStartTimer();}
 function stopTimer(){
   clearInterval(timerInterval);timerRunning=false;
