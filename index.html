@@ -826,7 +826,12 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="timer-cigar" id="timer-cigar-name">No cigar active</div>
       </div>
       <div id="timer-input-wrap" style="display:flex;gap:7px;align-items:center;flex:1;min-width:180px;">
-        <input class="humidor-search-input" id="timer-cigar-input" placeholder="Cigar name..." style="flex:1;" onkeydown="if(event.key==='Enter')confirmStartTimer()">
+        <div class="autocomplete-wrap" style="flex:1;">
+          <input class="humidor-search-input" id="timer-cigar-input" placeholder="Search your humidor..." style="width:100%;" autocomplete="off"
+            oninput="timerAutocomplete(this.value)" onfocus="timerAutocomplete(this.value)"
+            onkeydown="if(event.key==='Enter')confirmStartTimer()">
+          <div class="autocomplete-drop" id="timer-drop"></div>
+        </div>
         <button class="timer-btn" id="timer-start-btn" onclick="confirmStartTimer()">▶ Start</button>
       </div>
       <div id="timer-running-wrap" style="display:none;align-items:center;gap:7px;">
@@ -884,7 +889,14 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           </div>
         </div>
         <div class="form-group"><label class="form-label">Date Smoked</label><input class="form-input" id="s-date" type="date"></div>
-        <div class="form-group"><label class="form-label">Location / Occasion</label><input class="form-input" id="s-location" placeholder="Backyard, evening"></div>
+        <div class="form-group"><label class="form-label">Smoke Duration</label><input class="form-input" id="s-duration" placeholder="Auto-filled by timer" style="background:var(--surface2);color:var(--muted);" readonly></div>
+        <div class="form-group"><label class="form-label">Location / Occasion</label>
+          <div class="autocomplete-wrap">
+            <input class="form-input" id="s-location" placeholder="Backyard, lounge, celebration..." autocomplete="off"
+              oninput="locationAutocomplete(this.value)" onfocus="locationAutocomplete(this.value)">
+            <div class="autocomplete-drop" id="s-location-drop"></div>
+          </div>
+        </div>
         <div class="form-group full">
           <label class="form-label">Ratings</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
@@ -1554,14 +1566,38 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-s-brand"></div>
       <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="edit-s-name"></div>
       <div class="form-group"><label class="form-label">Date Smoked</label><input class="form-input" id="edit-s-date" type="date"></div>
+      <div class="form-group"><label class="form-label">Smoke Duration</label><input class="form-input" id="edit-s-duration" placeholder="e.g. 52m 8s"></div>
       <div class="form-group"><label class="form-label">Location / Occasion</label><input class="form-input" id="edit-s-location"></div>
-      <div class="form-group full"><label class="form-label">Rating</label>
+      <div class="form-group"><label class="form-label">Strength</label>
+        <select class="form-input" id="edit-s-strength">
+          <option value="">—</option><option>Mild</option><option>Mild-Medium</option><option>Medium</option><option>Medium-Full</option><option>Full</option>
+        </select>
+      </div>
+      <div class="form-group full"><label class="form-label">Overall Rating</label>
         <div class="rating-stars" id="edit-stars">
           <span class="star" onclick="setEditRating(1)">★</span><span class="star" onclick="setEditRating(2)">★</span>
           <span class="star" onclick="setEditRating(3)">★</span><span class="star" onclick="setEditRating(4)">★</span>
           <span class="star" onclick="setEditRating(5)">★</span>
         </div>
       </div>
+      <div class="form-group"><label class="form-label">Draw</label>
+        <div class="rating-stars mini-stars" id="edit-stars-draw"><span class="star" onclick="setEditAttr('draw',1)">★</span><span class="star" onclick="setEditAttr('draw',2)">★</span><span class="star" onclick="setEditAttr('draw',3)">★</span><span class="star" onclick="setEditAttr('draw',4)">★</span><span class="star" onclick="setEditAttr('draw',5)">★</span></div>
+      </div>
+      <div class="form-group"><label class="form-label">Burn</label>
+        <div class="rating-stars mini-stars" id="edit-stars-burn"><span class="star" onclick="setEditAttr('burn',1)">★</span><span class="star" onclick="setEditAttr('burn',2)">★</span><span class="star" onclick="setEditAttr('burn',3)">★</span><span class="star" onclick="setEditAttr('burn',4)">★</span><span class="star" onclick="setEditAttr('burn',5)">★</span></div>
+      </div>
+      <div class="form-group"><label class="form-label">Flavor</label>
+        <div class="rating-stars mini-stars" id="edit-stars-flavor"><span class="star" onclick="setEditAttr('flavor',1)">★</span><span class="star" onclick="setEditAttr('flavor',2)">★</span><span class="star" onclick="setEditAttr('flavor',3)">★</span><span class="star" onclick="setEditAttr('flavor',4)">★</span><span class="star" onclick="setEditAttr('flavor',5)">★</span></div>
+      </div>
+      <div class="form-group"><label class="form-label">Construction</label>
+        <div class="rating-stars mini-stars" id="edit-stars-construction"><span class="star" onclick="setEditAttr('construction',1)">★</span><span class="star" onclick="setEditAttr('construction',2)">★</span><span class="star" onclick="setEditAttr('construction',3)">★</span><span class="star" onclick="setEditAttr('construction',4)">★</span><span class="star" onclick="setEditAttr('construction',5)">★</span></div>
+      </div>
+      <div class="form-group"><label class="form-label">Drink Type</label>
+        <select class="form-input" id="edit-s-drink-type">
+          <option value="">None</option><option>Bourbon</option><option>Scotch</option><option>Rye Whiskey</option><option>Irish Whiskey</option><option>Rum</option><option>Cognac</option><option>Armagnac</option><option>Mezcal</option><option>Red Wine</option><option>Port</option><option>Espresso</option><option>Coffee</option><option>Beer</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Drink Name</label><input class="form-input" id="edit-s-drink-name" placeholder="e.g. Pappy 15yr"></div>
       <div class="form-group full"><label class="form-label">Tasting Notes</label><textarea class="smoke-note-area" id="edit-s-notes" style="min-height:80px;"></textarea></div>
     </div>
     <div class="modal-actions">
@@ -1977,6 +2013,24 @@ function loadData(){loadHumidors();loadBar();
   try{const s=localStorage.getItem('tc_smoked');if(s)smoked=JSON.parse(s);}catch(e){}
   renderAll();
 }
+function addToWishlist(){
+  var name=document.getElementById('w-name').value.trim();
+  if(!name){showToast('Please enter a name');return;}
+  wishlist.push({
+    id:Date.now(),
+    brand:document.getElementById('w-brand')?document.getElementById('w-brand').value:'',
+    name:name,
+    size:document.getElementById('w-size')?document.getElementById('w-size').value:'',
+    price:document.getElementById('w-price')?document.getElementById('w-price').value:'',
+    reason:document.getElementById('w-reason')?document.getElementById('w-reason').value:''
+  });
+  ['w-brand','w-name','w-size','w-price','w-reason'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  save();renderWishlist();
+  toggleAddForm('wish-form');
+  showToast('Added to Wish List ✓');
+}
 function save(){
   try{localStorage.setItem('tc_humidor',JSON.stringify(humidor));}catch(e){}
   try{localStorage.setItem('tc_wishlist',JSON.stringify(wishlist));}catch(e){}
@@ -2149,6 +2203,34 @@ function toggleRecipe(type){
     fullBtn.classList.remove('active');
   }
 }
+function addToHumidor(){
+  var name=document.getElementById('h-name').value.trim();
+  if(!name){showToast('Please enter a cigar name');return;}
+  var ah=getActiveHumidor();
+  if(!ah){showToast('No humidor selected');return;}
+  ah.cigars.push({
+    id:Date.now(),
+    batchId:'batch_'+Date.now(),
+    brand:document.getElementById('h-brand').value,
+    name:name,
+    size:document.getElementById('h-size').value,
+    wrapper:document.getElementById('h-wrapper').value,
+    strength:document.getElementById('h-strength').value,
+    notes:document.getElementById('h-notes').value,
+    qty:parseInt(document.getElementById('h-qty').value)||1,
+    price:parseFloat(document.getElementById('h-price').value)||0,
+    purchaseDate:document.getElementById('h-date').value||null
+  });
+  ['h-brand','h-name','h-size','h-wrapper','h-notes'].forEach(function(id){
+    document.getElementById(id).value='';
+  });
+  document.getElementById('h-qty').value=1;
+  document.getElementById('h-price').value='';
+  document.getElementById('h-date').value='';
+  save();saveHumidors();renderHumidor();
+  toggleAddForm('humidor-form');
+  showToast('Added to '+(ah.name||'Humidor')+' ✓');
+}
 function addToHumidorFromResult(){if(!currentResult)return;pickHumidor('fromResult',{});}
 function setRating(n){newRatingVal=n;document.querySelectorAll('#new-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<n)});}
 function setAttrRating(attr,n){
@@ -2165,6 +2247,7 @@ function logSmoke(){
   if(!name){showToast('Please enter a cigar name');return;}
   var drinkType=document.getElementById('s-drink-type')?document.getElementById('s-drink-type').value:'';
   var drinkName=document.getElementById('s-drink-name')?document.getElementById('s-drink-name').value:'';
+  var smokeDuration=document.getElementById('s-duration')?document.getElementById('s-duration').value:'';
   smoked.push({
     id:Date.now(),
     brand:document.getElementById('s-brand').value,
@@ -2174,6 +2257,7 @@ function logSmoke(){
     rating:newRatingVal,
     ratings:{draw:attrRatings.draw,burn:attrRatings.burn,flavor:attrRatings.flavor,construction:attrRatings.construction},
     notes:document.getElementById('s-notes').value,
+    duration:smokeDuration,
     drink:{type:drinkType,name:drinkName,rating:pairingRatingVal},
     photos:[...pendingPhotos]
   });
@@ -2181,6 +2265,7 @@ function logSmoke(){
   if(document.getElementById('s-drink-type'))document.getElementById('s-drink-type').value='';
   if(document.getElementById('s-drink-name'))document.getElementById('s-drink-name').value='';
   document.getElementById('s-date').value='';
+  if(document.getElementById('s-duration'))document.getElementById('s-duration').value='';
   document.getElementById('s-photo-preview').innerHTML='';
   document.getElementById('s-photo-input').value='';
   pendingPhotos=[];newRatingVal=0;pairingRatingVal=0;
@@ -2243,6 +2328,7 @@ function renderSmoked(){
     var stars=c.rating?('<div class="rating-stars" style="margin-top:5px">'+('<span class="star lit">★</span>').repeat(c.rating)+('<span class="star">★</span>').repeat(5-c.rating)+'</div>'):'';
     var note=c.notes?('<div class="personal-note">'+c.notes+'</div>'):'';
     var datePill=c.date?('<span class="meta-pill">'+c.date+'</span>'):'';
+    var durPill=c.duration?('<span class="meta-pill">⏱ '+c.duration+'</span>'):'';
     var locPill=c.location?('<span class="meta-pill">'+c.location+'</span>'):'';
     var photos=c.photos&&c.photos.length?('<div class="photo-strip">'+c.photos.map(function(p){return '<img src="'+p+'" class="photo-thumb">';}).join('')+'</div>'):'';
     var drinkHtml='';
@@ -2258,7 +2344,7 @@ function renderSmoked(){
       });
       attrHtml+='</div>';
     }
-    return '<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+datePill+' '+locPill+'</div>'+stars+attrHtml+drinkHtml+note+'</div><div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;"><button class="btn btn-sm btn-ghost" onclick="openEditSmoked('+c.id+')">Edit</button><button class="btn btn-sm btn-danger" onclick="removeSmoked('+c.id+')">&#x2715;</button></div></div>'+photos+'</div>';
+    return '<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+datePill+' '+locPill+' '+durPill+'</div>'+stars+attrHtml+drinkHtml+note+'</div><div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;"><button class="btn btn-sm btn-ghost" onclick="openEditSmoked('+c.id+')">Edit</button><button class="btn btn-sm btn-danger" onclick="removeSmoked('+c.id+')">&#x2715;</button></div></div>'+photos+'</div>';
   }).join('');
 }
 function renderAll(){renderHumidorTabs();renderHumidorInfoBar();renderHumidor();renderBar();renderWishlist();renderSmoked();}
@@ -2372,27 +2458,50 @@ function setEditRating(n){
   document.querySelectorAll('#edit-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<n)});
 }
 function openEditSmoked(id){
-  const c=smoked.find(function(s){return s.id===id;});if(!c)return;
+  var c=smoked.find(function(s){return s.id===id;});if(!c)return;
   document.getElementById('edit-s-id').value=id;
   document.getElementById('edit-s-brand').value=c.brand||'';
   document.getElementById('edit-s-name').value=c.name||'';
   document.getElementById('edit-s-date').value=c.date||'';
   document.getElementById('edit-s-location').value=c.location||'';
   document.getElementById('edit-s-notes').value=c.notes||'';
+  if(document.getElementById('edit-s-duration'))document.getElementById('edit-s-duration').value=c.duration||'';
+  if(document.getElementById('edit-s-strength'))document.getElementById('edit-s-strength').value=c.strength||'';
+  if(document.getElementById('edit-s-drink-type'))document.getElementById('edit-s-drink-type').value=(c.drink&&c.drink.type)||'';
+  if(document.getElementById('edit-s-drink-name'))document.getElementById('edit-s-drink-name').value=(c.drink&&c.drink.name)||'';
+  // Ratings
   editRatingVal=c.rating||0;
-  document.querySelectorAll('#edit-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<editRatingVal)});
+  document.querySelectorAll('#edit-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<editRatingVal);});
+  var attrs=['draw','burn','flavor','construction'];
+  attrs.forEach(function(a){
+    var val=(c.ratings&&c.ratings[a])||0;
+    var stars=document.querySelectorAll('#edit-stars-'+a+' .star');
+    stars.forEach(function(s,i){s.classList.toggle('lit',i<val);});
+  });
+  editAttrRatings={draw:(c.ratings&&c.ratings.draw)||0,burn:(c.ratings&&c.ratings.burn)||0,flavor:(c.ratings&&c.ratings.flavor)||0,construction:(c.ratings&&c.ratings.construction)||0};
   openModal('modal-smoked');
 }
+var editAttrRatings={draw:0,burn:0,flavor:0,construction:0};
+function setEditAttr(attr,n){
+  editAttrRatings[attr]=n;
+  document.querySelectorAll('#edit-stars-'+attr+' .star').forEach(function(s,i){s.classList.toggle('lit',i<n);});
+}
 function saveEditSmoked(){
-  const id=parseInt(document.getElementById('edit-s-id').value);
-  const c=smoked.find(function(s){return s.id===id;});if(!c)return;
+  var id=parseInt(document.getElementById('edit-s-id').value);
+  var c=smoked.find(function(s){return s.id===id;});if(!c)return;
   c.brand=document.getElementById('edit-s-brand').value;
   c.name=document.getElementById('edit-s-name').value;
   c.date=document.getElementById('edit-s-date').value;
   c.location=document.getElementById('edit-s-location').value;
   c.notes=document.getElementById('edit-s-notes').value;
   c.rating=editRatingVal;
-  save();renderSmoked();closeModal('modal-smoked');showToast('Smoke log updated ✓');
+  if(document.getElementById('edit-s-duration'))c.duration=document.getElementById('edit-s-duration').value;
+  if(document.getElementById('edit-s-strength'))c.strength=document.getElementById('edit-s-strength').value;
+  c.ratings={draw:editAttrRatings.draw,burn:editAttrRatings.burn,flavor:editAttrRatings.flavor,construction:editAttrRatings.construction};
+  var dt=document.getElementById('edit-s-drink-type');
+  var dn=document.getElementById('edit-s-drink-name');
+  if(dt)c.drink={type:dt.value,name:dn?dn.value:'',rating:(c.drink&&c.drink.rating)||0};
+  save();renderSmoked();closeModal('modal-smoked');showToast('Journal entry updated ✓');
 }
 function deleteFromSmoked(){
   const id=parseInt(document.getElementById('edit-s-id').value);
@@ -2406,33 +2515,62 @@ function humidorAutocomplete(val){
   var drop=document.getElementById('s-name-drop');
   if(!val||val.length<1){drop.classList.remove('show');drop.innerHTML='';return;}
   var q=val.toLowerCase();
-  var matches=humidor.filter(function(c){
+  // Search ALL humidors
+  var allCigars=[];
+  (humidors||[]).forEach(function(h){
+    (h.cigars||[]).forEach(function(c){
+      allCigars.push({cigar:c,humidorName:h.name,humidorId:h.id});
+    });
+  });
+  var matches=allCigars.filter(function(item){
+    var c=item.cigar;
     return (c.name||'').toLowerCase().includes(q)||(c.brand||'').toLowerCase().includes(q);
-  }).slice(0,6);
+  }).slice(0,8);
   if(!matches.length){drop.classList.remove('show');drop.innerHTML='';return;}
-  drop.innerHTML=matches.map(function(c,i){
-    return '<div class="autocomplete-item" data-id="'+c.id+'" data-name="'+c.name+'" data-brand="'+(c.brand||'')+'" onclick="selectHumidorCigar('+c.id+')">'
-      +'<div><div class="autocomplete-name">'+c.name+'</div>'
-      +'<div class="autocomplete-meta">'+(c.brand||'Unknown')+(c.strength?' · '+c.strength:'')+'</div></div>'
-      +'<div class="autocomplete-qty">'+((c.qty||1))+' in humidor</div>'
-      +'</div>';
-  }).join('');
+  drop.innerHTML='';
+  matches.forEach(function(item){
+    var c=item.cigar;
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.onclick=(function(cid,hid){return function(){selectHumidorCigar(cid,hid);};})(c.id,item.humidorId);
+    var left=document.createElement('div');
+    var nameEl=document.createElement('div');nameEl.className='autocomplete-name';nameEl.textContent=c.name||'';
+    var metaEl=document.createElement('div');metaEl.className='autocomplete-meta';
+    metaEl.textContent=(c.brand||'Unknown')+(c.strength?' · '+c.strength:'');
+    left.appendChild(nameEl);left.appendChild(metaEl);
+    var right=document.createElement('div');right.style.textAlign='right';
+    var qtyEl=document.createElement('div');qtyEl.className='autocomplete-qty';qtyEl.textContent=(c.qty||1)+' left';
+    var hEl=document.createElement('div');hEl.style.cssText='font-size:10px;color:var(--dim);';hEl.textContent=item.humidorName;
+    right.appendChild(qtyEl);right.appendChild(hEl);
+    div.appendChild(left);div.appendChild(right);
+    drop.appendChild(div);
+  });
   drop.classList.add('show');
   acFocusIdx=-1;
 }
-function selectHumidorCigar(id){
-  var c=humidor.find(function(h){return h.id===id;});
-  if(!c)return;
-  document.getElementById('s-name').value=c.name;
-  document.getElementById('s-brand').value=c.brand||'';
+function selectHumidorCigar(id,humidorId){
+  var foundCigar=null,foundHumidor=null;
+  (humidors||[]).forEach(function(h){
+    var c=(h.cigars||[]).find(function(x){return x.id===id;});
+    if(c&&!foundCigar){foundCigar=c;foundHumidor=h;}
+  });
+  if(!foundCigar&&humidorId){
+    var h=(humidors||[]).find(function(x){return x.id===humidorId;});
+    if(h){foundCigar=(h.cigars||[]).find(function(x){return x.id===id;});foundHumidor=h;}
+  }
+  if(!foundCigar)return;
+  document.getElementById('s-name').value=foundCigar.name;
+  document.getElementById('s-brand').value=foundCigar.brand||'';
   document.getElementById('s-name-drop').classList.remove('show');
-  // Ask if they want to decrement humidor
-  if((c.qty||1)>0){
-    if(confirm('Remove one '+c.name+' from your humidor?')){
-      c.qty=Math.max(0,(c.qty||1)-1);
-      if(c.qty===0)humidor=humidor.filter(function(h){return h.id!==id;});
-      save();renderHumidor();
-      showToast('Removed from humidor ✓');
+  var label=foundHumidor?foundHumidor.name:'your humidor';
+  if((foundCigar.qty||1)>0){
+    if(confirm('Remove one '+foundCigar.name+' from '+label+'?')){
+      foundCigar.qty=Math.max(0,(foundCigar.qty||1)-1);
+      if(foundCigar.qty===0&&foundHumidor){
+        foundHumidor.cigars=foundHumidor.cigars.filter(function(x){return x.id!==id;});
+      }
+      save();saveHumidors();renderHumidor();
+      showToast('Removed from '+label+' ✓');
     }
   }
 }
@@ -2463,6 +2601,45 @@ document.addEventListener('click',function(e){
   }
 });
 
+
+// ── LOCATION AUTOCOMPLETE ────────────────────────────────────────
+function locationAutocomplete(val){
+  var drop=document.getElementById('s-location-drop');
+  if(!drop)return;
+  var locations=[];
+  smoked.forEach(function(s){if(s.location&&s.location.trim())locations.push(s.location.trim());});
+  locations=[...new Set(locations)];
+  if(!val||val.length<1){
+    if(!locations.length){drop.classList.remove('show');return;}
+    var filtered=locations.slice(0,6);
+    renderLocationDrop(drop,filtered);
+    return;
+  }
+  var q=val.toLowerCase();
+  var filtered=locations.filter(function(l){return l.toLowerCase().includes(q);}).slice(0,6);
+  if(!filtered.length){drop.classList.remove('show');return;}
+  renderLocationDrop(drop,filtered);
+}
+function renderLocationDrop(drop,items){
+  drop.innerHTML='';
+  items.forEach(function(loc){
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.onclick=function(){
+      document.getElementById('s-location').value=loc;
+      drop.classList.remove('show');
+    };
+    var nameEl=document.createElement('div');nameEl.className='autocomplete-name';nameEl.textContent=loc;
+    div.appendChild(nameEl);
+    drop.appendChild(div);
+  });
+  drop.classList.add('show');
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#s-location')&&!e.target.closest('#s-location-drop')){
+    var d=document.getElementById('s-location-drop');if(d)d.classList.remove('show');
+  }
+});
 // ── CIGAR SELECTOR ───────────────────────────────────────────────
 var selectorChoices={shape:[],size:[],strength:[],notes:[]};
 
@@ -2642,15 +2819,39 @@ function searchFromQuiz(name,brand){
   searchCigar();
 }
 
+function confirmStartTimer(){
+  var input=document.getElementById('timer-cigar-input');
+  var name=input?input.value.trim():'';
+  if(!name){showToast('Enter a cigar name to start the timer');return;}
+  if(timerRunning){showToast('Timer already running');return;}
+  document.getElementById('timer-cigar-name').textContent=name;
+  timerRunning=true;
+  timerSeconds=0;
+  document.getElementById('timer-display').textContent='00:00:00';
+  document.getElementById('timer-input-wrap').style.display='none';
+  document.getElementById('timer-running-wrap').style.display='flex';
+  timerInterval=setInterval(function(){
+    timerSeconds++;
+    var h=Math.floor(timerSeconds/3600);
+    var m=Math.floor((timerSeconds%3600)/60);
+    var s=timerSeconds%60;
+    document.getElementById('timer-display').textContent=
+      (h>0?(h<10?'0'+h:h)+':':'')+(m<10?'0'+m:m)+':'+(s<10?'0'+s:s);
+  },1000);
+}
 function startTimer(){confirmStartTimer();}
 function stopTimer(){
   clearInterval(timerInterval);timerRunning=false;
-  var m=Math.floor(timerSeconds/60);var s=timerSeconds%60;
-  var duration=m+'m '+s+'s';
+  var h=Math.floor(timerSeconds/3600);
+  var m=Math.floor((timerSeconds%3600)/60);
+  var s=timerSeconds%60;
+  var duration=(h>0?h+'h ':'')+m+'m '+s+'s';
   var cigar=document.getElementById('timer-cigar-name').textContent;
-  showToast('Smoke time: '+duration+' — pre-filled below!');
-  document.getElementById('s-name').value=cigar;
-  document.getElementById('s-notes').value='Smoke duration: '+duration;
+  showToast('Smoke time: '+duration+' — log below!');
+  if(cigar&&cigar!=='No cigar active')document.getElementById('s-name').value=cigar;
+  document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
+  var durEl=document.getElementById('s-duration');
+  if(durEl)durEl.value=duration;
   document.getElementById('timer-input-wrap').style.display='flex';
   document.getElementById('timer-running-wrap').style.display='none';
   document.getElementById('timer-display').textContent='00:00';
@@ -2658,7 +2859,10 @@ function stopTimer(){
   document.getElementById('timer-cigar-input').value='';
   timerSeconds=0;
   var f=document.getElementById('smoked-form');
-  if(!f.classList.contains('show')){f.classList.add('show');f.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  if(f&&!f.classList.contains('show')){
+    f.classList.add('show');
+    setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'start'});},200);
+  }
 }
 
 // ── HUMIDOR SEARCH & SORT ────────────────────────────────────────
@@ -2677,6 +2881,52 @@ function searchFromCotd(){
 }
 
 // ── LONG ASH CHALLENGE ────────────────────────────────────────────
+
+// ── TIMER AUTOCOMPLETE ───────────────────────────────────────────
+function timerAutocomplete(val){
+  var drop=document.getElementById('timer-drop');
+  if(!drop)return;
+  if(!val||val.length<1){drop.classList.remove('show');drop.innerHTML='';return;}
+  var q=val.toLowerCase();
+  var allCigars=[];
+  (humidors||[]).forEach(function(h){
+    (h.cigars||[]).forEach(function(c){
+      allCigars.push({cigar:c,humidorName:h.name});
+    });
+  });
+  var matches=allCigars.filter(function(item){
+    var c=item.cigar;
+    return (c.name||'').toLowerCase().includes(q)||(c.brand||'').toLowerCase().includes(q);
+  }).slice(0,6);
+  if(!matches.length){drop.classList.remove('show');drop.innerHTML='';return;}
+  drop.innerHTML='';
+  matches.forEach(function(item){
+    var c=item.cigar;
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.onclick=function(){
+      document.getElementById('timer-cigar-input').value=(c.brand?c.brand+' ':'')+c.name;
+      drop.classList.remove('show');
+    };
+    var left=document.createElement('div');
+    var nameEl=document.createElement('div');nameEl.className='autocomplete-name';nameEl.textContent=c.name||'';
+    var metaEl=document.createElement('div');metaEl.className='autocomplete-meta';
+    metaEl.textContent=(c.brand||'Unknown')+' · '+item.humidorName;
+    left.appendChild(nameEl);left.appendChild(metaEl);
+    var right=document.createElement('div');
+    var qtyEl=document.createElement('div');qtyEl.className='autocomplete-qty';qtyEl.textContent=(c.qty||1)+' left';
+    right.appendChild(qtyEl);
+    div.appendChild(left);div.appendChild(right);
+    drop.appendChild(div);
+  });
+  drop.classList.add('show');
+}
+// Close timer dropdown on outside click
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#timer-cigar-input')&&!e.target.closest('#timer-drop')){
+    var d=document.getElementById('timer-drop');if(d)d.classList.remove('show');
+  }
+});
 let ashPersonalBest = null;
 function loadAshBest(){try{const b=localStorage.getItem('tc_ashbest');if(b)ashPersonalBest=JSON.parse(b);}catch(e){}}
 function saveAshBest(){try{localStorage.setItem('tc_ashbest',JSON.stringify(ashPersonalBest));}catch(e){}}
