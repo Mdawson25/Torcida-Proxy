@@ -522,7 +522,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
       <div class="result-actions" id="result-actions-cigar">
         <button class="btn btn-sm btn-primary" onclick="addToHumidorFromResult()">+ Humidor</button>
-        <button class="btn btn-sm" onclick="addToWishlistFromResult()">+ Wish List</button>
+        <button class="btn btn-sm" onclick="addToWishlistFromResult()">&#x2728; Cigar Wish List</button>
         <button class="btn btn-sm" onclick="addToSmokedFromResult()">+ Add to Journal</button>
       </div>
       <div class="result-actions" id="result-actions-spirit" style="display:none;">
@@ -792,8 +792,8 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   <!-- WISHLIST -->
   <div id="page-wishlist" class="page">
     <div style="display:flex;gap:8px;margin-bottom:0;">
-      <button class="btn btn-primary" style="flex:1;" onclick="openWishForm('cigar')">🚬 Cigar Wish List</button>
-      <button class="btn btn-ghost" style="flex:1;" onclick="openWishForm('spirit')">🍶 Bar Wish List</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="openWishForm('cigar')">&#x1F6AC; Cigar Wish List</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="openWishForm('spirit')">&#x1F376; Bar Wish List</button>
     </div>
     <div class="add-form" id="wish-form">
       <div class="sec-title" style="font-size:16px;" id="wish-form-title">Add to Wish List</div>
@@ -817,8 +817,10 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <button class="btn btn-ghost" onclick="toggleAddForm('wish-form')">Cancel</button>
       </div>
     </div>
-    <div class="sec-title">My Wish List</div>
-    <div id="wish-list"><div class="empty-state"><span class="empty-icon">✨</span><div class="empty-text">Your wish list is empty</div><div class="empty-sub">Add cigars you'd like to try someday</div></div></div>
+    <div class="sec-title">&#x1F6AC; Cigar Wish List</div>
+    <div id="cigar-wish-list"><div class="empty-state"><span class="empty-icon">&#x1F6AC;</span><div class="empty-text">No cigars on your wish list</div></div></div>
+    <div class="sec-title" style="margin-top:8px;">&#x1F376; Bar Wish List</div>
+    <div id="bar-wish-list"><div class="empty-state"><span class="empty-icon">&#x1F376;</span><div class="empty-text">No spirits on your bar wish list</div></div></div>
   </div>
 
 
@@ -1292,7 +1294,6 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
             <div style="font-size:11px;color:#5C3A1E;background:rgba(139,94,60,0.1);border:0.5px solid #8B5E3C;padding:2px 9px;border-radius:10px;">Bahia · Arapiraca</div>
           </div>
           <div style="font-size:13px;color:var(--muted);line-height:1.7;">Brazilian tobacco — particularly from the Bahia and Arapiraca regions — is prized for its natural sweetness and dark, rustic wrappers. Brazilian maduro leaves ferment beautifully and are used in some of the world's finest maduro blends. The tobacco has a raw, earthy character that adds depth to complex filler blends. <strong>Flavor profile:</strong> molasses, dark earth, leather, raisin, dark chocolate.</div>
-        </div>
 
         <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #6A3A8A;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
@@ -1400,6 +1401,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       </div>
     </div>
 
+    </div>
 
   <!-- ABOUT -->
   <div id="page-about" class="page">
@@ -1506,7 +1508,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="about-footer-sub">Made with respect for the craft &amp; the people behind it</div>
     </div>
   </div>
-    </div>
+</div>
+
+</div>
 <!-- EDIT MODALS -->
 <!-- Humidor Edit Modal -->
 <div class="modal-overlay" id="modal-humidor" onclick="if(event.target===this)closeModal('modal-humidor')">
@@ -1870,7 +1874,8 @@ function renderBar(){
   var icons={'Bourbon':'🥃','Scotch':'🥃','Rye Whiskey':'🥃','Irish Whiskey':'🥃','Japanese Whisky':'🥃',
     'Rum':'🍹','Cognac':'🍷','Armagnac':'🍷','Mezcal':'🌵','Tequila':'🌵',
     'Gin':'🍸','Vodka':'🍸','Port':'🍷','Red Wine':'🍷','Other':'🍶'};
-  list.innerHTML=myBar.map(function(s){
+  list.innerHTML='';
+  myBar.map(function(s){
     var icon=icons[s.type]||'🍶';
     var meta=[];
     if(s.type)meta.push(s.type);
@@ -1893,8 +1898,8 @@ function renderBar(){
     delBtn.onclick=(function(sid){return function(){removeFromBar(sid);};})(s.id);
     btns.appendChild(pairBtn);btns.appendChild(delBtn);
     card.appendChild(iconEl);card.appendChild(body);card.appendChild(btns);
-    return card.outerHTML;
-  }).join('');
+    return card;
+  }).forEach(function(card){list.appendChild(card);});
 }
 
 function addToBarManually(){
@@ -1925,6 +1930,49 @@ function searchSpiritPairing(){
   if(tab)showPage('scanner',tab);
   searchCigar();
 }
+
+function addToWishlistFromResult(){
+  if(!currentResult)return;
+  var isSpirit=currentResult.type==='spirit';
+  if(isSpirit){
+    wishlist.push({
+      id:Date.now(),
+      itemType:'spirit',
+      brand:currentResult.brand||'',
+      name:currentResult.name||'',
+      spiritType:currentResult.spirit_type||'',
+      price:'',
+      reason:''
+    });
+  } else {
+    wishlist.push({
+      id:Date.now(),
+      itemType:'cigar',
+      brand:currentResult.brand||'',
+      name:currentResult.name||'',
+      size:currentResult.size||'',
+      price:'',
+      reason:''
+    });
+  }
+  save();renderWishlist();
+  showToast((currentResult.name||'Item')+' added to '+(isSpirit?'Bar Wish List':'Cigar Wish List')+' ✓');
+}
+
+function addToSmokedFromResult(){
+  if(!currentResult)return;
+  document.getElementById('s-name').value=currentResult.name||'';
+  document.getElementById('s-brand').value=currentResult.brand||'';
+  document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
+  var tab=document.querySelectorAll('.nav-tab')[3];
+  if(tab)showPage('smoked',tab);
+  var f=document.getElementById('smoked-form');
+  if(f){
+    if(!f.classList.contains('show'))f.classList.add('show');
+    setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'start'});},200);
+  }
+  showToast('Pre-filled in Journal — add your notes!');
+}
 function addToBarFromResult(){
   if(!currentResult)return;
   myBar.push({
@@ -1948,29 +1996,31 @@ function removeFromBar(id){
 
 async function findCigarForSpirit(id){
   var s=myBar.find(function(x){return x.id===id;});
-  if(!s)return;
+  if(!s){showToast('Spirit not found');return;}
   showToast('Finding the perfect cigar pairing...');
   try{
-    var q=s.brand+' '+s.name+' '+s.type;
+    var q=(s.brand||'')+' '+(s.name||'')+' '+(s.type||'spirit');
     var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-6',max_tokens:400,
-        system:'You are an expert cigar sommelier. Return ONLY valid JSON.',
-        messages:[{role:'user',content:'Suggest the single best cigar to pair with '+q+'. Return JSON: cigar_name, cigar_brand, why (one sentence).'}]
+        system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',
+        messages:[{role:'user',content:'Suggest the single best cigar to pair with '+q.trim()+'. Return JSON: cigar_name, cigar_brand, why (one sentence).'}]
       })
     });
+    if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();
+    if(data.error)throw new Error(data.error.message||'API error');
     var text=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
     var match=text.match(/\{[\s\S]*\}/);
     if(!match)throw new Error('No JSON');
     var rec=JSON.parse(match[0]);
     if(rec.cigar_name){
-      var q=((rec.cigar_brand||'')+' '+rec.cigar_name).trim();
-      document.getElementById('cigar-search').value=q;
+      var searchQ=((rec.cigar_brand||'')+' '+rec.cigar_name).trim();
+      document.getElementById('cigar-search').value=searchQ;
       var tab=document.querySelectorAll('.nav-tab')[0];
       if(tab)showPage('scanner',tab);
-      setTimeout(function(){showToast('Searching: '+q);searchCigar();},400);
+      setTimeout(function(){showToast('Pairing: '+searchQ);searchCigar();},400);
     } else {
       showToast('No pairing found — try searching manually');
     }
@@ -1982,64 +2032,12 @@ async function findCigarForSpirit(id){
 
 let timerInterval=null,timerSeconds=0,timerRunning=false;
 let smokedFilter='all';
-function loadData(){console.log('Torcida v2.1 loaded');loadHumidors();loadBar();
+function loadData(){loadHumidors();loadBar();
   try{const h=localStorage.getItem('tc_humidor');if(h)humidor=JSON.parse(h);}catch(e){}
   try{const w=localStorage.getItem('tc_wishlist');if(w)wishlist=JSON.parse(w);}catch(e){}
   try{const s=localStorage.getItem('tc_smoked');if(s)smoked=JSON.parse(s);}catch(e){}
   renderAll();
 }
-
-function openWishForm(type){
-  var titleEl=document.getElementById('wish-form-title');
-  var typeEl=document.getElementById('w-item-type');
-  var spiritGroup=document.getElementById('w-spirit-type-group');
-  if(type==='spirit'){
-    if(titleEl)titleEl.textContent='Add Spirit to Bar Wish List';
-    if(typeEl)typeEl.value='spirit';
-    if(spiritGroup)spiritGroup.style.display='block';
-    document.getElementById('w-name').placeholder='e.g. Pappy Van Winkle 15yr';
-    document.getElementById('w-brand').placeholder='e.g. Buffalo Trace';
-    var addBtn=document.querySelector('#wish-form .btn-primary');
-    if(addBtn)addBtn.textContent='Add to My Bar';
-  } else {
-    if(titleEl)titleEl.textContent='Add Cigar to Wish List';
-    if(typeEl)typeEl.value='cigar';
-    if(spiritGroup)spiritGroup.style.display='none';
-    document.getElementById('w-name').placeholder='Family Reserve No. 45';
-    document.getElementById('w-brand').placeholder='Padron';
-    var addBtnC=document.querySelector('#wish-form .btn-primary');
-    if(addBtnC)addBtnC.textContent='Add to Wish List';
-  }
-  var form=document.getElementById('wish-form');
-  if(form&&!form.classList.contains('show'))form.classList.add('show');
-}
-
-function addToWishlist(){
-  var name=document.getElementById('w-name').value.trim();
-  if(!name){showToast('Please enter a name');return;}
-  var wType=document.getElementById('w-item-type')?document.getElementById('w-item-type').value:'cigar';
-  var wST=document.getElementById('w-spirit-type')?document.getElementById('w-spirit-type').value:'';
-  var brand=document.getElementById('w-brand')?document.getElementById('w-brand').value:'';
-  var notes=document.getElementById('w-reason')?document.getElementById('w-reason').value:'';
-  var price=document.getElementById('w-price')?document.getElementById('w-price').value:'';
-  var size=document.getElementById('w-size')?document.getElementById('w-size').value:'';
-  if(wType==='spirit'){
-    myBar.push({id:'bar_'+Date.now(),name:name,brand:brand,type:wST||'Other',age:'',proof:'',price:parseFloat(price)||0,notes:notes});
-    saveBar();
-    try{renderBar();}catch(e){console.error('renderBar:',e);}
-    showToast(name+' added to My Bar ✓');
-  } else {
-    wishlist.push({id:Date.now(),itemType:'cigar',brand:brand,name:name,size:size,price:price,reason:notes});
-    save();
-    try{renderWishlist();}catch(e){console.error('renderWishlist:',e);}
-    showToast(name+' added to Wish List ✓');
-  }
-  ['w-brand','w-name','w-size','w-price','w-reason'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  if(document.getElementById('w-spirit-type'))document.getElementById('w-spirit-type').value='';
-  var form=document.getElementById('wish-form');
-  if(form)form.classList.remove('show');
-}
-
 function save(){
   try{localStorage.setItem('tc_humidor',JSON.stringify(humidor));}catch(e){}
   try{localStorage.setItem('tc_wishlist',JSON.stringify(wishlist));}catch(e){}
@@ -2066,13 +2064,10 @@ async function searchCigar(){
   btn.disabled=true;
   btn.innerHTML='Searching<span class="loader"></span>';
   try{
-    // Stage 1: core identity + info (small, reliable)
     const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
+      method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:800,
+        model:'claude-sonnet-4-6',max_tokens:800,
         system:'You are a cigar and spirits expert. Return ONLY valid compact JSON, no markdown.',
         messages:[{role:'user',content:'Identify "'+q+'". Return JSON: type("cigar" or "spirit"), name, brand. If cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(6 words),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(6 words),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]
       })
@@ -2085,7 +2080,6 @@ async function searchCigar(){
     if(!match)throw new Error('No JSON returned');
     const result=JSON.parse(match[0]);
     displayResult(result);
-    // Stage 2: recipes in background (non-blocking)
     fetchRecipes(q, result.type||'cigar');
   }catch(e){
     console.error('Search error:',e);
@@ -2095,25 +2089,19 @@ async function searchCigar(){
   btn.disabled=false;
 }
 
-async function fetchRecipes(q, type){
+async function fetchRecipes(q,type){
   try{
     var prompt=type==='spirit'
-      ?'For the spirit "'+q+'", return JSON: drink_name,drink_desc,drink_recipe(ingredients then steps, newlines),drink_recipe_search(3-5 words),drink_zero_proof(zero proof version).'
-      :'For the cigar "'+q+'", return JSON: cocktail_name,cocktail_desc,cocktail_recipe(ingredients then steps, newlines),cocktail_recipe_search(3-5 words),zero_proof_recipe(zero proof version).';
+      ?'For the spirit "'+q+'", return JSON: drink_name,drink_desc,drink_recipe(ingredients then steps),drink_recipe_search(3-5 words),drink_zero_proof.'
+      :'For the cigar "'+q+'", return JSON: cocktail_name,cocktail_desc,cocktail_recipe(ingredients then steps),cocktail_recipe_search(3-5 words),zero_proof_recipe.';
     const res=await fetch('https://torcida-proxy.vercel.app/api/chat',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',max_tokens:900,
-        system:'You are a cocktail expert. Return ONLY valid compact JSON, no markdown.',
-        messages:[{role:'user',content:prompt}]
-      })
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:900,system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})
     });
     if(!res.ok)return;
-    const data=await res.json();
-    if(data.error)return;
+    const data=await res.json();if(data.error)return;
     const raw=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
-    const match=raw.match(/\{[\s\S]*\}/);
-    if(!match)return;
+    const match=raw.match(/\{[\s\S]*\}/);if(!match)return;
     const r=JSON.parse(match[0]);
     if(currentResult)Object.assign(currentResult,r);
     if(type==='cigar'&&r.cocktail_name){
@@ -2132,7 +2120,7 @@ async function fetchRecipes(q, type){
       if(r.drink_recipe_search)document.getElementById('spirit-drink-link').href='https://www.google.com/search?q='+encodeURIComponent(r.drink_recipe_search+' recipe');
       document.getElementById('spirit-drink-block').style.display='block';
     }
-  }catch(e){console.log('Recipes fetch failed (non-critical):',e.message);}
+  }catch(e){console.log('Recipes non-critical fail:',e.message);}
 }
 function displayResult(cigar){
   currentResult=cigar;
@@ -2292,6 +2280,15 @@ function logSmoke(){
 }
 function changeQty(id,delta){const c=humidor.find(function(h){return h.id===id;});if(!c)return;c.qty=Math.max(0,(c.qty||1)+delta);if(c.qty===0){humidor=humidor.filter(function(h){return h.id!==id;});showToast('Removed from Humidor');}save();renderHumidor();}
 function moveToHumidor(id){pickHumidor('fromWishlist',{wid:id});}
+function moveWishSpiritToBar(id){
+  var c=wishlist.find(function(w){return w.id===id;});
+  if(!c)return;
+  myBar.push({id:'bar_'+Date.now(),name:c.name,brand:c.brand||'',type:c.spiritType||'Other',age:'',proof:'',price:0,notes:''});
+  wishlist=wishlist.filter(function(w){return w.id!==id;});
+  saveBar();save();renderBar();renderWishlist();
+  showToast(c.name+' moved to My Bar ✓');
+}
+
 function removeWish(id){wishlist=wishlist.filter(function(w){return w.id!==id;});save();renderWishlist();}
 function removeSmoked(id){smoked=smoked.filter(function(s){return s.id!==id;});save();renderSmoked();}
 function renderHumidor(){
@@ -2321,36 +2318,51 @@ function renderHumidor(){
   }).join('');
 }
 function renderWishlist(){
-  var wList=document.getElementById('wish-list');
-  if(!wList)return;
-  if(!wishlist.length){
-    wList.innerHTML='<div class="empty-state"><span class="empty-icon">&#x2728;</span><div class="empty-text">Your wish list is empty</div><div class="empty-sub">Tap Cigar Wish List to add cigars</div></div>';
-    return;
-  }
-  wList.innerHTML='';
-  wishlist.forEach(function(c){
+  var cigarList=document.getElementById('cigar-wish-list');
+  var barList=document.getElementById('bar-wish-list');
+  if(!cigarList||!barList)return;
+  var cigars=wishlist.filter(function(c){return c.itemType!=='spirit';});
+  var spirits=wishlist.filter(function(c){return c.itemType==='spirit';});
+  function makeWishCard(c,isSpirit){
     var card=document.createElement('div');card.className='cigar-card';
-    var isSpirit=c.itemType==='spirit';
     var band=document.createElement('div');band.className='card-band wish';
+    if(isSpirit)band.style.background='#4A5A8A';
     var body=document.createElement('div');body.className='card-body';
-    var nameEl=document.createElement('div');nameEl.className='card-name';nameEl.textContent=c.name||'';
-    var brandEl=document.createElement('div');brandEl.className='card-brand';brandEl.textContent=c.brand||'Unknown Brand';
+    var n=document.createElement('div');n.className='card-name';n.textContent=c.name||'';
+    var b=document.createElement('div');b.className='card-brand';b.textContent=c.brand||'Unknown Brand';
     var meta=document.createElement('div');meta.className='card-meta';
     if(isSpirit&&c.spiritType){var tb=document.createElement('span');tb.className='meta-pill';tb.style.cssText='background:rgba(74,90,138,0.1);color:#2A3A6A;';tb.textContent=c.spiritType;meta.appendChild(tb);}
-    if(c.size){var sp=document.createElement('span');sp.className='meta-pill';sp.textContent=c.size;meta.appendChild(sp);}
+    if(!isSpirit&&c.size){var sp=document.createElement('span');sp.className='meta-pill';sp.textContent=c.size;meta.appendChild(sp);}
     if(c.price){var pp=document.createElement('span');pp.className='meta-pill';pp.textContent=c.price;meta.appendChild(pp);}
-    body.appendChild(nameEl);body.appendChild(brandEl);body.appendChild(meta);
+    body.appendChild(n);body.appendChild(b);body.appendChild(meta);
     if(c.reason){var note=document.createElement('div');note.className='personal-note';note.textContent=c.reason;body.appendChild(note);}
     var actions=document.createElement('div');actions.style.cssText='display:flex;flex-direction:column;gap:5px;flex-shrink:0;';
-    if(!isSpirit){var hBtn=document.createElement('button');hBtn.className='btn btn-sm';hBtn.textContent='-> Humidor';hBtn.onclick=(function(wid){return function(){moveToHumidor(wid);};})(c.id);actions.appendChild(hBtn);}
+    if(isSpirit){
+      var aBtn=document.createElement('button');aBtn.className='btn btn-sm btn-primary';aBtn.textContent='Add to Bar';
+      aBtn.onclick=(function(wid){return function(){moveWishSpiritToBar(wid);};})(c.id);actions.appendChild(aBtn);
+    } else {
+      var hBtn=document.createElement('button');hBtn.className='btn btn-sm';hBtn.textContent='-> Humidor';
+      hBtn.onclick=(function(wid){return function(){moveToHumidor(wid);};})(c.id);actions.appendChild(hBtn);
+    }
     var eBtn=document.createElement('button');eBtn.className='btn btn-sm btn-ghost';eBtn.textContent='Edit';eBtn.onclick=(function(wid){return function(){openEditWishlist(wid);};})(c.id);
     var dBtn=document.createElement('button');dBtn.className='btn btn-sm btn-danger';dBtn.textContent='Remove';dBtn.onclick=(function(wid){return function(){removeWish(wid);};})(c.id);
     actions.appendChild(eBtn);actions.appendChild(dBtn);
     card.appendChild(band);card.appendChild(body);card.appendChild(actions);
-    wList.appendChild(card);
-  });
+    return card;
+  }
+  if(!cigars.length){cigarList.innerHTML='<div class="empty-state"><span class="empty-icon">&#x1F6AC;</span><div class="empty-text">No cigars on your wish list</div></div>';}
+  else{cigarList.innerHTML='';cigars.forEach(function(c){cigarList.appendChild(makeWishCard(c,false));});}
+  if(!spirits.length){barList.innerHTML='<div class="empty-state"><span class="empty-icon">&#x1F376;</span><div class="empty-text">No spirits on your bar wish list</div></div>';}
+  else{barList.innerHTML='';spirits.forEach(function(c){barList.appendChild(makeWishCard(c,true));});}
 }
-
+function moveWishSpiritToBar(id){
+  var c=wishlist.find(function(w){return w.id===id;});
+  if(!c)return;
+  myBar.push({id:'bar_'+Date.now(),name:c.name,brand:c.brand||'',type:c.spiritType||'Other',age:'',proof:'',price:0,notes:''});
+  wishlist=wishlist.filter(function(w){return w.id!==id;});
+  saveBar();save();renderBar();renderWishlist();
+  showToast(c.name+' moved to My Bar ✓');
+}
 function renderSmoked(){
   const ratings=smoked.filter(s=>s.rating>0).map(s=>s.rating);
   document.getElementById('s-count').textContent=smoked.length;
@@ -2864,5 +2876,584 @@ function resetAsh(){
 loadAshBest();
 
 </script>
+</body>
+</html
+function openWishForm(type){
+  var titleEl=document.getElementById('wish-form-title');
+  var typeEl=document.getElementById('w-item-type');
+  var spiritGroup=document.getElementById('w-spirit-type-group');
+  if(type==='spirit'){
+    if(titleEl)titleEl.textContent='Add Spirit to Bar Wish List';
+    if(typeEl)typeEl.value='spirit';
+    if(spiritGroup)spiritGroup.style.display='block';
+    document.getElementById('w-name').placeholder='e.g. Pappy Van Winkle 15yr';
+    document.getElementById('w-brand').placeholder='e.g. Buffalo Trace';
+    var btn=document.querySelector('#wish-form .btn-primary');if(btn)btn.textContent='Add to Bar Wish List';
+  } else {
+    if(titleEl)titleEl.textContent='Add Cigar to Wish List';
+    if(typeEl)typeEl.value='cigar';
+    if(spiritGroup)spiritGroup.style.display='none';
+    document.getElementById('w-name').placeholder='Family Reserve No. 45';
+    document.getElementById('w-brand').placeholder='Padron';
+    var btn2=document.querySelector('#wish-form .btn-primary');if(btn2)btn2.textContent='Add to Cigar Wish List';
+  }
+  var form=document.getElementById('wish-form');
+  if(form&&!form.classList.contains('show'))form.classList.add('show');
+}
+function addToWishlist(){
+  var name=document.getElementById('w-name').value.trim();
+  if(!name){showToast('Please enter a name');return;}
+  var wType=document.getElementById('w-item-type')?document.getElementById('w-item-type').value:'cigar';
+  var wST=document.getElementById('w-spirit-type')?document.getElementById('w-spirit-type').value:'';
+  var brand=document.getElementById('w-brand')?document.getElementById('w-brand').value:'';
+  var notes=document.getElementById('w-reason')?document.getElementById('w-reason').value:'';
+  var price=document.getElementById('w-price')?document.getElementById('w-price').value:'';
+  var size=document.getElementById('w-size')?document.getElementById('w-size').value:'';
+  if(wType==='spirit'){
+    wishlist.push({id:Date.now(),itemType:'spirit',brand:brand,name:name,spiritType:wST||'',price:price,reason:notes});
+    save();renderWishlist();
+    showToast(name+' added to Bar Wish List ✓');
+  } else {
+    wishlist.push({id:Date.now(),itemType:'cigar',brand:brand,name:name,size:size,price:price,reason:notes});
+    save();renderWishlist();
+    showToast(name+' added to Cigar Wish List ✓');
+  }
+  ['w-brand','w-name','w-size','w-price','w-reason'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  if(document.getElementById('w-spirit-type'))document.getElementById('w-spirit-type').value='';
+  var form=document.getElementById('wish-form');
+  if(form)form.classList.remove('show');
+}!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#F5EDD8">
+<title>Torcida — The Art of the Cigar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Philosopher:ital,wght@1,700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+--gold:#8B5E3C;--gold-light:#5C3A1E;--gold-dark:#A07850;
+--bg:#F5EDD8;--surface:#FFFDF7;--surface2:#F0E6CC;--surface3:#E8D5B0;
+--border:rgba(139,94,60,0.2);--border-s:rgba(139,94,60,0.5);
+--text:#3A2410;--muted:#8B6B4A;--dim:#B8946A;
+--red:#8B2A1A;--red-l:#C4503A;
+--btn-bg:#F5EDD8;--btn-bg-h:#EDD8B8;--btn-border:#8B5E3C;
+}
+body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padding-bottom:20px;font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+.app{max-width:780px;margin:0 auto;}
+.header{padding:20px 20px 14px;border-bottom:0.5px solid var(--border);background:rgba(201,168,76,0.03);}
+.header-top{display:flex;align-items:center;gap:12px;margin-bottom:3px;}
+.brand-title{font-family:'Philosopher',serif;font-size:34px;font-weight:700;font-style:italic;color:var(--gold);letter-spacing:2px;}
+.brand-sub{font-size:15px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;text-align:center;}
+.nav{display:flex;background:var(--surface);border-bottom:0.5px solid var(--border);overflow-x:auto;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-tab{flex:1;min-width:0;padding:8px 2px 7px;text-align:center;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'Crimson Pro',serif;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;transition:all 0.2s;border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.2;word-break:break-word;overflow-wrap:break-word;}
+.nav-tab.active{color:var(--gold);border-bottom-color:#8B5E3C;background:rgba(139,94,60,0.05);}
+.nav-tab:hover:not(.active){color:var(--gold-light);background:rgba(139,94,60,0.06);}
+.nav-icon{font-size:18px;line-height:1;display:block;}
+.nav-label{display:block;font-size:9px;letter-spacing:0.3px;text-transform:uppercase;line-height:1.3;max-width:52px;word-break:break-word;hyphens:auto;}
+@media(min-width:400px){.nav-label{font-size:10px;max-width:60px;}}
+@media(min-width:480px){.nav-label{font-size:11px;max-width:70px;}}
+.nav-icon{font-size:19.2px;display:block;margin-bottom:2px;}
+.page{display:none;padding:16px 14px;}
+.page.active{display:block;}
+.sec-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.sec-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
+.btn{padding:10px 18px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:17px;font-weight:600;cursor:pointer;transition:all 0.18s;white-space:nowrap;letter-spacing:0.3px;}
+.btn:hover{background:var(--btn-bg-h);color:#FFE08A;border-color:var(--gold-light);}
+.btn-primary{background:#5C3A1E;border-color:var(--gold);border-width:1.5px;color:#F5EDD8;}
+.btn-primary:hover{background:#7A4E2E;color:#FFFDF7;}
+.btn-sm{padding:6px 12px;font-size:17px;font-weight:600;}
+.btn-ghost{border-color:rgba(201,168,76,0.35);color:var(--gold);background:transparent;}
+.btn-ghost:hover{color:var(--gold-light);border-color:var(--gold);background:rgba(201,168,76,0.07);}
+.btn-danger{border-color:rgba(196,80,58,0.6);color:#E8906A;background:rgba(139,58,42,0.2);}
+.btn-danger:hover{background:rgba(196,80,58,0.28);color:#FFAA88;border-color:#C4503A;}
+.btn-full{width:100%;margin-bottom:14px;}
+.scanner-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 20px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden;}
+.scanner-box::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 29px,rgba(139,94,60,0.04) 30px);pointer-events:none;}
+.scanner-line{width:60%;height:2px;background:linear-gradient(90deg,transparent,#8B5E3C,transparent);margin:14px auto;animation:scan 2s ease-in-out infinite;}
+@keyframes scan{0%,100%{opacity:0.3;transform:scaleX(0.5);}50%{opacity:1;transform:scaleX(1);}}
+.scanner-text{font-size:17px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+.input-row{display:flex;gap:8px;margin-bottom:14px;}
+.search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:13px 15px;color:var(--text);font-family:'Crimson Pro',serif;font-size:18px;outline:none;}
+.search-input:focus{border-color:var(--border-s);}
+.search-input::placeholder{color:var(--dim);}
+.cigar-result{background:var(--surface);border:0.5px solid var(--border-s);border-radius:12px;padding:18px;margin-bottom:14px;display:none;}
+.cigar-result.show{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.cigar-name{font-family:'Playfair Display',serif;font-size:22.8px;color:var(--gold-light);margin-bottom:3px;}
+.cigar-brand{font-size:17px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
+.cigar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.stat-box{background:var(--surface2);border-radius:7px;padding:9px 11px;border:0.5px solid var(--border);}
+.stat-label{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:3px;}
+.stat-val{font-size:17px;color:var(--text);font-weight:500;}
+.notes-block{margin-bottom:12px;}
+.notes-label{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--gold-dark);margin-bottom:5px;font-weight:600;}
+.notes-text{font-size:17px;color:var(--muted);line-height:1.6;}
+.flavor-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.tag{background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;padding:2px 9px;font-size:15px;color:var(--muted);}
+.tag.gold{border-color:var(--gold-dark);color:var(--gold);background:rgba(201,168,76,0.08);}
+.result-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--border);}
+.cigar-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.2s;}
+.cigar-card:hover{border-color:var(--border-s);}
+.card-band{width:4px;min-height:48px;border-radius:2px;background:#8B5E3C;flex-shrink:0;margin-top:2px;}
+.card-band.wish{background:#C4503A;}
+.card-band.smoked{background:#4A6A34;}
+.card-body{flex:1;min-width:0;}
+.card-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:2px;}
+.card-brand{font-size:15px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.meta-pill{font-size:15px;color:var(--dim);background:var(--surface2);padding:2px 7px;border-radius:10px;}
+.card-actions{display:flex;gap:5px;align-items:flex-start;flex-shrink:0;}
+.qty-control{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--btn-border);border-radius:8px;padding:3px 7px;}
+.qty-btn{background:none;border:none;color:var(--gold-light);font-size:20.4px;cursor:pointer;padding:0 1px;line-height:1;font-weight:700;}
+.qty-btn:hover{color:#FFE08A;}
+.qty-num{font-size:17px;color:var(--gold-light);min-width:20px;text-align:center;font-weight:600;}
+.rating-stars{display:flex;gap:2px;margin:5px 0;}
+.star{font-size:18px;cursor:pointer;color:var(--dim);transition:color 0.1s;}
+.star.lit{color:#8B5E3C;}
+.personal-note{font-size:17px;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.5;border-left:2px solid var(--border);padding-left:9px;}
+.photo-strip{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;}
+.photo-thumb{width:60px;height:60px;object-fit:cover;border-radius:6px;border:0.5px solid var(--border);}
+.photo-add{width:60px;height:60px;border-radius:6px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--dim);font-size:24px;background:var(--surface2);transition:all 0.2s;}
+.photo-add:hover{border-color:var(--gold-dark);color:var(--gold);}
+.ash-challenge-box{background:var(--surface);border:1px solid rgba(139,94,60,0.4);border-radius:12px;padding:20px;margin-bottom:18px;position:relative;overflow:hidden;}
+.ash-challenge-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.06) 0%,transparent 70%);pointer-events:none;}
+.ash-title{font-family:'Playfair Display',serif;font-size:20.4px;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.ash-subtitle{font-size:17px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.ash-upload-area{border:1.5px dashed var(--gold-dark);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:14px;background:var(--surface2);}
+.ash-upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.05);}
+.ash-upload-icon{font-size:38.4px;display:block;margin-bottom:7px;}
+.ash-upload-text{font-size:17px;color:var(--muted);}
+.ash-upload-sub{font-size:15px;color:var(--dim);margin-top:3px;}
+.ash-result{display:none;margin-top:14px;animation:fadeIn 0.3s ease;}
+.ash-result.show{display:block;}
+.ash-photo-wrap{position:relative;display:inline-block;margin-bottom:12px;}
+.ash-photo{max-width:100%;max-height:220px;object-fit:cover;border-radius:8px;border:1px solid var(--border-s);display:block;}
+.ash-badge{position:absolute;top:8px;right:8px;background:rgba(201,168,76,0.92);color:#1A1410;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.ash-analysis{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px;}
+.ash-analysis-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.ash-analysis-text{font-size:17px;color:var(--muted);line-height:1.7;}
+.ash-edu-box{background:var(--surface);border:0.5px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 16px;margin-top:14px;}
+.ash-edu-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;font-weight:600;}
+.ash-edu-text{font-size:17px;color:var(--muted);line-height:1.7;}
+.ash-personal-best{display:flex;align-items:center;gap:10px;background:rgba(139,94,60,0.08);border:0.5px solid var(--gold-dark);border-radius:8px;padding:9px 13px;margin-top:12px;}
+.ash-best-label{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);}
+.ash-best-val{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold-light);font-weight:700;}
+.ash-best-sub{font-size:15px;color:var(--dim);}
+.ash-loading{display:none;text-align:center;padding:14px;}
+.ash-loading.show{display:block;}
+
+.empty-state{text-align:center;padding:44px 20px;color:var(--dim);}
+.empty-icon{font-size:52.8px;display:block;margin-bottom:10px;opacity:0.5;}
+.empty-text{font-size:17px;margin-bottom:6px;color:var(--muted);}
+.empty-sub{font-size:17px;}
+.add-form{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;display:none;}
+.add-form.show{display:block;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold-dark);}
+.form-input{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;outline:none;}
+.form-input:focus{border-color:var(--border-s);}
+.form-actions{display:flex;gap:7px;margin-top:14px;}
+.smoke-note-area{width:100%;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;resize:vertical;min-height:72px;outline:none;}
+.smoke-note-area:focus{border-color:var(--border-s);}
+.summary-bar{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.summary-item{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:9px 13px;flex:1;min-width:80px;}
+.summary-num{font-family:'Playfair Display',serif;font-size:25.2px;color:var(--gold);}
+.summary-lbl{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
+.loader{display:inline-block;width:14px;height:14px;border:2px solid rgba(139,94,60,0.3);border-top-color:#8B5E3C;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-left:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#5C3A1E;border:0.5px solid var(--border-s);color:#F5EDD8;padding:9px 18px;border-radius:20px;font-size:17px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
+.quote-banner{background:var(--surface);border-bottom:0.5px solid var(--border);padding:18px 20px;text-align:center;}
+.quote-label{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.quote-ornament{color:var(--gold-dark);font-size:31.2px;font-family:'Playfair Display',serif;line-height:0.8;display:block;margin-bottom:5px;opacity:0.7;}
+.quote-text{font-family:'Playfair Display',serif;font-style:italic;font-size:18px;color:var(--gold-light);line-height:1.6;max-width:580px;margin:0 auto 7px;}
+.quote-attr{font-size:15px;color:var(--muted);letter-spacing:1px;}
+.info-pills{display:flex;gap:5px;padding:14px 16px 0;flex-wrap:wrap;}
+.pill{background:var(--btn-bg);border:1px solid var(--btn-border);border-radius:20px;padding:5px 14px;font-size:15px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);cursor:pointer;transition:all 0.2s;font-family:'Crimson Pro',serif;font-weight:600;}
+.pill.active{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:700;}
+.pill:hover:not(.active){background:rgba(139,94,60,0.1);color:#5C3A1E;border-color:#8B5E3C;}
+.info-sec{display:none;padding:16px;}
+.info-sec.active{display:block;}
+.info-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:5px;}
+.info-sub{font-size:17px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+.shapes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px;}
+.shape-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 10px;transition:border-color 0.2s;display:flex;flex-direction:column;align-items:center;}
+.shape-card:hover{border-color:var(--border-s);}
+.shape-visual{display:flex;justify-content:center;align-items:flex-end;height:96px;margin-bottom:9px;width:100%;}
+.shape-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:2px;text-align:center;}
+.shape-dim{font-size:13px;color:var(--gold-dark);letter-spacing:0.5px;margin-bottom:4px;text-align:center;}
+.shape-desc{font-size:15px;color:var(--muted);line-height:1.4;text-align:center;}
+.str-row{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;margin-bottom:7px;}
+.str-row:hover{border-color:var(--border-s);}
+.str-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);min-width:110px;}
+.str-bar-wrap{flex:1;}
+.str-bar{height:5px;border-radius:3px;background:var(--surface3);}
+.str-fill{height:100%;border-radius:3px;}
+.str-desc{font-size:15px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.str-ex{font-size:13px;color:var(--dim);margin-top:2px;font-style:italic;}
+.cuts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+.cut-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;transition:border-color 0.2s;}
+.cut-card:hover{border-color:var(--border-s);}
+.cut-vis{display:flex;justify-content:center;margin-bottom:10px;height:76px;align-items:center;}
+.cut-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:3px;}
+.cut-badge{display:inline-block;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-bottom:7px;border:0.5px solid;}
+.cut-desc{font-size:15px;color:var(--muted);line-height:1.5;}
+.cut-pro{font-size:13px;color:#7AC49A;margin-top:5px;}
+.cut-con{font-size:13px;color:#E8906A;margin-top:2px;}
+.step{display:flex;gap:12px;margin-bottom:13px;padding:14px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;}
+.step:hover{border-color:var(--border-s);}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,0.15);border:1px solid var(--gold-dark);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);flex-shrink:0;font-weight:700;}
+.step-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:3px;}
+.step-text{font-size:17px;color:var(--muted);line-height:1.5;}
+.step-tip{font-size:15px;color:var(--gold-dark);margin-top:4px;padding-left:9px;border-left:2px solid var(--gold-dark);}
+.wrapper-swatch{height:24px;border-radius:5px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:4px;}
+.ornament-div{text-align:center;color:var(--gold-dark);font-size:19.2px;margin:14px 0;letter-spacing:6px;}
+
+/* ABOUT PAGE */
+.about-hero{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+.about-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.07) 0%,transparent 70%);pointer-events:none;}
+.about-logo-word{font-family:'Philosopher',serif;font-size:58px;font-weight:700;font-style:italic;color:var(--gold);letter-spacing:4px;margin-bottom:6px;}
+.about-tagline{font-size:17px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;}
+.about-ornament{color:var(--gold-dark);font-size:26.4px;letter-spacing:8px;margin-bottom:18px;display:block;}
+.about-intro{font-family:'Playfair Display',serif;font-style:italic;font-size:20.4px;color:var(--gold-light);line-height:1.7;max-width:540px;margin:0 auto;}
+.about-section{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:22px 20px;margin-bottom:14px;}
+.about-section-title{font-family:'Playfair Display',serif;font-size:20.4px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.about-section-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
+.about-body{font-size:17px;color:var(--muted);line-height:1.7;}
+.about-body p{margin-bottom:12px;}
+.about-body p:last-child{margin-bottom:0;}
+.about-body strong{color:var(--gold-light);font-weight:600;}
+.tribute-block{background:var(--surface2);border-left:3px solid #8B5E3C;border-radius:0 10px 10px 0;padding:16px 18px;margin:14px 0;}
+.tribute-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:18px;color:var(--gold-light);line-height:1.7;margin-bottom:8px;}
+.tribute-attr{font-size:15px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;}
+.roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px;}
+.role-card{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px 12px;text-align:center;transition:border-color 0.2s;}
+.role-card:hover{border-color:var(--border-s);}
+.role-icon{font-size:31.2px;display:block;margin-bottom:8px;}
+.role-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:4px;}
+.role-desc{font-size:15px;color:var(--muted);line-height:1.4;}
+.about-values{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.value-item{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:14px 12px;}
+.value-title{font-size:17px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.value-text{font-size:17px;color:var(--muted);line-height:1.5;}
+.about-footer{text-align:center;padding:20px 0 8px;border-top:0.5px solid var(--border);margin-top:20px;}
+.about-footer-word{font-family:'Playfair Display',serif;font-size:26.4px;color:var(--gold-dark);letter-spacing:4px;}
+.about-footer-sub{font-size:15px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+/* ── EDIT MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(58,36,16,0.6);z-index:500;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.show{display:flex;animation:fadeIn 0.2s ease;}
+.modal-box{background:var(--surface);border:0.5px solid var(--border-s);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;animation:slideUp 0.25s ease;}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{background:none;border:none;color:var(--dim);font-size:26.4px;cursor:pointer;padding:0 4px;line-height:1;}
+.modal-close:hover{color:var(--gold);}
+.modal-actions{display:flex;gap:8px;margin-top:16px;}
+
+/* ── SMOKE TIMER ── */
+.timer-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.timer-display{font-family:'Playfair Display',serif;font-size:33.6px;color:var(--gold);min-width:80px;letter-spacing:2px;}
+.timer-label{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:2px;}
+.timer-cigar{font-size:17px;color:var(--muted);font-style:italic;}
+.timer-actions{display:flex;gap:6px;margin-left:auto;}
+.timer-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--gold-light);font-family:'Crimson Pro',serif;font-size:17px;font-weight:600;cursor:pointer;transition:all 0.18s;}
+.timer-btn.active{background:#E8F5E0;border-color:#5A8A3A;color:#3A6820;}
+.timer-btn.stop{background:#F5E8E0;border-color:#C4503A;color:#8B2A1A;}
+
+/* ── HUMIDOR SEARCH ── */
+.humidor-search-row{display:flex;gap:8px;margin-bottom:12px;}
+.humidor-search-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;outline:none;}
+.humidor-search-input:focus{border-color:var(--border-s);}
+.humidor-search-input::placeholder{color:var(--dim);}
+.sort-select{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--muted);font-family:'Crimson Pro',serif;font-size:17px;outline:none;cursor:pointer;}
+.sort-select:focus{border-color:var(--border-s);}
+
+/* ── AGING BADGE ── */
+.aging-badge{font-size:13px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:0.5px;}
+.aging-new{background:rgba(60,100,40,0.12);border:0.5px solid #5A8A3A;color:#3A6820;}
+.aging-mid{background:rgba(139,94,60,0.12);border:0.5px solid #8B5E3C;color:#5C3A1E;}
+.aging-long{background:rgba(160,80,30,0.12);border:0.5px solid #A05028;color:#7A3A18;}
+
+/* ── COLLECTION VALUE ── */
+.value-summary{background:rgba(139,94,60,0.08);border:0.5px solid var(--gold-dark);border-radius:8px;padding:9px 13px;flex:1;min-width:80px;}
+.value-num{font-family:'Playfair Display',serif;font-size:25.2px;color:var(--gold);}
+.value-lbl{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;}
+
+/* ── SMOKED LOG FILTER ── */
+.smoked-filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.filter-pill{padding:4px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Crimson Pro',serif;font-size:15px;cursor:pointer;transition:all 0.15s;letter-spacing:0.5px;}
+.filter-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+.smoked-search-input{flex:1;min-width:140px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:6px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:17px;outline:none;}
+.smoked-search-input:focus{border-color:var(--border-s);}
+.smoked-search-input::placeholder{color:var(--dim);}
+
+
+
+/* ── SMOKE BACKGROUND ── */
+.smoke-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
+.app{position:relative;z-index:1;}
+.modal-overlay{z-index:500;}
+.toast{z-index:999;}
+@keyframes drift1{0%{transform:translateY(100vh) translateX(0) scaleX(1);}50%{transform:translateY(40vh) translateX(30px) scaleX(1.2);}100%{transform:translateY(-20vh) translateX(-10px) scaleX(0.8);opacity:0;}}
+@keyframes drift2{0%{transform:translateY(100vh) translateX(0) scaleX(1);}50%{transform:translateY(50vh) translateX(-25px) scaleX(0.9);}100%{transform:translateY(-10vh) translateX(20px) scaleX(1.1);opacity:0;}}
+@keyframes drift3{0%{transform:translateY(100vh) translateX(0);}50%{transform:translateY(45vh) translateX(15px);}100%{transform:translateY(-15vh) translateX(-20px);opacity:0;}}
+.wisp{position:absolute;bottom:-100px;opacity:0;animation-timing-function:ease-in-out;animation-iteration-count:infinite;}
+.wisp1{left:15%;animation:drift1 18s 0s infinite;opacity:0;}
+.wisp2{left:40%;animation:drift2 22s 4s infinite;opacity:0;}
+.wisp3{left:70%;animation:drift1 20s 8s infinite;opacity:0;}
+.wisp4{left:55%;animation:drift3 25s 2s infinite;opacity:0;}
+.wisp5{left:25%;animation:drift2 19s 11s infinite;opacity:0;}
+
+.mini-stars .star{font-size:22px;padding:2px;}
+.rating-attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.attr-score{display:inline-block;font-size:11px;color:var(--muted);margin-left:4px;vertical-align:middle;}
+.drink-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(74,106,52,0.12);border:0.5px solid rgba(74,106,52,0.4);border-radius:10px;padding:3px 9px;font-size:12px;color:#3A6820;margin-top:6px;}
+
+/* ── HUMIDOR AUTOCOMPLETE ── */
+.autocomplete-wrap{position:relative;}
+.autocomplete-drop{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border-s);border-radius:0 0 10px 10px;z-index:200;max-height:220px;overflow-y:auto;box-shadow:0 6px 20px rgba(58,36,16,0.15);display:none;}
+.autocomplete-drop.show{display:block;}
+.autocomplete-item{padding:11px 14px;cursor:pointer;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:10px;}
+.autocomplete-item:last-child{border-bottom:none;}
+.autocomplete-item:hover,.autocomplete-item.focused{background:rgba(139,94,60,0.08);}
+.autocomplete-name{font-size:15px;color:var(--text);font-weight:600;}
+.autocomplete-meta{font-size:12px;color:var(--muted);}
+.autocomplete-qty{margin-left:auto;font-size:12px;color:var(--muted);background:rgba(139,94,60,0.1);padding:2px 7px;border-radius:8px;flex-shrink:0;}
+
+/* ── CIGAR SELECTOR ── */
+.selector-section{padding:18px 16px;}
+.selector-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--border);}
+.selector-chips{margin-bottom:18px;line-height:2;}
+.sel-chip{display:inline-flex;align-items:center;padding:7px 14px;border-radius:20px;border:1px solid var(--border-s);background:var(--surface);color:var(--muted);font-family:'Crimson Pro',serif;font-size:14px;cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent;margin:3px 4px 3px 0;}
+.sel-chip:hover{border-color:var(--gold);color:var(--gold);}
+.sel-chip.chosen{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:600;}
+.notes-chips{margin-bottom:18px;line-height:2;}
+.note-chip{display:inline-flex;align-items:center;padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Crimson Pro',serif;font-size:13px;cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent;margin:3px 4px 3px 0;}
+.note-chip:hover{border-color:var(--gold);color:var(--gold);}
+.note-chip.chosen{background:rgba(139,94,60,0.15);border-color:#8B5E3C;color:#5C3A1E;font-weight:600;}
+.selector-result{background:var(--surface);border:1px solid var(--border-s);border-radius:12px;padding:18px;margin-top:4px;display:none;}
+.selector-result.show{display:block;animation:fadeIn 0.3s ease;}
+.sel-res-name{font-family:'Philosopher',serif;font-style:italic;font-size:22px;color:var(--text);margin-bottom:3px;}
+.sel-res-brand{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.sel-res-why{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+.sel-res-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.sel-loading{text-align:center;padding:20px;color:var(--muted);font-size:14px;font-style:italic;display:none;}
+.sel-loading.show{display:block;}
+.selector-hint{font-size:12px;color:var(--dim);font-style:italic;margin-bottom:14px;}
+
+#cigar-selector-wrap{display:none;}
+
+.quiz-question{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:600;margin-bottom:12px;line-height:1.4;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{background:var(--surface);border:1px solid var(--border-s);border-radius:10px;padding:12px 14px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:15px;color:var(--muted);transition:all 0.15s;-webkit-tap-highlight-color:transparent;line-height:1.5;}
+.quiz-opt:hover{border-color:var(--gold);color:var(--text);background:rgba(139,94,60,0.05);}
+.quiz-opt.selected{border-color:#8B5E3C;background:#8B5E3C;color:#FFFDF7;font-weight:600;}
+.quiz-progress{display:flex;gap:4px;margin-bottom:14px;}
+.quiz-dot{height:4px;border-radius:2px;background:var(--border);flex:1;transition:background 0.2s;}
+.quiz-dot.done{background:#8B5E3C;}
+.quiz-rec-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;}
+.quiz-rec-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;}
+.quiz-rec-brand{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── MULTI HUMIDOR ── */
+.humidor-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.humidor-tabs::-webkit-scrollbar{display:none;}
+.humidor-tab-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border-s);background:var(--surface);color:var(--muted);font-family:'Crimson Pro',serif;font-size:14px;cursor:pointer;transition:all 0.15s;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+.humidor-tab-btn.active{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:600;}
+.humidor-tab-btn.add-new{background:transparent;border:1.5px dashed var(--border-s);color:var(--gold);}
+.humidor-info-bar{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;}
+.humidor-info-col{flex:1;min-width:120px;}
+.humidor-info-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:3px;}
+.humidor-info-val{font-size:15px;color:var(--text);font-weight:600;}
+.humidor-info-sub{font-size:12px;color:var(--muted);}
+.humi-type-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(139,94,60,0.1);border:0.5px solid var(--border-s);color:var(--gold);margin-top:3px;}
+
+/* ── YOUR BAR ── */
+.bar-tab-row{display:flex;gap:8px;margin-bottom:14px;}
+.bar-tab{flex:1;padding:10px;text-align:center;border-radius:10px;border:1px solid var(--border-s);background:var(--surface);color:var(--muted);font-family:'Crimson Pro',serif;font-size:15px;cursor:pointer;transition:all 0.15s;}
+.bar-tab.active{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:600;}
+.spirit-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:13px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;min-width:0;}
+.spirit-icon{font-size:28px;flex-shrink:0;}
+.spirit-body{flex:1;min-width:0;}
+.spirit-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:600;margin-bottom:2px;word-break:break-word;}
+.spirit-brand{font-size:13px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.spirit-type-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(74,90,138,0.1);border:0.5px solid rgba(74,90,138,0.4);color:#2A3A6A;margin-right:5px;}
+/* ── MOBILE OPTIMIZATIONS ── */
+*{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overscroll-behavior-y:none;}
+input,select,textarea{font-size:17px !important;} /* Prevents iOS zoom on focus */
+
+/* Touch targets — Apple minimum 44x44pt */
+.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
+.btn-sm{min-height:44px;padding:10px 14px;}
+.btn-full{min-height:48px;}
+.nav-tab{min-height:50px;}
+.qty-btn{min-width:36px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;}
+.star{font-size:28px;padding:4px;min-width:36px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;color:#C8A882;} /* Larger star tap targets */
+.filter-pill{min-height:36px;display:inline-flex;align-items:center;}
+.pill{min-height:36px;display:inline-flex;align-items:center;}
+
+/* Single column forms on mobile */
+@media (max-width: 500px) {
+  .form-grid{grid-template-columns:1fr !important;}
+  .form-group.full{grid-column:1 !important;}
+  .cigar-grid{grid-template-columns:1fr 1fr !important;}
+  .about-values{grid-template-columns:1fr !important;}
+  .cuts-grid{grid-template-columns:1fr !important;}
+  .shapes-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr)) !important;}
+  .roles-grid{grid-template-columns:1fr 1fr !important;}
+  .timer-bar{flex-direction:column;gap:8px;}
+  .summary-bar{gap:8px;}
+  .summary-item,.value-summary{padding:8px 10px;}
+  .result-actions{gap:6px;}
+  .result-actions .btn{flex:1;min-width:0;text-align:center;}
+  .modal-box{padding:18px 14px 28px;}
+  .humidor-search-row{flex-direction:column;}
+  .sort-select{width:100%;}
+  .smoked-filter-row{gap:4px;}
+  .card-actions{flex-direction:row !important;flex-wrap:wrap;}
+}
+
+/* Smooth scrolling for lists */
+.page{-webkit-overflow-scrolling:touch;}
+
+/* Better input styling on iOS */
+input[type="date"]{appearance:none;-webkit-appearance:none;}
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
+
+/* Fix inline 10px font-size in wrapper guide */
+.wrapper-label{font-size:13px !important;color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="smoke-bg" aria-hidden="true">
+  <svg class="wisp wisp1" width="60" height="200" viewBox="0 0 60 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M30 200 Q20 170 32 140 Q44 110 28 80 Q12 50 30 20 Q36 8 30 0" stroke="rgba(139,94,60,0.06)" stroke-width="18" stroke-linecap="round" fill="none"/>
+    <path d="M30 200 Q20 170 32 140 Q44 110 28 80 Q12 50 30 20 Q36 8 30 0" stroke="rgba(139,94,60,0.03)" stroke-width="30" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp2" width="50" height="180" viewBox="0 0 50 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25 180 Q35 155 22 125 Q9 95 28 65 Q40 45 24 15 Q20 5 25 0" stroke="rgba(139,94,60,0.05)" stroke-width="14" stroke-linecap="round" fill="none"/>
+    <path d="M25 180 Q35 155 22 125 Q9 95 28 65 Q40 45 24 15 Q20 5 25 0" stroke="rgba(139,94,60,0.025)" stroke-width="26" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp3" width="55" height="190" viewBox="0 0 55 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M27 190 Q18 162 30 130 Q42 98 25 68 Q10 42 28 14 Q32 5 27 0" stroke="rgba(139,94,60,0.04)" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <path d="M27 190 Q18 162 30 130 Q42 98 25 68 Q10 42 28 14 Q32 5 27 0" stroke="rgba(139,94,60,0.02)" stroke-width="28" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp4" width="45" height="170" viewBox="0 0 45 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 170 Q32 145 20 118 Q8 90 24 62 Q36 40 22 12 Q18 4 22 0" stroke="rgba(139,94,60,0.045)" stroke-width="12" stroke-linecap="round" fill="none"/>
+  </svg>
+  <svg class="wisp wisp5" width="50" height="185" viewBox="0 0 50 185" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25 185 Q15 158 27 126 Q39 94 23 64 Q9 38 26 10 Q30 3 25 0" stroke="rgba(139,94,60,0.035)" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <path d="M25 185 Q15 158 27 126 Q39 94 23 64 Q9 38 26 10 Q30 3 25 0" stroke="rgba(139,94,60,0.015)" stroke-width="28" stroke-linecap="round" fill="none"/>
+  </svg>
+</div>
+<div class="app">
+  <div class="header">
+    <div class="header-top" style="justify-content:center;">
+      <span class="brand-title" style="letter-spacing:3px;">Torcida</span>
+    </div>
+    <div class="brand-sub" style="text-align:center;padding-left:0;">The Art of the Cigar</div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-tab active" onclick="showPage('scanner',this)"><span class="nav-icon">🔍</span><span class="nav-label">Find My Cigar</span></button>
+    <button class="nav-tab" onclick="showPage('humidor',this)"><span class="nav-icon">📦</span><span class="nav-label">Humidor</span></button>
+    <button class="nav-tab" onclick="showPage('wishlist',this)"><span class="nav-icon">✨</span><span class="nav-label">Wish List</span></button>
+    <button class="nav-tab" onclick="showPage('smoked',this)"><span class="nav-icon">📒</span><span class="nav-label">Journal</span></button>
+    <button class="nav-tab" onclick="showPage('guide',this)"><span class="nav-icon">📖</span><span class="nav-label">Guide</span></button>
+    <button class="nav-tab" onclick="showPage('about',this)"><span class="nav-icon">🌿</span><span class="nav-label">About</span></button>
+  </nav>
+
+<!-- EDIT MODALS -->
+<!-- Humidor Edit Modal -->
+<div class="modal-overlay" id="modal-humidor" onclick="if(event.target===this)closeModal('modal-humidor')">
+  <div class="modal-box">
+    <div class="modal-title">Edit Cigar <button class="modal-close" onclick="closeModal('modal-humidor')">✕</button></div>
+    <input type="hidden" id="edit-h-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-h-brand"></div>
+      <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="edit-h-name"></div>
+      <div class="form-group"><label class="form-label">Size</label><input class="form-input" id="edit-h-size"></div>
+      <div class="form-group"><label class="form-label">Wrapper</label><input class="form-input" id="edit-h-wrapper"></div>
+      <div class="form-group"><label class="form-label">Strength</label>
+        <select class="form-input" id="edit-h-strength"><option>Mild</option><option>Mild-Medium</option><option>Medium</option><option>Medium-Full</option><option>Full</option></select></div>
+      <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" id="edit-h-qty" type="number" min="1"></div>
+      <div class="form-group"><label class="form-label">Purchase Date</label><input class="form-input" id="edit-h-date" type="date"></div>
+      <div class="form-group"><label class="form-label">Price Per Cigar ($)</label><input class="form-input" id="edit-h-price" type="number" step="0.01" min="0"></div>
+      <div class="form-group full"><label class="form-label">Notes</label><input class="form-input" id="edit-h-notes"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditHumidor()">Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-humidor')">Cancel</button>
+      <button class="btn btn-danger" onclick="deleteFromHumidor()" style="margin-left:auto;">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Wishlist Edit Modal -->
+<div class="modal-overlay" id="modal-wishlist" onclick="if(event.target===this)closeModal('modal-wishlist')">
+  <div class="modal-box">
+    <div class="modal-title">Edit Wish List Entry <button class="modal-close" onclick="closeModal('modal-wishlist')">✕</button></div>
+    <input type="hidden" id="edit-w-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-w-brand"></div>
+      <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="edit-w-name"></div>
+      <div class="form-group"><label class="form-label">Size</label><input class="form-input" id="edit-w-size"></div>
+      <div class="form-group"><label class="form-label">Est. Price</label><input class="form-input" id="edit-w-price"></div>
+      <div class="form-group full"><label class="form-label">Why I want it</label><input class="form-input" id="edit-w-reason"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditWishlist()">Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-wishlist')">Cancel</button>
+      <button class="btn btn-danger" onclick="deleteFromWishlist()" style="margin-left:auto;">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Smoked Edit Modal -->
+<div class="modal-overlay" id="modal-smoked" onclick="if(event.target===this)closeModal('modal-smoked')">
+  <div class="modal-box">
+    <div class="modal-title">Edit Journal Entry <button class="modal-close" onclick="closeModal('modal-smoked')">✕</button></div>
+    <input type="hidden" id="edit-s-id">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="edit-s-brand"></div>
+      <div class="form-group"><label class="form-label">Name / Vitola</label><input class="form-input" id="edit-s-name"></div>
+      <div class="form-group"><label class="form-label">Date Smoked</label><input class="form-input" id="edit-s-date" type="date"></div>
+      <div class="form-group"><label class="form-label">Location / Occasion</label><input class="form-input" id="edit-s-location"></div>
+      <div class="form-group full"><label class="form-label">Rating</label>
+        <div class="rating-stars" id="edit-stars">
+          <span class="star" onclick="setEditRating(1)">★</span><span class="star" onclick="setEditRating(2)">★</span>
+          <span class="star" onclick="setEditRating(3)">★</span><span class="star" onclick="setEditRating(4)">★</span>
+          <span class="star" onclick="setEditRating(5)">★</span>
+        </div>
+      </div>
+      <div class="form-group full"><label class="form-label">Tasting Notes</label><textarea class="smoke-note-area" id="edit-s-notes" style="min-height:80px;"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditSmoked()">Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-smoked')">Cancel</button>
+      <button class="btn btn-danger" onclick="deleteFromSmoked()" style="margin-left:auto;">Delete</button>
+    </div>
+  </div>
+</div>
+
+  <!-- HUMIDOR PICKER MODAL -->
+  <div class="modal-overlay" id="modal-pick-humidor" onclick="if(event.target===this)closeModal('modal-pick-humidor')">
+    <div class="modal-box">
+      <div class="modal-title">Add to Which Humidor? <button class="modal-close" onclick="closeModal('modal-pick-humidor')">✕</button></div>
+      <input type="hidden" id="pick-humidor-action">
+      <input type="hidden" id="pick-humidor-data">
+      <div id="pick-humidor-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;"></div>
+    </div>
+  </div>
+<div class="toast" id="toast"></div>
+
+
 </body>
 </html>
