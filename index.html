@@ -72,14 +72,14 @@ body{font-family:'Crimson Pro',serif,'Apple Color Emoji','Segoe UI Emoji','Noto 
 .tag{background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;padding:2px 9px;font-size:15px;color:var(--muted);}
 .tag.gold{border-color:var(--gold-dark);color:var(--gold);background:rgba(201,168,76,0.08);}
 .result-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--border);}
-.cigar-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.2s;}
+.cigar-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:15px 16px;margin-bottom:12px;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.2s;}
 .cigar-card:hover{border-color:var(--border-s);}
 .card-band{width:4px;min-height:48px;border-radius:2px;background:#8B5E3C;flex-shrink:0;margin-top:2px;}
 .card-band.wish{background:#C4503A;}
 .card-band.smoked{background:#4A6A34;}
 .card-body{flex:1;min-width:0;}
-.card-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:2px;}
-.card-brand{font-size:15px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.card-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:4px;}
+.card-brand{font-size:15px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;}
 .card-meta{display:flex;gap:8px;flex-wrap:wrap;}
 .meta-pill{font-size:15px;color:var(--dim);background:var(--surface2);padding:2px 7px;border-radius:10px;}
 .card-actions{display:flex;gap:5px;align-items:flex-start;flex-shrink:0;}
@@ -521,22 +521,22 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
     <!-- ── HUMIDOR MODE ── -->
     <div id="cigar-humidor-mode">
-      <div class="humidor-tabs" id="humidor-tabs"></div>
-      <div class="humidor-info-bar" id="humidor-info-bar" style="display:none;">
+      <div class="humidor-tabs" id="humidor-tabs" style="margin-bottom:14px;"></div>
+      <div class="humidor-info-bar" id="humidor-info-bar" style="display:none;margin-bottom:14px;">
         <div class="humidor-info-col"><div class="humidor-info-label">Type</div><div class="humidor-info-val" id="hib-type">—</div><div class="humi-type-badge" id="hib-target"></div></div>
         <div class="humidor-info-col"><div class="humidor-info-label">Humidity</div><div class="humidor-info-val" id="hib-humidity">—</div><div class="humidor-info-sub" id="hib-humidity-sub"></div></div>
         <div class="humidor-info-col"><div class="humidor-info-label">Temperature</div><div class="humidor-info-val" id="hib-temp">—</div><div class="humidor-info-sub" id="hib-temp-sub"></div></div>
-        <div style="width:100%;display:flex;gap:8px;margin-top:2px;">
+        <div style="width:100%;display:flex;gap:8px;margin-top:8px;">
           <button class="btn btn-ghost btn-sm" onclick="editActiveHumidor()" style="flex:1;">✏️ Edit Humidor</button>
           <button class="btn btn-sm" style="flex:1;background:#C4503A;border-color:#C4503A;color:#FFFDF7;" onclick="deleteActiveHumidor()">🗑 Delete</button>
         </div>
       </div>
-      <div class="summary-bar">
+      <div class="summary-bar" style="margin-bottom:16px;">
         <div class="summary-item"><div class="summary-num" id="h-count">0</div><div class="summary-lbl">Cigars</div></div>
         <div class="summary-item"><div class="summary-num" id="h-total">0</div><div class="summary-lbl">Total Stock</div></div>
         <div class="value-summary"><div class="value-num" id="h-value">$0</div><div class="value-lbl">Value</div></div>
       </div>
-      <div class="humidor-search-row">
+      <div class="humidor-search-row" style="margin-bottom:14px;">
         <input class="humidor-search-input" id="h-search" placeholder="Search by name, brand, wrapper..." oninput="renderHumidor()">
         <select class="sort-select" id="h-sort" onchange="renderHumidor()">
           <option value="added">Recently Added</option>
@@ -546,7 +546,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           <option value="aging">Aging (Oldest First)</option>
         </select>
       </div>
-      <button class="btn btn-full" onclick="toggleAddForm('humidor-form')">+ Add Cigar to Humidor</button>
+      <button class="btn btn-full" style="margin-bottom:14px;" onclick="toggleAddForm('humidor-form')">+ Add Cigar to Humidor</button>
       <div class="add-form" id="humidor-form">
         <div class="sec-title" style="font-size:16px;">Add to Humidor</div>
         <div class="form-grid">
@@ -565,7 +565,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           <button class="btn btn-ghost" onclick="toggleAddForm('humidor-form')">Cancel</button>
         </div>
       </div>
-      <div class="sec-title" id="h-section-title">My Humidor</div>
+      <div class="sec-title" id="h-section-title" style="margin-top:8px;margin-bottom:14px;">My Humidor</div>
       <div id="humidor-list"></div>
     </div>
 
