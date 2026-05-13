@@ -18,7 +18,7 @@
 --red:#8B2A1A;--red-l:#C4503A;
 --btn-bg:#F5EDD8;--btn-bg-h:#EDD8B8;--btn-border:#8B5E3C;
 }
-body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--text);padding-bottom:20px;font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body{font-family:'Crimson Pro',serif,'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji';background:var(--bg);color:var(--text);padding-bottom:20px;font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;}
 .app{max-width:780px;margin:0 auto;}
 .header{padding:20px 20px 14px;border-bottom:0.5px solid var(--border);background:rgba(201,168,76,0.03);}
 .header-top{display:flex;align-items:center;gap:12px;margin-bottom:3px;}
@@ -392,9 +392,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     <button class="nav-tab active" onclick="showPage('scanner',this)"><span class="nav-icon">🔍</span><span class="nav-label">Find My Cigar</span></button>
     <button class="nav-tab" onclick="showPage('cigar',this)"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;"><path d="M18 8.5 Q19 6.5 18 4.5" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.45"/><path d="M16 8 Q17.2 6.2 16.5 4.3" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" fill="none" opacity="0.3"/><rect x="16.8" y="10" width="3.2" height="1.8" rx="0.7" fill="currentColor" opacity="0.3"/><ellipse cx="16.5" cy="11" rx="1.4" ry="1.4" fill="#E8762A" opacity="0.95"/><rect x="2.5" y="9.5" width="14.2" height="3" rx="1.5" fill="currentColor" opacity="0.9"/><rect x="10.5" y="9.5" width="2.8" height="3" fill="currentColor" opacity="0.4"/><ellipse cx="2.8" cy="11" rx="1.2" ry="1.5" fill="currentColor" opacity="0.7"/></svg></span><span class="nav-label">Cigar</span></button>
     <button class="nav-tab" onclick="showPage('bar',this)"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;"><!-- bottle body --><path d="M8 13 L7 19.5 Q7 20.5 8 20.5 L14 20.5 Q15 20.5 15 19.5 L14 13 Z" fill="currentColor" opacity="0.85"/><!-- bottle label --><rect x="8" y="14.5" width="6" height="3.5" rx="0.5" fill="currentColor" opacity="0.3"/><!-- shoulder taper --><path d="M8 13 Q8 11 9.5 10 L9.5 8.5 L12.5 8.5 L12.5 10 Q14 11 14 13 Z" fill="currentColor" opacity="0.75"/><!-- neck --><rect x="9.5" y="5.5" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.7"/><!-- cork/cap --><rect x="9.8" y="4" width="2.4" height="2" rx="0.6" fill="currentColor" opacity="0.55"/><!-- highlight on body --><rect x="13" y="14" width="0.7" height="5" rx="0.35" fill="white" opacity="0.15"/></svg></span><span class="nav-label">Bar</span></button>
-    <button class="nav-tab" onclick="showPage('smoked',this)"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;"><path d="M16 8.5 Q17 6.5 16 4.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.45"/><path d="M18.2 8 Q19.4 6.2 18.6 4.3" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" fill="none" opacity="0.3"/><ellipse cx="14.8" cy="11" rx="1.4" ry="1.4" fill="#E8762A" opacity="0.95"/><rect x="2.5" y="9.5" width="12.5" height="3" rx="1.5" fill="currentColor" opacity="0.9"/><rect x="9.5" y="9.5" width="2.6" height="3" fill="currentColor" opacity="0.4"/><ellipse cx="2.8" cy="11" rx="1.2" ry="1.5" fill="currentColor" opacity="0.7"/><rect x="15.4" y="10.1" width="3.8" height="1.8" rx="0.7" fill="currentColor" opacity="0.28"/><line x1="3" y1="15.5" x2="14" y2="15.5" stroke="currentColor" stroke-width="0.8" opacity="0.3" stroke-linecap="round"/><line x1="3" y1="17.5" x2="11" y2="17.5" stroke="currentColor" stroke-width="0.8" opacity="0.2" stroke-linecap="round"/></svg></span><span class="nav-label">Smoked</span></button>
+    <button class="nav-tab" onclick="showPage('smoked',this)"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;"><rect x="4" y="4" width="14" height="15" rx="1.5" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="1.1"/><path d="M4 5.5 Q4 3 6 3 Q8 3 8 5.5" stroke="currentColor" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M4 17.5 Q4 20 6 20 Q8 20 8 17.5" stroke="currentColor" stroke-width="1" fill="none" stroke-linecap="round"/><line x1="7" y1="8" x2="15" y2="8" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/><line x1="7" y1="11" x2="15" y2="11" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/><line x1="7" y1="14" x2="12" y2="14" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/></svg></span><span class="nav-label">Smoked</span></button>
     <button class="nav-tab" onclick="showPage('guide',this)"><span class="nav-icon">📖</span><span class="nav-label">Guide</span></button>
-    <button class="nav-tab" onclick="showPage('about',this)"><span class="nav-icon">🌿</span><span class="nav-label">About</span></button>
+    <button class="nav-tab" onclick="showPage('about',this)"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;"><rect x="1.5" y="6" width="19" height="10" rx="2" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.08"/><rect x="3" y="7.5" width="16" height="7" rx="1" stroke="currentColor" stroke-width="0.5" fill="none" opacity="0.5"/><line x1="1.5" y1="9.5" x2="20.5" y2="9.5" stroke="currentColor" stroke-width="0.6" opacity="0.4"/><line x1="1.5" y1="12.5" x2="20.5" y2="12.5" stroke="currentColor" stroke-width="0.6" opacity="0.4"/><text x="11" y="12" text-anchor="middle" font-family="serif" font-size="4.5" fill="currentColor" font-weight="bold" opacity="0.85">TORCIDA</text></svg></span><span class="nav-label">About</span></button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════ -->
@@ -704,7 +704,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="timer-cigar" id="timer-cigar-name">No cigar active</div>
       </div>
       <div id="timer-input-wrap" style="display:flex;gap:7px;align-items:center;flex:1;min-width:180px;">
-        <input class="humidor-search-input" id="timer-cigar-input" placeholder="Cigar name..." style="flex:1;" onkeydown="if(event.key==='Enter')confirmStartTimer()">
+        <div class="autocomplete-wrap" style="flex:1;"><input class="humidor-search-input" id="timer-cigar-input" placeholder="Cigar name..." style="width:100%;" autocomplete="off" oninput="humidorAutocomplete(this.value,'timer-cigar-drop')" onfocus="humidorAutocomplete(this.value,'timer-cigar-drop')" onkeydown="autocompleteKeydown(event,'timer-cigar-drop');if(event.key==='Enter'&&!document.getElementById('timer-cigar-drop').classList.contains('show'))confirmStartTimer()"><div class="autocomplete-drop" id="timer-cigar-drop"></div></div>
         <button class="timer-btn" id="timer-start-btn" onclick="confirmStartTimer()">▶ Start</button>
       </div>
       <div id="timer-running-wrap" style="display:none;align-items:center;gap:7px;">
@@ -819,8 +819,50 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     </div>
     <div id="info-cuts" class="info-sec">
       <div class="info-title">Types of Cuts</div>
-      <div class="info-sub">The cap cut opens the cigar's head for draw. Always use a sharp cutter for a clean, unrestricted draw.</div>
+      <div class="info-sub">The cap cut opens the cigar's head for draw. A clean, precise cut is one of the most important things you can do for your smoke — a poor cut causes unraveling, tight draws, and uneven burns.</div>
       <div class="cuts-grid" id="cuts-grid"></div>
+      <div class="ornament-div" style="margin:18px 0 12px;">Cutting technique</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">How much to cut</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Remove only 1–2mm from the cap — just enough to open the draw. Cutting too deep past the shoulder removes the cap entirely and causes the wrapper to unravel. Look for the cap line (a faint ring where the wrapper ends) and cut just above it.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Blade sharpness matters</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">A dull cutter crushes and tears the cap instead of slicing it cleanly. This bruises the tobacco, tightens the draw, and causes the wrapper to crack or peel. A quality guillotine cutter replaced every 1–2 years will serve you better than an expensive but dull one.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Single vs. double blade</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Double-bladed guillotines cut from both sides simultaneously, reducing lateral stress on the cap and producing a cleaner edge. Single-blade cutters are perfectly fine but require a confident, swift motion — hesitation causes compression and tearing.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Matching cut to ring gauge</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Larger ring gauge cigars (50+) draw more air by default — a V-cut or straight cut works well. Smaller ring gauges (38–46) can become overly restrictive — use a guillotine with a wide opening, not a punch, which can make the draw too tight on a thin cigar.</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Torpedo & figurado tips</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Tapered heads (torpedo, belicoso, pyramid) concentrate flavor. Cut at the widest point of the taper — about 1/4 inch from the tip — to preserve the tapered draw experience while still opening the cigar fully. Never cut all the way to the shoulder on a figurado.</div>
+        </div>
+      </div>
+      <div class="ornament-div" style="margin:4px 0 12px;">Cut comparison</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Guillotine (Straight Cut)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Best all-around cut. Open, generous draw. Works on all ring gauges. Most forgiving for beginners.</div></div>
+          <div style="background:rgba(201,168,76,0.12);border:0.5px solid var(--gold);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap;">Universal</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">V-Cut (Wedge / Cat's Eye)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Cuts a V-shaped wedge into the cap. Concentrates smoke through a narrow channel, intensifying flavors. Excellent on larger ring gauges (50+). Adds complexity and richness.</div></div>
+          <div style="background:rgba(90,138,58,0.12);border:0.5px solid #5A8A3A;color:#3A6820;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap;">Flavor+</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Punch Cut</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">A circular punch bores a small hole into the cap rather than removing it. Keeps the cap intact. Cooler, slower smoke. Reduces draw slightly — ideal for medium/large ring gauges. Avoid on small ring sizes.</div></div>
+          <div style="background:rgba(139,94,60,0.12);border:0.5px solid #8B5E3C;color:#5C3A1E;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap;">Cooler smoke</div>
+        </div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Shuriken / Multi-Blade</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Multiple small cuts radiating from the center. Creates multiple draw channels. Not widely used but produces a unique draw with less resistance. Rare — mostly found among enthusiasts who experiment with draw.</div></div>
+          <div style="background:rgba(80,80,80,0.1);border:0.5px solid #888;color:#666;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap;">Specialist</div>
+        </div>
+      </div>
     </div>
     <div id="info-lighting" class="info-sec">
       <div class="info-title">How to Light a Cigar</div>
@@ -831,34 +873,191 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     </div>
     <div id="info-humidorcare" class="info-sec">
       <div class="info-title">Humidor Care</div>
-      <div class="info-sub">A well-maintained humidor is the difference between a cigar that sings and one that disappoints.</div>
-      <div class="ornament-div" style="margin:14px 0 10px;">Humidity</div>
+      <div class="info-sub">A well-maintained humidor is the difference between a cigar that sings and one that disappoints. Cigars are living things — they continue to ferment and evolve in storage, and the environment you provide determines whether that evolution improves or ruins them.</div>
+
+      <div class="ornament-div" style="margin:16px 0 12px;">Humidity levels</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">65–70% RH</div><div style="background:rgba(74,106,52,0.15);border:0.5px solid #5A8A3A;color:#3A6820;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Ideal</div></div><div style="font-size:14px;color:var(--muted);line-height:1.6;">The sweet spot for most premium cigars. Preserves oils, maintains draw, and allows slow graceful aging.</div></div>
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">62–65% RH</div><div style="background:rgba(139,94,60,0.12);border:0.5px solid #8B5E3C;color:#5C3A1E;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Drier Storage</div></div><div style="font-size:14px;color:var(--muted);line-height:1.6;">Preferred by many aficionados for long-term aging. Cigars burn slower and cooler at this range.</div></div>
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">70–72% RH</div><div style="background:rgba(196,80,58,0.1);border:0.5px solid #C4503A;color:#8B2A1A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Upper Limit</div></div><div style="font-size:14px;color:var(--muted);line-height:1.6;">Above 72% risks mold, tobacco beetle eggs hatching, and wrapper damage. Never exceed 75%.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">65–70% RH</div><div style="background:rgba(74,106,52,0.15);border:0.5px solid #5A8A3A;color:#3A6820;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Ideal</div></div><div style="font-size:13px;color:var(--muted);line-height:1.7;">The sweet spot for most premium cigars. Preserves essential oils, maintains draw resistance, prevents cracking, and allows slow graceful aging. Most manufacturers store at this range.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">62–65% RH</div><div style="background:rgba(139,94,60,0.12);border:0.5px solid #8B5E3C;color:#5C3A1E;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Aging Storage</div></div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Preferred by many aficionados for long-term aging. Lower humidity slows fermentation and produces a slower, cooler burn. Cuban cigars in particular benefit from this range after the initial bloom period.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">70–72% RH</div><div style="background:rgba(196,80,58,0.1);border:0.5px solid #C4503A;color:#8B2A1A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Upper Limit</div></div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Above 72% risks mold growth (white bloom vs. blue-green mold — learn the difference), tobacco beetle eggs hatching, and wrapper splitting. Never exceed 75% under any circumstances.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;">Below 60% RH</div><div style="background:rgba(196,80,58,0.1);border:0.5px solid #C4503A;color:#8B2A1A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Too Dry</div></div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Cigars dry out rapidly below 60%. Wrappers crack and flake, oils evaporate, harshness increases, and the cigar burns hot and fast. Dry cigars can be rehydrated slowly over weeks, but rapid re-humidification splits wrappers.</div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">Temperature</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;">65–70°F (18–21°C)</div><div style="background:rgba(74,106,52,0.15);border:0.5px solid #5A8A3A;color:#3A6820;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Ideal</div></div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Cool and stable. Below 70°F keeps tobacco beetles dormant — their eggs are present in virtually all premium tobacco and hatch above 72°F, devastating an entire collection.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600;">Above 72°F (22°C)</div><div style="background:rgba(196,80,58,0.1);border:0.5px solid #C4503A;color:#8B2A1A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">Beetle Risk</div></div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Tobacco beetle eggs begin hatching above 72°F. If you suspect infestation (tiny holes in the wrapper, fine tobacco dust inside the humidor), quarantine all cigars immediately and freeze them at 0°F for 72 hours before returning to the humidor.</div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">Seasoning a new humidor</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Why seasoning matters</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">New Spanish cedar absorbs massive amounts of moisture. An unseasoned humidor will rob humidity from your cigars, causing them to dry out even with an active humidifier. Proper seasoning saturates the wood so it maintains rather than consumes humidity.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">The wipe method (recommended)</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Dampen a clean cloth or sponge with distilled water only — never tap water, which contains minerals that damage wood and humidifier elements. Wipe all interior cedar surfaces lightly. Place a small dish of distilled water inside, close the lid, and wait 24–48 hours. Check humidity — if it reads 70%+ consistently, the humidor is ready.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">The slow method (safest)</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Place an activated humidifier and a digital hygrometer inside without any cigars. Close the lid for 2 weeks. Let the cedar absorb moisture gradually. This prevents warping, which can occur if unseasoned wood is exposed to rapid moisture introduction. After 2 weeks, readings should stabilize — then add cigars.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Distilled water only</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Tap water contains chlorine, minerals, and bacteria that leave residue, clog humidifier elements, promote mold, and impart off-flavors to tobacco. Always use distilled or purified water. Propylene glycol (PG) solution in a 50/50 mix with distilled water is the gold standard for passive humidifiers — it self-regulates at approximately 70% RH.</div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">Ongoing maintenance</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Digital hygrometer — non-negotiable</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Analog hygrometers that ship with most humidors are notoriously inaccurate — often 10–15% off. A quality digital hygrometer (Boveda Caliber, Xikar, or similar) costs $20–40 and pays for itself immediately by preventing a ruined collection.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Rotation</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Rotate cigars every 3–6 months. Cigars near the humidifier or top of the stack receive more moisture than those at the bottom. Rotation ensures even aging across your collection and prevents any single cigar from becoming over- or under-humidified.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Boveda packs — the modern standard</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Two-way humidity control packets that both add and remove moisture to maintain a precise RH level (58%, 62%, 65%, 69%, 72% available). Replace when the pack becomes fully hardened — typically every 2–4 months depending on traffic and seal quality. Never use both a Boveda pack and a traditional humidifier simultaneously.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Quarantine new cigars</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Always quarantine new cigars in a separate container for 2 weeks before adding them to your main humidor. New arrivals may carry pests, mold, or dramatically different humidity levels that can destabilize your existing collection.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Plume vs. mold — know the difference</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Plume (bloom) is a white crystalline powder that forms on well-aged cigars as oils migrate to the surface — it brushes off cleanly and is a sign of good aging. Mold is fuzzy, circular, and usually blue-green — it spreads and must be addressed immediately by removing affected cigars, wiping surfaces with a 50/50 water-isopropyl cloth, and lowering humidity.</div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">Humidor types</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Desktop humidor</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">The classic. Spanish cedar-lined wood box with a Spanish cedar tray. Ideal for 25–200 cigars. Requires manual monitoring and maintenance. Best for collections you smoke regularly.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Wineador (wine cooler conversion)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">A wine cooler retrofitted with Spanish cedar shelving and Boveda packs or electronic humidifier. Holds hundreds to thousands of cigars with stable temperature control. The gold standard for serious collectors. More setup required but near-perfect climate control.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Tupperdor</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">An airtight plastic container (like Tupperware or Sterilite) with Boveda packs. Airtight seal maintains humidity with minimal evaporation — often outperforms expensive wooden humidors. Lacks the aesthetic but excels at preservation. Ideal for travel and backup storage.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Cabinet humidor</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Full-sized furniture piece holding thousands of cigars. Glass doors, electronic humidification and temperature systems. For dedicated walk-in collections or cigar lounges. Significant investment but commercial-grade climate control.</div></div>
       </div>
     </div>
     <div id="info-leafwrapper" class="info-sec">
       <div class="info-title">Leaves &amp; Wrappers</div>
-      <div class="info-sub">The wrapper contributes up to 60% of a cigar's flavor. Understanding leaf types transforms how you choose and appreciate a cigar.</div>
-      <div class="ornament-div">Wrapper Colors</div>
+      <div class="info-sub">The wrapper leaf contributes up to 60% of a cigar's total flavor. It is the most visually prominent leaf and the most expensive to grow. Understanding leaf types, their cultivation, and fermentation transforms how you choose and experience a cigar.</div>
+
+      <div class="ornament-div" style="margin:16px 0 12px;">Anatomy of a cigar</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;height:44px;border-radius:4px;background:#D4A96A;flex-shrink:0;margin-top:2px;"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Claro — Very Light</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Shade-grown. Extremely light tan color. Mild, smooth, and creamy flavor.</div></div></div>
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;height:44px;border-radius:4px;background:#A0702A;flex-shrink:0;margin-top:2px;"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Colorado — Medium Brown</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">The most common wrapper shade. Rich reddish-brown with cedar, leather, earth notes.</div></div></div>
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;height:44px;border-radius:4px;background:#3A2008;flex-shrink:0;margin-top:2px;border:0.5px solid rgba(201,168,76,0.3);"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Maduro — Very Dark</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Fermented for months. Deep chocolate, coffee, and earth notes with natural sweetness.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Wrapper (Capa)</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">The outermost leaf. Must be blemish-free, silky in texture, and oily. Contributes the most to the visual impression and a significant portion of the flavor — particularly sweetness, spice, and overall character. Grown under shade cloth to produce fine-veined, elastic leaves.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Binder (Capote)</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Holds the filler leaves together in the bunch. Must be elastic enough to stretch and strong enough to hold its shape during the rolling process. Often contributes body, combustion quality, and structural integrity. The binder is chosen as much for burning properties as for flavor.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Filler (Tripa)</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">The blend of 2–5 leaves that make up the interior. The ligador (blender) uses leaves from different primings, regions, and fermentation stages to achieve a specific flavor profile, strength, and burn rate. Different filler leaves serve different functions: volado for combustion, seco for balance, ligero for strength and complexity.</div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">The three filler primings</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:var(--gold);white-space:nowrap;flex-shrink:0;">VOLADO</div><div><div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:2px;">Lower priming — combustion leaf</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Grows at the bottom of the plant. Lowest nicotine content. Burns exceptionally well. Used to ensure consistent combustion throughout the cigar. Mild flavor contribution but essential structural role.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="background:rgba(90,138,58,0.15);border:0.5px solid #5A8A3A;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:#3A6820;white-space:nowrap;flex-shrink:0;">SECO</div><div><div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:2px;">Middle priming — flavor leaf</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Mid-plant. Medium nicotine. Good combustion with complex flavor. Cedar, earth, spice, and sweetness notes. The backbone of most blends — contributes balance and body without dominating strength.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="background:rgba(139,94,60,0.15);border:0.5px solid #8B5E3C;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:#5C3A1E;white-space:nowrap;flex-shrink:0;">LIGERO</div><div><div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:2px;">Top priming — strength leaf</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Highest on the plant. Receives the most sunlight. Highest nicotine and oil content. Burns slowly — always placed in the center of the bunch so the cigar draws evenly. Used sparingly. Responsible for strength, body, and the long finish. Must be aged longer than other primings.</div></div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">Wrapper colors</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;min-height:48px;border-radius:4px;background:#E8D5A0;flex-shrink:0;margin-top:2px;border:0.5px solid rgba(0,0,0,0.1);"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Double Claro (Candela)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Pale green to light tan. Dried rapidly with heat to preserve chlorophyll. Grassy, vegetal, and mild. Largely fallen out of fashion but still produced. Extremely low nicotine. Also called "AMS" (American Market Selection) from their mid-20th century popularity.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;min-height:48px;border-radius:4px;background:#D4A96A;flex-shrink:0;margin-top:2px;"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Claro — Very Light</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Shade-grown under tent cloth. Light tan to golden. Extremely fine veins. Mild, smooth, and creamy with subtle sweetness. Ecuadorian Connecticut wrappers are the modern benchmark for this category — silky texture, elegant draw.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;min-height:48px;border-radius:4px;background:#C4904A;flex-shrink:0;margin-top:2px;"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Natural (Colorado Claro)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Light to medium brown. Often sun-grown. The classic presentation for many Honduran and Dominican blends. Cedar, hay, light nuts, mild spice. More body than Claro but retains approachability.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;min-height:48px;border-radius:4px;background:#A0702A;flex-shrink:0;margin-top:2px;"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Colorado — Medium Brown</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">The most common wrapper shade globally. Rich reddish-brown. Cedar, leather, earth, baking spice, dried fruit. Typical of Nicaraguan puro blends and many Cuban Habanos. Versatile across all strength profiles.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;min-height:48px;border-radius:4px;background:#6A3A10;flex-shrink:0;margin-top:2px;"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Colorado Maduro</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Dark reddish-brown to deep brown. Heavier fermentation than Colorado. Richer, more complex — dark chocolate, coffee, and dried fruit with a natural sweetness. A transition color between Colorado and full Maduro.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;min-height:48px;border-radius:4px;background:#3A2008;flex-shrink:0;margin-top:2px;border:0.5px solid rgba(201,168,76,0.2);"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Maduro — Very Dark</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Fermented for months at high temperatures. Deep chocolate to almost black. The complex fermentation process breaks down harsh compounds, resulting in natural sweetness. Deep chocolate, espresso, dark fruit, earth. Oily sheen. One of the most misunderstood wrappers — not inherently strong, just rich.</div></div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;"><div style="width:18px;min-height:48px;border-radius:4px;background:#1A0A00;flex-shrink:0;margin-top:2px;border:0.5px solid rgba(201,168,76,0.3);"></div><div><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Oscuro — Black</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">The darkest possible wrapper. Extended fermentation beyond Maduro. Very oily. Deep, intense flavors — dark chocolate, espresso, black pepper, molasses. Produced in limited quantities. Nicaraguan and Honduran ligero leaves are most commonly used. Not for the faint-hearted.</div></div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">Cultivation methods</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Shade-grown (Tapado)</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Grown under cheesecloth or muslin tenting that filters sunlight by 30–50%. Produces the most prized wrapper leaves. Without direct sun stress, the leaf grows larger, thinner, and with fewer, finer veins. More elastic — easier to roll without cracking. Less oily and lower nicotine than sun-grown, which contributes to milder, creamier flavor profiles. Ecuador's persistent cloud cover naturally mimics this effect.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Sun-grown (Corojo / Criollo)</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Grown in full sunlight. The leaf develops more oils and thicker veins as a defense against direct sun. Higher oil and nicotine content = more robust, complex, and spicy flavors. Nicaraguan sun-grown Corojo is the benchmark for full-bodied, pepper-forward wrappers. Historically, all Cuban wrapper tobacco was sun-grown.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">Fermentation</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">After harvesting and initial drying, all tobacco goes through fermentation — a controlled composting process where internal heat breaks down ammonia, harsh compounds, and chlorophyll. Wrapper leaves may ferment multiple times over 1–3 years. Maduro fermentation is the most intense, often using steam, pressure, and temperatures up to 120°F. Proper fermentation is what separates fine premium tobacco from harsh commercial cigarette tobacco.</div></div>
+      </div>
+
+      <div class="ornament-div" style="margin:4px 0 12px;">Notable wrapper varieties</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Connecticut Shade</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">The definitive mild wrapper. Originally grown in the Connecticut River Valley; today most come from Ecuador under similar growing conditions. Silky, paper-thin, light golden. Creamy, nutty, slightly sweet. Used on many of the world's most approachable premium cigars.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Habano (Cuban-seed)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Cuban seed tobacco grown outside Cuba — Nicaragua, Ecuador, Honduras, Dominican Republic. Retains the genetic profile of Criollo and Corojo varieties that made Cuban tobacco famous. Spicy, complex, cedar, leather, pepper. The backbone of many of Nicaragua's most celebrated blends.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Sumatra</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">From the Indonesian island of Sumatra. Medium brown, fine texture, low to medium strength. Earthy, woody, slightly spicy with underlying sweetness. Used as both wrapper and binder in Dutch-style cigars and increasingly in New World blends for its consistency.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">San Andrés (Mexican Maduro)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Grown in the San Andrés Tuxtla valley of Veracruz, Mexico. The gold standard for Maduro wrappers. Exceptionally dark, oily, and naturally sweet. Chocolate, coffee, dark fruit, molasses. Aged longer than most other Maduros. Used in iconic blends like Padron 1964 Maduro.</div></div>
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;"><div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:2px;">Corojo (Original Cuban)</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">The original premier Cuban wrapper variety, once grown exclusively in the Vuelta Abajo region of Cuba. Post-revolution seeds were smuggled to Honduras, Nicaragua, and Ecuador. Rich red-brown color, intense oils, bold pepper and spice. A connoisseur's wrapper.</div></div>
       </div>
     </div>
     <div id="info-origins" class="info-sec">
       <div class="info-title">Countries of Origin</div>
-      <div class="info-sub">Tobacco's character is inseparable from the soil it grows in. Each region produces leaves with a distinct personality.</div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;">
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #C9A84C;"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;margin-bottom:6px;">Cuba — Vuelta Abajo</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">The origin of everything. Complex earthiness, subtle sweetness, cedar, leather, cream.</div></div>
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #5A8A3A;"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;margin-bottom:6px;">Nicaragua — Jalapa · Estelí</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">The new world power. Volcanic soil produces pepper, dark chocolate, earth, leather, coffee.</div></div>
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #8B5E3C;"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;margin-bottom:6px;">Dominican Republic — Cibao Valley</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Elegance and refinement. Cream, cedar, floral, light spice, nuts.</div></div>
-        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid #3A6820;"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);font-weight:600;margin-bottom:6px;">Ecuador — Cloud Forest</div><div style="font-size:13px;color:var(--muted);line-height:1.7;">Natural cloud cover mimics shade-grown. Silky wrappers: cream, vanilla, cedar, floral.</div></div>
+      <div class="info-sub">Terroir is as meaningful in cigars as it is in wine. Tap any country to explore its flavor fingerprint across six dimensions.</div>
+      <style>
+        .orig-btn{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left;width:100%;transition:border-color 0.15s;}
+        .orig-btn.active{border:1.5px solid var(--gold);background:rgba(201,168,76,0.08);}
+        .orig-btn .ob-flag{font-size:20px;display:block;margin-bottom:4px;line-height:1.2;}
+        .orig-btn .ob-name{font-size:13px;font-weight:600;color:var(--text);display:block;}
+        .orig-btn .ob-reg{font-size:10px;color:var(--muted);margin-top:1px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .orig-detail-box{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px;margin-top:8px;}
+        .orig-dim-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+        .orig-dim-bg{flex:1;height:4px;background:var(--border);border-radius:2px;}
+        .orig-dim-fill{height:4px;border-radius:2px;transition:width 0.4s ease;}
+        .orig-tag{font-size:11px;padding:3px 8px;border-radius:20px;border:0.5px solid var(--gold);color:var(--gold-dark);background:rgba(201,168,76,0.1);}
+      </style>
+      <div style="font-size:12px;color:var(--muted);padding:10px 0 6px;">Tap a country to see its flavor fingerprint</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:4px 0;">
+        <button class="orig-btn active" onclick="origSelect(0)"><span class="ob-flag" style="display:inline-block;background:#C9A84C;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">CU</span><span class="ob-name">Cuba</span><span class="ob-reg">Vuelta Abajo</span></button>
+        <button class="orig-btn" onclick="origSelect(1)"><span class="ob-flag" style="display:inline-block;background:#5A8A3A;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">NI</span><span class="ob-name">Nicaragua</span><span class="ob-reg">Estelí · Jalapa</span></button>
+        <button class="orig-btn" onclick="origSelect(2)"><span class="ob-flag" style="display:inline-block;background:#8B5E3C;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">DO</span><span class="ob-name">Dominican Rep.</span><span class="ob-reg">Cibao Valley</span></button>
+        <button class="orig-btn" onclick="origSelect(3)"><span class="ob-flag" style="display:inline-block;background:#3A6820;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">HN</span><span class="ob-name">Honduras</span><span class="ob-reg">Jamastran Valley</span></button>
+        <button class="orig-btn" onclick="origSelect(4)"><span class="ob-flag" style="display:inline-block;background:#2A5878;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">EC</span><span class="ob-name">Ecuador</span><span class="ob-reg">Quevedo · Los Ríos</span></button>
+        <button class="orig-btn" onclick="origSelect(5)"><span class="ob-flag" style="display:inline-block;background:#785028;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">MX</span><span class="ob-name">Mexico</span><span class="ob-reg">San Andrés Tuxtla</span></button>
+        <button class="orig-btn" onclick="origSelect(6)"><span class="ob-flag" style="display:inline-block;background:#8A3A2A;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">CM</span><span class="ob-name">Cameroon</span><span class="ob-reg">Metet · Yaoundé</span></button>
+        <button class="orig-btn" onclick="origSelect(7)"><span class="ob-flag" style="display:inline-block;background:#4A6878;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">ID</span><span class="ob-name">Indonesia</span><span class="ob-reg">Sumatra · Java</span></button>
+        <button class="orig-btn" onclick="origSelect(8)"><span class="ob-flag" style="display:inline-block;background:#2A7840;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">BR</span><span class="ob-name">Brazil</span><span class="ob-reg">Bahia · Arapiraca</span></button>
+        <button class="orig-btn" onclick="origSelect(9)"><span class="ob-flag" style="display:inline-block;background:#3A5878;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">US</span><span class="ob-name">USA</span><span class="ob-reg">Connecticut Valley</span></button>
+        <button class="orig-btn" onclick="origSelect(10)"><span class="ob-flag" style="display:inline-block;background:#8A5A2A;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">TR</span><span class="ob-name">Turkey</span><span class="ob-reg">Izmir · Samsun</span></button>
+        <button class="orig-btn" onclick="origSelect(11)"><span class="ob-flag" style="display:inline-block;background:#2A7850;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">CR</span><span class="ob-name">Costa Rica</span><span class="ob-reg">Naranjo · Cartago</span></button>
+        <button class="orig-btn" onclick="origSelect(12)"><span class="ob-flag" style="display:inline-block;background:#4A5878;color:#fff;font-size:10px;font-weight:700;font-family:monospace;padding:2px 5px;border-radius:4px;letter-spacing:1px;margin-bottom:4px;">PA</span><span class="ob-name">Panama</span><span class="ob-reg">Dolega · Boquete</span></button>
       </div>
+      <div id="origins-detail" style="margin-top:4px;"></div>
+      <script>
+      (function(){
+        var DIMS=['Strength','Spice','Sweetness','Earth','Complexity','Smoke'];
+        var ctrs=[
+          {name:'Cuba',region:'Vuelta Abajo · Partido · Semi Vuelta',scores:[7,6,7,8,10,8],tags:['Cedar','Leather','Cream','Long finish'],desc:'The benchmark every other region is measured against. Vuelta Abajo soil produces unparalleled complexity — earthy sweetness, cream, cedar, and a signature spice that lingers long in the retrohale.',brands:'Cohiba, Montecristo, Partagás, Romeo y Julieta, Bolivar',color:'#C9A84C'},
+          {name:'Nicaragua',region:'Estelí · Jalapa · Condega · Ometepe',scores:[9,9,5,9,9,9],tags:['Black pepper','Dark chocolate','Coffee','Volcanic earth'],desc:'The modern powerhouse. Volcanic soil and distinct micro-regions produce extraordinary depth. Estelí delivers bold intensity; Jalapa brings sweeter balance; Ometepe ligero is among the richest in the world.',brands:'Padron, Oliva, My Father, AJ Fernandez, Drew Estate',color:'#5A8A3A'},
+          {name:'Dominican Republic',region:'Cibao Valley · Villa González',scores:[4,4,7,5,7,5],tags:['Cream','Floral','Light spice','Cedar'],desc:'Elegance over power. Cibao Valley tobacco is refined and restrained — creamy, approachable, subtly complex. The world\'s largest premium cigar producer by volume for 40+ years.',brands:'Arturo Fuente, Davidoff, Macanudo, Avo, Leon Jimenes',color:'#8B5E3C'},
+          {name:'Honduras',region:'Jamastran Valley · Danlí · Talanga',scores:[7,6,5,8,8,7],tags:['Dark cocoa','Leather','Earth','Woody spice'],desc:'The Jamastran Valley at 2,500ft delivers superb balance — more robust than Dominican, less aggressive than Nicaraguan. Dark cocoa and leather are the signature notes.',brands:'Alec Bradley, Camacho, CAO, Punch, Rocky Patel',color:'#3A6820'},
+          {name:'Ecuador',region:'Quevedo · Los Ríos · El Chaco',scores:[4,4,8,4,6,4],tags:['Cream','Vanilla','Silky texture','Floral'],desc:'The premier wrapper source. Persistent Andean cloud cover naturally mimics shade-growing — producing silky, thin, nearly seamless leaves prized by blenders worldwide.',brands:'Wrapper for Davidoff, Perdomo, AJ Fernandez, Rocky Patel',color:'#2A5878'},
+          {name:'Mexico',region:'San Andrés Tuxtla · Veracruz',scores:[7,5,9,7,7,6],tags:['Dark chocolate','Molasses','Coffee','Natural sweetness'],desc:'San Andrés Maduro is the gold standard for dark wrappers — jet black, oily, naturally sweet from extended fermentation.',brands:'Padron 1964 Maduro, Arturo Fuente Hemingway Maduro',color:'#785028'},
+          {name:'Cameroon',region:'Metet · Yaoundé Region',scores:[5,5,6,8,8,5],tags:['Earthy','Sweet barnyard','Woody','Distinctive tooth'],desc:'One of the most distinctive wrappers in the world. Recognizable by its rustic tooth texture. Limited supply drives prestige. Earthy, woody, subtly sweet.',brands:'Arturo Fuente Don Carlos, vintage CAO Cameroon',color:'#8A3A2A'},
+          {name:'Indonesia',region:'Sumatra · Java · Besuki',scores:[4,4,5,7,5,5],tags:['Earth','Wood','Consistent burn','Mild spice'],desc:'Sumatra wrappers and Java binders are workhorses of premium blending. Reliable combustion and earthy wood flavors make Indonesian leaf a staple across handmade cigars.',brands:'Widely used as binder; Djarum, European-style cigars',color:'#4A6878'},
+          {name:'Brazil',region:'Bahia · Arapiraca',scores:[6,5,8,7,6,6],tags:['Natural sweetness','Dark fruit','Earthy','Rustic'],desc:'Arapiraca leaf produces some of the finest Maduro binders in the world. Brazilian tobacco delivers natural sweetness and dark fruit alongside a rustic earthiness.',brands:'CAO Brazilia, various premium binder and filler blends',color:'#2A7840'},
+          {name:'USA',region:'Connecticut Valley · Pennsylvania · Kentucky',scores:[3,3,8,4,5,4],tags:['Cream','Hay','Mild sweetness','Smooth draw'],desc:'The Connecticut River Valley produces the most famous shade-grown wrapper — silky, light, and consistently mild. Connecticut Broadleaf is a premier Maduro binder.',brands:'Broderick, General Cigar Connecticut shade, Diesel Broadleaf',color:'#3A5878'},
+          {name:'Turkey',region:'Izmir · Samsun · Trabzon',scores:[5,7,4,6,6,5],tags:['Aromatic','Herbal','Spice','Oriental character'],desc:'Turkish Oriental tobacco is small-leafed, sun-cured, and intensely aromatic. Complex herbal and spice notes make it increasingly valued in boutique premium blends.',brands:'Natively used in blended tobaccos; emerging in boutique cigars',color:'#8A5A2A'},
+          {name:'Costa Rica',region:'Naranjo · Palmares · Cartago',scores:[5,5,6,6,7,5],tags:['Smooth','Mineral','Cedar','Balanced','Floral'],desc:'An emerging origin gaining recognition from boutique blenders. Costa Rica highlands produce tobacco with clean mineral character, smooth draw, and cedar-forward balance.',brands:'Kafie 1901, Aganorsa Leaf Costa Rican blends',color:'#2A7850'},
+          {name:'Panama',region:'Dolega · Boquete · Chiriquí',scores:[5,5,7,6,6,5],tags:['Smooth','Mineral','Cedar','Balanced'],desc:'High-altitude Chiriquí highlands produce tobacco with mineral character and smooth draw. An emerging origin gaining recognition among boutique blenders.',brands:'Las Lajas, Don Benigno',color:'#4A5878'},
+        ];
+
+        function drawRadar(canvas,scores,col){
+          var ctx=canvas.getContext('2d');
+          var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,R=Math.min(W,H)/2-28,N=6;
+          ctx.clearRect(0,0,W,H);
+          var isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
+          var gc=isDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.08)';
+          var lc=isDark?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.4)';
+          for(var ring=1;ring<=5;ring++){
+            ctx.beginPath();
+            for(var i=0;i<N;i++){var a=(i/N)*Math.PI*2-Math.PI/2,r=R*(ring/5);i===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}
+            ctx.closePath();ctx.strokeStyle=gc;ctx.lineWidth=0.5;ctx.stroke();
+          }
+          for(var i=0;i<N;i++){
+            var a=(i/N)*Math.PI*2-Math.PI/2;
+            ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));ctx.strokeStyle=gc;ctx.lineWidth=0.5;ctx.stroke();
+            ctx.font='10px sans-serif';ctx.fillStyle=lc;ctx.textAlign='center';ctx.textBaseline='middle';
+            ctx.fillText(DIMS[i],cx+(R+20)*Math.cos(a),cy+(R+20)*Math.sin(a));
+          }
+          ctx.beginPath();
+          for(var i=0;i<N;i++){var a=(i/N)*Math.PI*2-Math.PI/2,r=R*(scores[i]/10);i===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}
+          ctx.closePath();ctx.fillStyle=col+'33';ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke();
+          for(var i=0;i<N;i++){var a=(i/N)*Math.PI*2-Math.PI/2,r=R*(scores[i]/10);ctx.beginPath();ctx.arc(cx+r*Math.cos(a),cy+r*Math.sin(a),3.5,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();}
+        }
+
+        window.origSelect=function(idx){
+          document.querySelectorAll('.orig-btn').forEach(function(b,i){b.classList.toggle('active',i===idx);});
+          var c=ctrs[idx];
+          var bars=DIMS.map(function(dim,i){
+            return '<div class="orig-dim-row"><div style="width:76px;font-size:11px;color:var(--muted);">'+dim+'</div><div class="orig-dim-bg"><div class="orig-dim-fill" style="width:'+c.scores[i]*10+'%;background:'+c.color+';"></div></div><div style="width:16px;text-align:right;font-size:11px;color:var(--muted);">'+c.scores[i]+'</div></div>';
+          }).join('');
+          document.getElementById('origins-detail').innerHTML='<div class="orig-detail-box">'
+            +'<div style="margin-bottom:12px;">'
+            +'<div style="font-family:Playfair Display,serif;font-size:18px;color:var(--text);font-weight:600;">'+c.name+'</div>'
+            +'<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+c.region+'</div></div>'
+            +'<div style="display:flex;justify-content:center;margin:8px 0 14px;"><canvas id="orig-rc" width="220" height="220"></canvas></div>'
+            +'<div style="margin-bottom:14px;">'+bars+'</div>'
+            +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">'+c.tags.map(function(t){return '<span class="orig-tag">'+t+'</span>';}).join('')+'</div>'
+            +'<div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px;">'+c.desc+'</div>'
+            +'<div style="font-size:12px;color:var(--muted);"><span style="color:var(--text);font-weight:600;">Notable: </span>'+c.brands+'</div>'
+            +'</div>';
+          drawRadar(document.getElementById('orig-rc'),c.scores,c.color);
+        };
+
+        origSelect(0);
+      })();
+      </script>
     </div>
+
     <div id="info-quizpill" class="info-sec">
       <div class="info-title">Strength Finder</div>
       <div class="info-sub">Answer five quick questions and we'll recommend the perfect starting strength and three specific cigars.</div>
@@ -1112,7 +1311,7 @@ function renderBar(){
     if(meta.length){var metaEl=document.createElement('div');metaEl.style.cssText='font-size:12px;color:var(--muted);';metaEl.textContent=meta.join(' · ');body.appendChild(metaEl);}
     if(s.notes){var notesEl=document.createElement('div');notesEl.className='personal-note';notesEl.textContent=s.notes;body.appendChild(notesEl);}
     var btns=document.createElement('div');btns.style.cssText='display:flex;flex-direction:column;gap:5px;flex-shrink:0;';
-    var pairBtn=document.createElement('button');pairBtn.className='btn btn-sm btn-ghost';pairBtn.style.fontSize='12px';pairBtn.textContent='<svg width="14" height="14" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px;"><path d="M18 8.5 Q19 6.5 18 4.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.45"/><ellipse cx="16.5" cy="11" rx="1.4" ry="1.4" fill="#E8762A" opacity="0.95"/><rect x="2.5" y="9.5" width="14.2" height="3" rx="1.5" fill="currentColor" opacity="0.9"/><rect x="10.5" y="9.5" width="2.8" height="3" fill="currentColor" opacity="0.4"/><ellipse cx="2.8" cy="11" rx="1.2" ry="1.5" fill="currentColor" opacity="0.7"/></svg> Pair';pairBtn.onclick=(function(sid){return function(){findCigarForSpirit(sid);};})(s.id);
+    var pairBtn=document.createElement('button');pairBtn.className='btn btn-sm btn-ghost';pairBtn.style.fontSize='12px';pairBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px;"><path d="M18 8.5 Q19 6.5 18 4.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.45"/><ellipse cx="16.5" cy="11" rx="1.4" ry="1.4" fill="#E8762A" opacity="0.95"/><rect x="2.5" y="9.5" width="14.2" height="3" rx="1.5" fill="currentColor" opacity="0.9"/><rect x="10.5" y="9.5" width="2.8" height="3" fill="currentColor" opacity="0.4"/><ellipse cx="2.8" cy="11" rx="1.2" ry="1.5" fill="currentColor" opacity="0.7"/></svg> Pair';pairBtn.onclick=(function(sid){return function(){findCigarForSpirit(sid);};})(s.id);
     var delBtn=document.createElement('button');delBtn.className='btn btn-sm btn-danger';delBtn.textContent='✕';delBtn.onclick=(function(sid){return function(){removeFromBar(sid);};})(s.id);
     btns.appendChild(pairBtn);btns.appendChild(delBtn);
     card.appendChild(iconEl);card.appendChild(body);card.appendChild(btns);
@@ -1272,7 +1471,7 @@ function showPage(id,tab){
   if(id==='bar'){renderBar();}
   if(id==='smoked'){refreshTimerUI();}
 }
-function showInfo(id,pill){document.querySelectorAll('.info-sec').forEach(function(s){s.classList.remove('active');});document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('active');});document.getElementById('info-'+id).classList.add('active');pill.classList.add('active');}
+function showInfo(id,pill){document.querySelectorAll('.info-sec').forEach(function(s){s.classList.remove('active');});document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('active');});document.getElementById('info-'+id).classList.add('active');pill.classList.add('active');if(id==='origins'&&typeof origSelect==='function'){origSelect(0);}}
 function showToast(msg){var t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
 function toggleAddForm(id){var f=document.getElementById(id);f.classList.toggle('show');if(f.classList.contains('show'))f.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function openModal(id){document.getElementById(id).classList.add('show');document.body.style.overflow='hidden';}
@@ -1664,37 +1863,50 @@ function allHumidorCigars(){
   humidors.forEach(function(h){(h.cigars||[]).forEach(function(c){results.push({cigar:c,humidor:h});});});
   return results;
 }
-function humidorAutocomplete(val){
-  var drop=document.getElementById('s-name-drop');if(!val||val.length<1){drop.classList.remove('show');drop.innerHTML='';return;}
+function humidorAutocomplete(val,dropId){
+  dropId=dropId||'s-name-drop';
+  var drop=document.getElementById(dropId);if(!drop)return;
+  if(!val||val.length<1){drop.classList.remove('show');drop.innerHTML='';return;}
   var q=val.toLowerCase();
   var all=allHumidorCigars();
   var matches=all.filter(function(x){return (x.cigar.name||'').toLowerCase().includes(q)||(x.cigar.brand||'').toLowerCase().includes(q);}).slice(0,8);
   if(!matches.length){drop.classList.remove('show');drop.innerHTML='';return;}
   drop.innerHTML=matches.map(function(x){
     var c=x.cigar;var h=x.humidor;
-    return '<div class="autocomplete-item" data-id="'+c.id+'" data-hid="'+h.id+'" onclick="selectHumidorCigar('+c.id+',\''+h.id+'\')">'+
+    return '<div class="autocomplete-item" data-id="'+c.id+'" data-hid="'+h.id+'" onclick="selectHumidorCigar('+c.id+',\''+h.id+'\',\''+dropId+'\')">'+
       '<div><div class="autocomplete-name">'+c.name+'</div>'+
       '<div class="autocomplete-meta">'+(c.brand||'Unknown')+(c.strength?' · '+c.strength:'')+'</div></div>'+
       '<div class="autocomplete-qty" style="text-align:right;"><div>'+((c.qty||1))+' left</div><div style="font-size:10px;opacity:0.7;">'+h.name+'</div></div></div>';
   }).join('');
   drop.classList.add('show');acFocusIdx=-1;
 }
-function selectHumidorCigar(id,hid){
-  // Find cigar across all humidors
+function selectHumidorCigar(id,hid,dropId){
+  dropId=dropId||'s-name-drop';
   var targetH=humidors.find(function(h){return h.id==hid;})||getActiveHumidor();
   if(!targetH)return;
   var c=targetH.cigars.find(function(h){return h.id===id;});if(!c)return;
-  document.getElementById('s-name').value=c.name;document.getElementById('s-brand').value=c.brand||'';document.getElementById('s-name-drop').classList.remove('show');
-  if((c.qty||1)>0&&confirm('Remove one '+c.name+' from '+targetH.name+'?')){c.qty=Math.max(0,(c.qty||1)-1);if(c.qty===0)targetH.cigars=targetH.cigars.filter(function(h){return h.id!==id;});saveHumidors();renderHumidor();showToast('Removed from '+targetH.name+' ✓');}
+  var isTimer=(dropId==='timer-cigar-drop');
+  if(isTimer){
+    document.getElementById('timer-cigar-input').value=c.name;
+  } else {
+    document.getElementById('s-name').value=c.name;document.getElementById('s-brand').value=c.brand||'';
+  }
+  document.getElementById(dropId).classList.remove('show');
+  if(!isTimer&&(c.qty||1)>0&&confirm('Remove one '+c.name+' from '+targetH.name+'?')){c.qty=Math.max(0,(c.qty||1)-1);if(c.qty===0)targetH.cigars=targetH.cigars.filter(function(h){return h.id!==id;});saveHumidors();renderHumidor();showToast('Removed from '+targetH.name+' ✓');}
 }
-function autocompleteKeydown(e){
-  var drop=document.getElementById('s-name-drop');var items=drop.querySelectorAll('.autocomplete-item');if(!items.length)return;
+function autocompleteKeydown(e,dropId){
+  dropId=dropId||'s-name-drop';
+  var drop=document.getElementById(dropId);var items=drop.querySelectorAll('.autocomplete-item');if(!items.length)return;
   if(e.key==='ArrowDown'){e.preventDefault();acFocusIdx=Math.min(acFocusIdx+1,items.length-1);items.forEach(function(el,i){el.classList.toggle('focused',i===acFocusIdx);});}
   else if(e.key==='ArrowUp'){e.preventDefault();acFocusIdx=Math.max(acFocusIdx-1,0);items.forEach(function(el,i){el.classList.toggle('focused',i===acFocusIdx);});}
   else if(e.key==='Enter'&&acFocusIdx>=0){e.preventDefault();items[acFocusIdx].click();}
   else if(e.key==='Escape')drop.classList.remove('show');
 }
-document.addEventListener('click',function(e){if(!e.target.closest('.autocomplete-wrap')){var drop=document.getElementById('s-name-drop');if(drop)drop.classList.remove('show');}});
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.autocomplete-wrap')){
+    ['s-name-drop','timer-cigar-drop'].forEach(function(id){var d=document.getElementById(id);if(d)d.classList.remove('show');});
+  }
+});
 
 // ── CIGAR SELECTOR ─────────────────────────────────────────────
 var selectorChoices={shape:[],size:[],strength:[],notes:[]};
