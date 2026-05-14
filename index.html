@@ -1113,6 +1113,10 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <!-- ── SHARE CARD MODAL ─────────────────────────────────── -->
 <div class="modal-overlay" id="modal-share" onclick="if(event.target===this)closeModal('modal-share')" style="z-index:1800;">
   <div class="modal-box" style="max-width:360px;padding:0;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px 0;background:var(--surface);">
+      <div style="font-size:14px;font-weight:600;color:var(--text);">Smoke Card</div>
+      <button onclick="closeModal('modal-share')" style="background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;line-height:1;padding:0;">×</button>
+    </div>
     <div id="share-card" style="background:linear-gradient(145deg,#1A1208,#2C1A0A);padding:28px 24px 22px;position:relative;">
       <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;opacity:0.8;">TORCIDA · THE ART OF THE CIGAR</div>
       <div id="sc-name" style="font-family:'Playfair Display',serif;font-size:22px;color:#FFFDF7;font-weight:600;margin-bottom:4px;line-height:1.3;"></div>
@@ -1126,8 +1130,8 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div style="font-family:'Playfair Display',serif;font-size:14px;color:#C9A84C;letter-spacing:1px;">Torcida</div>
       </div>
     </div>
-    <div style="padding:16px;background:var(--surface);display:flex;gap:8px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="downloadShareCard()">Save Image</button>
+    <div style="padding:14px 16px 20px;background:var(--surface);display:flex;gap:8px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="downloadShareCard()">📸 Save Image</button>
       <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('modal-share')">Close</button>
     </div>
   </div>
@@ -1136,7 +1140,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <!-- ── OCCASION MATCHER MODAL ───────────────────────────── -->
 <div class="modal-overlay" id="modal-occasion" onclick="if(event.target===this)closeModal('modal-occasion')" style="z-index:1800;">
   <div class="modal-box" style="max-width:400px;">
-    <div class="modal-title" style="font-size:20px;">🎯 Occasion Matcher</div>
+    <div class="modal-title" style="font-size:20px;">🎯 Occasion Matcher<button onclick="closeModal('modal-occasion')" style="background:none;border:none;font-size:26px;color:var(--muted);cursor:pointer;line-height:1;padding:0;margin-left:auto;">×</button></div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Tell me about the moment and I'll find the perfect cigar and pairing.</div>
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">
       <div>
@@ -1176,16 +1180,17 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     </div>
     <button class="btn btn-primary btn-full" onclick="runOccasionMatch()" id="occ-match-btn">Find My Perfect Match</button>
     <div id="occ-result" style="display:none;margin-top:16px;"></div>
+    <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="closeModal('modal-occasion')">Close</button>
   </div>
 </div>
 
 <!-- ── TASTE PROFILE MODAL ──────────────────────────────── -->
 <div class="modal-overlay" id="modal-taste" onclick="if(event.target===this)closeModal('modal-taste')" style="z-index:1800;">
   <div class="modal-box" style="max-width:400px;">
-    <div class="modal-title" style="font-size:20px;">✦ Your Taste Profile</div>
+    <div class="modal-title" style="font-size:20px;">✦ Your Taste Profile<button onclick="closeModal('modal-taste')" style="background:none;border:none;font-size:26px;color:var(--muted);cursor:pointer;line-height:1;padding:0;margin-left:auto;">×</button></div>
     <div id="taste-content" style="min-height:120px;"></div>
-    <div style="margin-top:16px;text-align:center;">
-      <button class="btn btn-ghost" onclick="closeModal('modal-taste')">Close</button>
+    <div style="margin-top:16px;">
+      <button class="btn btn-ghost btn-full" onclick="closeModal('modal-taste')">Close</button>
     </div>
   </div>
 </div>
@@ -1569,7 +1574,7 @@ function showInfo(id,pill){document.querySelectorAll('.info-sec').forEach(functi
 function showToast(msg){var t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
 function toggleAddForm(id){var f=document.getElementById(id);f.classList.toggle('show');if(f.classList.contains('show'))f.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function openModal(id){document.getElementById(id).classList.add('show');document.body.style.overflow='hidden';}
-function closeModal(id){document.getElementById(id).classList.remove('show');document.body.style.overflow='';}
+function closeModal(id){var el=document.getElementById(id);if(el){el.classList.remove('show');el.style.display='none';}document.body.style.overflow='';}
 function renderAll(){renderHumidorTabs();renderHumidorInfoBar();renderHumidor();renderBar();renderWishlist();renderBarWishList();renderSmoked();}
 
 // ── SCANNER ───────────────────────────────────────────────────
