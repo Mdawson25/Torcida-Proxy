@@ -225,6 +225,16 @@ body{font-family:'Crimson Pro',serif,'Apple Color Emoji','Segoe UI Emoji','Noto 
 .modal-box{background:var(--surface);border:0.5px solid var(--border-s);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;animation:slideUp 0.25s ease;}
 @keyframes slideUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .modal-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.occ-chip{font-size:13px;padding:6px 12px;border-radius:20px;border:0.5px solid var(--border-s);color:var(--muted);cursor:pointer;background:var(--surface);transition:all 0.15s;font-family:'Crimson Pro',serif;}
+.occ-chip.active{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:600;}
+.taste-bar-bg{flex:1;height:6px;background:var(--border);border-radius:3px;}
+.taste-bar-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#8B5E3C,#C9A84C);}
+.taste-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.taste-label{width:100px;font-size:13px;color:var(--muted);}
+.taste-score{width:24px;text-align:right;font-size:12px;color:var(--muted);}
+.sc-star{font-size:16px;color:#C9A84C;}
+.sc-star.dim{color:rgba(201,168,76,0.25);}
+.sc-pill{font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(201,168,76,0.15);color:#C9A84C;border:0.5px solid rgba(201,168,76,0.4);}
 .modal-close{background:none;border:none;color:var(--dim);font-size:26.4px;cursor:pointer;padding:0 4px;line-height:1;}
 .modal-close:hover{color:var(--gold);}
 .modal-actions{display:flex;gap:8px;margin-top:16px;}
@@ -695,6 +705,10 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Smoked</div></div>
       <div class="summary-item"><div class="summary-num" id="s-avg">—</div><div class="summary-lbl">Avg Rating</div></div>
     </div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openTasteProfile()">✦ Taste Profile</button>
+      <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openOccasionMatcher()">🎯 Occasion Match</button>
+    </div>
 
     <!-- SMOKE TIMER (fixed) -->
     <div class="timer-bar" style="flex-wrap:wrap;gap:10px;">
@@ -1093,6 +1107,86 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     <div class="roles-grid"><div class="role-card"><span class="role-icon">🌱</span><div class="role-name">Veguero</div><div class="role-desc">The tobacco farmer who tends the fields from seed to harvest</div></div><div class="role-card"><span class="role-icon">🍃</span><div class="role-name">Escogedora</div><div class="role-desc">Selects and grades leaves by color, texture, and quality</div></div><div class="role-card"><span class="role-icon">✋</span><div class="role-name">Rezagadora</div><div class="role-desc">Sorts wrapper leaves by shade for visual consistency</div></div><div class="role-card"><span class="role-icon">🎋</span><div class="role-name">Torcedor/a</div><div class="role-desc">The master roller who hand-rolls each cigar to perfection</div></div><div class="role-card"><span class="role-icon">📖</span><div class="role-name">Lectora</div><div class="role-desc">Reads aloud to the rolling room — a 150-year-old Cuban tradition</div></div><div class="role-card"><span class="role-icon">🎯</span><div class="role-name">Ligador</div><div class="role-desc">Creates the blend — the recipe of leaves that defines the cigar's character</div></div></div></div>
     <div class="about-section"><div class="about-section-title">Our Values</div><div class="about-values"><div class="value-item"><div class="value-title">Inclusivity</div><div class="value-text">The cigar is for everyone. Novice and aficionado sit at the same table here.</div></div><div class="value-item"><div class="value-title">Craft First</div><div class="value-text">We honor the hands, the fields, and the generations of skill behind every cigar.</div></div><div class="value-item"><div class="value-title">Patience</div><div class="value-text">Great cigars cannot be rushed. Neither can great experiences.</div></div><div class="value-item"><div class="value-title">Memory</div><div class="value-text">Every smoke is a moment worth keeping. Torcida is your record of those moments.</div></div></div></div>
     <div class="about-footer"><div class="about-footer-word">Torcida</div><div class="about-footer-sub">Made with respect for the craft &amp; the people behind it</div></div>
+  </div>
+</div>
+
+<!-- ── SHARE CARD MODAL ─────────────────────────────────── -->
+<div class="modal-overlay" id="modal-share" onclick="if(event.target===this)closeModal('modal-share')" style="z-index:1800;">
+  <div class="modal-box" style="max-width:360px;padding:0;overflow:hidden;">
+    <div id="share-card" style="background:linear-gradient(145deg,#1A1208,#2C1A0A);padding:28px 24px 22px;position:relative;">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;opacity:0.8;">TORCIDA · THE ART OF THE CIGAR</div>
+      <div id="sc-name" style="font-family:'Playfair Display',serif;font-size:22px;color:#FFFDF7;font-weight:600;margin-bottom:4px;line-height:1.3;"></div>
+      <div id="sc-brand" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-bottom:16px;opacity:0.8;"></div>
+      <div style="display:flex;gap:6px;margin-bottom:14px;" id="sc-stars"></div>
+      <div id="sc-notes" style="font-size:13px;color:#D4C4A0;line-height:1.6;font-style:italic;margin-bottom:16px;border-left:2px solid #C9A84C;padding-left:10px;"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="sc-pills"></div>
+      <div id="sc-drink" style="font-size:12px;color:#C9A84C;margin-bottom:16px;opacity:0.85;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:0.5px solid rgba(201,168,76,0.3);padding-top:12px;">
+        <div id="sc-date" style="font-size:11px;color:#8B7A5A;"></div>
+        <div style="font-family:'Playfair Display',serif;font-size:14px;color:#C9A84C;letter-spacing:1px;">Torcida</div>
+      </div>
+    </div>
+    <div style="padding:16px;background:var(--surface);display:flex;gap:8px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="downloadShareCard()">Save Image</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('modal-share')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── OCCASION MATCHER MODAL ───────────────────────────── -->
+<div class="modal-overlay" id="modal-occasion" onclick="if(event.target===this)closeModal('modal-occasion')" style="z-index:1800;">
+  <div class="modal-box" style="max-width:400px;">
+    <div class="modal-title" style="font-size:20px;">🎯 Occasion Matcher</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Tell me about the moment and I'll find the perfect cigar and pairing.</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">
+      <div>
+        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">The Occasion</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;" id="occasion-chips">
+          <div class="occ-chip active" onclick="toggleOccChip(this)">Morning ritual</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">Celebrating</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">After dinner</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">Golf round</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">Weekend unwind</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">Business meeting</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">Night cap</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">Bonfire / outdoors</div>
+          <div class="occ-chip" onclick="toggleOccChip(this)">Special milestone</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Time Available</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="time-chips">
+          <div class="occ-chip active" onclick="toggleTimeChip(this)">30 min</div>
+          <div class="occ-chip" onclick="toggleTimeChip(this)">45 min</div>
+          <div class="occ-chip" onclick="toggleTimeChip(this)">60 min</div>
+          <div class="occ-chip" onclick="toggleTimeChip(this)">90 min</div>
+          <div class="occ-chip" onclick="toggleTimeChip(this)">All day</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Mood</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="mood-chips">
+          <div class="occ-chip active" onclick="toggleMoodChip(this)">Relaxed</div>
+          <div class="occ-chip" onclick="toggleMoodChip(this)">Focused</div>
+          <div class="occ-chip" onclick="toggleMoodChip(this)">Social</div>
+          <div class="occ-chip" onclick="toggleMoodChip(this)">Contemplative</div>
+          <div class="occ-chip" onclick="toggleMoodChip(this)">Celebratory</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="runOccasionMatch()" id="occ-match-btn">Find My Perfect Match</button>
+    <div id="occ-result" style="display:none;margin-top:16px;"></div>
+  </div>
+</div>
+
+<!-- ── TASTE PROFILE MODAL ──────────────────────────────── -->
+<div class="modal-overlay" id="modal-taste" onclick="if(event.target===this)closeModal('modal-taste')" style="z-index:1800;">
+  <div class="modal-box" style="max-width:400px;">
+    <div class="modal-title" style="font-size:20px;">✦ Your Taste Profile</div>
+    <div id="taste-content" style="min-height:120px;"></div>
+    <div style="margin-top:16px;text-align:center;">
+      <button class="btn btn-ghost" onclick="closeModal('modal-taste')">Close</button>
+    </div>
   </div>
 </div>
 
@@ -1685,7 +1779,7 @@ function renderSmoked(){
     var photos=c.photos&&c.photos.length?('<div class="photo-strip">'+c.photos.map(function(p){return '<img src="'+p+'" class="photo-thumb">';}).join('')+'</div>'):'';
     var drinkHtml='';if(c.drink&&c.drink.type){var ds=c.drink.rating?'★'.repeat(c.drink.rating):'';drinkHtml='<div class="drink-badge">'+c.drink.type+(c.drink.name?' — '+c.drink.name:'')+(ds?' '+ds:'')+'</div>';}
     var attrHtml='';if(c.ratings&&(c.ratings.draw||c.ratings.burn||c.ratings.flavor||c.ratings.construction)){attrHtml='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;">';['draw','burn','flavor','construction'].forEach(function(a){if(c.ratings[a]){attrHtml+='<span style="font-size:11px;color:var(--muted);">'+a.charAt(0).toUpperCase()+a.slice(1)+': <span style="color:#8B5E3C;">'+'★'.repeat(c.ratings[a])+'</span></span>';}});attrHtml+='</div>';}
-    return '<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+datePill+' '+locPill+'</div>'+stars+attrHtml+drinkHtml+note+'</div><div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;"><button class="btn btn-sm btn-ghost" onclick="openEditSmoked('+c.id+')">Edit</button><button class="btn btn-sm btn-danger" onclick="removeSmoked('+c.id+')">✕</button></div></div>'+photos+'</div>';
+    return '<div class="cigar-card" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:12px;align-items:flex-start"><div class="card-band smoked"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+datePill+' '+locPill+'</div>'+stars+attrHtml+drinkHtml+note+'</div><div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;"><button class="btn btn-sm btn-ghost" onclick="openEditSmoked('+c.id+')">Edit</button><button class="btn btn-sm btn-ghost" style="color:var(--gold-light);border-color:var(--gold-light);" onclick="openShareCard('+c.id+')">Share</button><button class="btn btn-sm btn-danger" onclick="removeSmoked('+c.id+')">✕</button></div></div>'+photos+'</div>';
   }).join('');
 }
 
@@ -2059,7 +2153,146 @@ document.getElementById('light-steps').innerHTML=steps.map(function(s){return '<
 var flames=[{name:'Cedar spill',badge:'Best',col:'#7AC49A',desc:'Zero off-flavors. The purist\'s choice.'},{name:'Butane lighter',badge:'Good',col:'#C9A84C',desc:'Clean burning. Hold 1–2 inches from the foot.'},{name:'Torch lighter',badge:'Good',col:'#C9A84C',desc:'Wind-resistant and precise.'},{name:'Wooden match',badge:'OK',col:'#C4803A',desc:'Let sulfur burn off 3 seconds before use.'},{name:'Zippo / fluid lighter',badge:'Avoid',col:'#C4503A',desc:'Naphtha fluid taints the flavor.'},{name:'Scented candle',badge:'Avoid',col:'#C4503A',desc:'Wax vapors contaminate even premium cigars.'}];
 document.getElementById('flame-guide').innerHTML=flames.map(function(f){return '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:9px;padding-bottom:9px;border-bottom:0.5px solid var(--border);"><span style="font-size:11px;padding:2px 9px;border-radius:10px;background:'+f.col+'20;border:0.5px solid '+f.col+'40;color:'+f.col+';white-space:nowrap;flex-shrink:0;">'+f.badge+'</span><div><div style="font-size:13px;color:var(--gold-light);font-weight:600;margin-bottom:2px;">'+f.name+'</div><div style="font-size:12px;color:var(--muted);">'+f.desc+'</div></div></div>';}).join('');
 
-// ── INIT ───────────────────────────────────────────────────────
+// ── FEATURE 1: SHARE CARD ─────────────────────────────────────
+function openShareCard(id){
+  var s=smoked.find(function(x){return x.id===id;});
+  if(!s)return;
+  document.getElementById('sc-name').textContent=s.name||'';
+  document.getElementById('sc-brand').textContent=s.brand||'';
+  document.getElementById('sc-notes').textContent=s.notes||'';
+  document.getElementById('sc-notes').style.display=s.notes?'block':'none';
+  var starsHtml='';
+  for(var i=1;i<=5;i++)starsHtml+='<span class="sc-star'+(i<=(s.rating||0)?'':' dim')+'">★</span>';
+  document.getElementById('sc-stars').innerHTML=starsHtml;
+  document.getElementById('sc-stars').style.display=s.rating?'flex':'none';
+  var pills='';
+  if(s.location)pills+='<span class="sc-pill">'+s.location+'</span>';
+  if(s.drink&&s.drink.name)pills+='<span class="sc-pill">'+s.drink.type+': '+s.drink.name+'</span>';
+  document.getElementById('sc-pills').innerHTML=pills;
+  document.getElementById('sc-drink').style.display='none';
+  document.getElementById('sc-date').textContent=s.date?'Smoked '+s.date:'';
+  document.getElementById('modal-share').style.display='flex';
+}
+function downloadShareCard(){
+  var card=document.getElementById('share-card');
+  // Use html2canvas if available, otherwise guide user to screenshot
+  if(typeof html2canvas!=='undefined'){
+    html2canvas(card,{scale:2,useCORS:true,backgroundColor:null}).then(function(canvas){
+      var a=document.createElement('a');a.download='torcida-smoke-'+Date.now()+'.png';a.href=canvas.toDataURL('image/png');a.click();
+    });
+  } else {
+    showToast('Take a screenshot to save your smoke card!');
+  }
+}
+
+// ── FEATURE 2: TASTE PROFILE ──────────────────────────────────
+function openTasteProfile(){
+  var content=document.getElementById('taste-content');
+  if(smoked.length<3){
+    content.innerHTML='<div style="text-align:center;padding:24px 0;"><div style="font-size:36px;margin-bottom:12px;">✦</div><div style="color:var(--muted);font-size:14px;line-height:1.6;">Log at least 3 smokes with ratings to unlock your personal taste profile.<br><br>The more you log, the smarter it gets.</div></div>';
+    document.getElementById('modal-taste').style.display='flex';return;
+  }
+  // Build taste fingerprint from logged smokes
+  var rated=smoked.filter(function(s){return s.rating>0;});
+  var dims={strength:0,spice:0,sweetness:0,earth:0,complexity:0,smoke:0};
+  var dimCounts={strength:0,spice:0,sweetness:0,earth:0,complexity:0,smoke:0};
+  // Infer preferences from notes and ratings
+  rated.forEach(function(s){
+    var n=(s.notes||'').toLowerCase();var r=s.rating;
+    if(n.match(/pepper|spice|bold|full|strong/)){dims.spice+=r;dimCounts.spice++;}
+    if(n.match(/sweet|chocolate|honey|caramel|vanilla/)){dims.sweetness+=r;dimCounts.sweetness++;}
+    if(n.match(/earth|leather|wood|cedar|soil/)){dims.earth+=r;dimCounts.earth++;}
+    if(n.match(/complex|evolv|change|develop|layer/)){dims.complexity+=r;dimCounts.complexity++;}
+    if(n.match(/smoke|smoky|campfire|char/)){dims.smoke+=r;dimCounts.smoke++;}
+    // Use draw/burn ratings as proxies
+    if(s.ratings){
+      if(s.ratings.flavor){dims.complexity+=s.ratings.flavor;dimCounts.complexity++;}
+    }
+  });
+  // Normalize to 10
+  var scores={};
+  Object.keys(dims).forEach(function(k){
+    scores[k]=dimCounts[k]>0?Math.min(10,Math.round((dims[k]/dimCounts[k])*2)):Math.round(3+Math.random()*3);
+  });
+  // Top flavors from notes
+  var flavorMap={};
+  var flavorWords=['cedar','leather','chocolate','coffee','pepper','cream','vanilla','earth','spice','nuts','fruit','floral','honey','caramel','toast'];
+  rated.forEach(function(s){var n=(s.notes||'').toLowerCase();flavorWords.forEach(function(w){if(n.includes(w))flavorMap[w]=(flavorMap[w]||0)+1;});});
+  var topFlavors=Object.keys(flavorMap).sort(function(a,b){return flavorMap[b]-flavorMap[a];}).slice(0,5);
+  // Top rated cigars
+  var topSmokes=[...rated].sort(function(a,b){return b.rating-a.rating;}).slice(0,3);
+  // Build HTML
+  var barsHtml=['Strength','Spice','Sweetness','Earth','Complexity','Smoke'].map(function(dim){
+    var k=dim.toLowerCase();var sc=scores[k]||5;
+    return '<div class="taste-row"><div class="taste-label">'+dim+'</div><div class="taste-bar-bg"><div class="taste-bar-fill" style="width:'+sc*10+'%;"></div></div><div class="taste-score">'+sc+'/10</div></div>';
+  }).join('');
+  var topFlavorHtml=topFlavors.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">'+topFlavors.map(function(f){return '<span class="orig-tag">'+f.charAt(0).toUpperCase()+f.slice(1)+'</span>';}).join('')+'</div>':'';
+  var topSmokesHtml=topSmokes.length?'<div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Your Top Smokes</div>'+topSmokes.map(function(s){return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);"><div style="font-size:14px;color:var(--text);">'+s.name+'</div><div style="color:#C9A84C;">'+'★'.repeat(s.rating)+'</div></div>';}).join(''):'';
+  content.innerHTML='<div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Flavor Fingerprint</div>'
+    +barsHtml
+    +(topFlavors.length?'<div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 8px;">Notes You Love</div>'+topFlavorHtml:'')
+    +topSmokesHtml
+    +'<div style="font-size:11px;color:var(--dim);margin-top:14px;line-height:1.5;">Based on '+rated.length+' rated smoke'+(rated.length===1?'':'s')+'. Log more for a richer profile.</div>';
+  document.getElementById('modal-taste').style.display='flex';
+}
+
+// ── FEATURE 3: OCCASION MATCHER ───────────────────────────────
+function toggleOccChip(el){document.querySelectorAll('#occasion-chips .occ-chip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');}
+function toggleTimeChip(el){document.querySelectorAll('#time-chips .occ-chip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');}
+function toggleMoodChip(el){document.querySelectorAll('#mood-chips .occ-chip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');}
+
+function openOccasionMatcher(){
+  document.getElementById('occ-result').style.display='none';
+  document.getElementById('occ-match-btn').style.display='block';
+  document.getElementById('modal-occasion').style.display='flex';
+}
+
+async function runOccasionMatch(){
+  var occasion=document.querySelector('#occasion-chips .occ-chip.active');
+  var time=document.querySelector('#time-chips .occ-chip.active');
+  var mood=document.querySelector('#mood-chips .occ-chip.active');
+  var btn=document.getElementById('occ-match-btn');
+  btn.textContent='Finding your match...';btn.disabled=true;
+
+  // Build bar context
+  var barCtx=myBar&&myBar.length?'The user has these spirits in their bar: '+myBar.map(function(s){return (s.brand?s.brand+' ':'')+s.name;}).join(', ')+'.':'';
+  // Build taste context from top rated smokes
+  var tasteCtx='';
+  var topRated=[...smoked].filter(function(s){return s.rating>=4;}).sort(function(a,b){return b.rating-a.rating;}).slice(0,3);
+  if(topRated.length)tasteCtx='User\'s top rated smokes: '+topRated.map(function(s){return s.name+(s.brand?' by '+s.brand:'');}).join(', ')+'.';
+
+  var prompt='I need a cigar and drink pairing recommendation for this occasion: '
+    +(occasion?occasion.textContent:'relaxing')+'. '
+    +'Time available: '+(time?time.textContent:'45 min')+'. '
+    +'Mood: '+(mood?mood.textContent:'relaxed')+'. '
+    +barCtx+' '+tasteCtx+' '
+    +'Return JSON only: {cigar_name, cigar_brand, cigar_size, cigar_strength, cigar_why, drink_name, drink_why, occasion_note}';
+
+  try{
+    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:600,system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})});
+    var data=await res.json();
+    var raw=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
+    var match=raw.match(/\{[\s\S]*\}/);if(!match)throw new Error('No JSON');
+    var r=JSON.parse(match[0]);
+    var resultHtml='<div style="background:var(--surface2);border:0.5px solid var(--border);border-radius:12px;padding:14px;">'
+      +'<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Your Perfect Match</div>'
+      +'<div style="font-family:Playfair Display,serif;font-size:18px;color:var(--text);font-weight:600;margin-bottom:2px;">'+(r.cigar_name||'')+'</div>'
+      +'<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">'+(r.cigar_brand||'')+' · '+(r.cigar_size||'')+' · '+(r.cigar_strength||'')+'</div>'
+      +'<div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px;">'+(r.cigar_why||'')+'</div>'
+      +'<div style="height:0.5px;background:var(--border);margin-bottom:12px;"></div>'
+      +'<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Pair With</div>'
+      +'<div style="font-size:15px;color:var(--text);font-weight:600;margin-bottom:4px;">'+(r.drink_name||'')+'</div>'
+      +'<div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px;">'+(r.drink_why||'')+'</div>'
+      +(r.occasion_note?'<div style="font-size:12px;color:var(--dim);font-style:italic;border-top:0.5px solid var(--border);padding-top:10px;">'+r.occasion_note+'</div>':'')
+      +'</div>';
+    document.getElementById('occ-result').innerHTML=resultHtml;
+    document.getElementById('occ-result').style.display='block';
+  }catch(e){
+    document.getElementById('occ-result').innerHTML='<div style="color:var(--muted);font-size:13px;padding:12px 0;">Could not get a recommendation — check your connection.</div>';
+    document.getElementById('occ-result').style.display='block';
+  }
+  btn.textContent='Find My Perfect Match';btn.disabled=false;
+}
 document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
 loadAshBest();
 loadData();
