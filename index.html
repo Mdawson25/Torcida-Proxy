@@ -1118,20 +1118,21 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <button onclick="closeModal('modal-share')" style="background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;line-height:1;padding:0;">×</button>
     </div>
     <div id="share-card" style="background:linear-gradient(145deg,#1A1208,#2C1A0A);padding:28px 24px 22px;position:relative;">
-      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;opacity:0.8;">TORCIDA · THE ART OF THE CIGAR</div>
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;opacity:0.8;">✦ TORCIDA · THE ART OF THE CIGAR</div>
       <div id="sc-name" style="font-family:'Playfair Display',serif;font-size:22px;color:#FFFDF7;font-weight:600;margin-bottom:4px;line-height:1.3;"></div>
       <div id="sc-brand" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-bottom:16px;opacity:0.8;"></div>
       <div style="display:flex;gap:6px;margin-bottom:14px;" id="sc-stars"></div>
       <div id="sc-notes" style="font-size:13px;color:#D4C4A0;line-height:1.6;font-style:italic;margin-bottom:16px;border-left:2px solid #C9A84C;padding-left:10px;"></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="sc-pills"></div>
-      <div id="sc-drink" style="font-size:12px;color:#C9A84C;margin-bottom:16px;opacity:0.85;"></div>
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:0.5px solid rgba(201,168,76,0.3);padding-top:12px;">
-        <div id="sc-date" style="font-size:11px;color:#8B7A5A;"></div>
+      <div id="sc-drink" style="font-size:12px;color:#C9A84C;margin-bottom:12px;opacity:0.85;"></div>
+      <div id="sc-date" style="margin-bottom:12px;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid rgba(201,168,76,0.3);padding-top:12px;">
+        <div id="sc-footer-date" style="font-size:11px;color:#8B7A5A;"></div>
         <div style="font-family:'Playfair Display',serif;font-size:14px;color:#C9A84C;letter-spacing:1px;">Torcida</div>
       </div>
     </div>
     <div style="padding:14px 16px 20px;background:var(--surface);display:flex;gap:8px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="downloadShareCard()">📸 Save Image</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="shareSmokCard()">💬 Send / Share</button>
       <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('modal-share')">Close</button>
     </div>
   </div>
@@ -2162,31 +2163,103 @@ document.getElementById('flame-guide').innerHTML=flames.map(function(f){return '
 function openShareCard(id){
   var s=smoked.find(function(x){return x.id===id;});
   if(!s)return;
+  // Store full entry on the modal for sharing
+  document.getElementById('modal-share')._entry=s;
+
   document.getElementById('sc-name').textContent=s.name||'';
   document.getElementById('sc-brand').textContent=s.brand||'';
-  document.getElementById('sc-notes').textContent=s.notes||'';
-  document.getElementById('sc-notes').style.display=s.notes?'block':'none';
+
+  // Stars
   var starsHtml='';
   for(var i=1;i<=5;i++)starsHtml+='<span class="sc-star'+(i<=(s.rating||0)?'':' dim')+'">★</span>';
   document.getElementById('sc-stars').innerHTML=starsHtml;
   document.getElementById('sc-stars').style.display=s.rating?'flex':'none';
+
+  // Notes
+  document.getElementById('sc-notes').textContent=s.notes||'';
+  document.getElementById('sc-notes').style.display=s.notes?'block':'none';
+
+  // Pills — location, date, drink
   var pills='';
+  if(s.date)pills+='<span class="sc-pill">'+s.date+'</span>';
   if(s.location)pills+='<span class="sc-pill">'+s.location+'</span>';
-  if(s.drink&&s.drink.name)pills+='<span class="sc-pill">'+s.drink.type+': '+s.drink.name+'</span>';
+  if(s.drink&&s.drink.name)pills+='<span class="sc-pill">'+(s.drink.type?s.drink.type+': ':'')+s.drink.name+'</span>';
   document.getElementById('sc-pills').innerHTML=pills;
-  document.getElementById('sc-drink').style.display='none';
-  document.getElementById('sc-date').textContent=s.date?'Smoked '+s.date:'';
-  document.getElementById('modal-share').style.display='flex';
-}
-function downloadShareCard(){
-  var card=document.getElementById('share-card');
-  // Use html2canvas if available, otherwise guide user to screenshot
-  if(typeof html2canvas!=='undefined'){
-    html2canvas(card,{scale:2,useCORS:true,backgroundColor:null}).then(function(canvas){
-      var a=document.createElement('a');a.download='torcida-smoke-'+Date.now()+'.png';a.href=canvas.toDataURL('image/png');a.click();
+
+  // Attr ratings
+  var attrHtml='';
+  if(s.ratings&&(s.ratings.draw||s.ratings.burn||s.ratings.flavor||s.ratings.construction)){
+    var attrs=['draw','burn','flavor','construction'];
+    attrHtml='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">';
+    attrs.forEach(function(a){
+      if(s.ratings[a])attrHtml+='<span style="font-size:11px;color:#9A8060;">'+a.charAt(0).toUpperCase()+a.slice(1)+': <span style="color:#C9A84C;">'+'★'.repeat(s.ratings[a])+'</span></span>';
     });
+    attrHtml+='</div>';
+  }
+  document.getElementById('sc-drink').innerHTML=attrHtml;
+  document.getElementById('sc-drink').style.display=attrHtml?'block':'none';
+
+  // Photos
+  var photoHtml='';
+  if(s.photos&&s.photos.length){
+    photoHtml='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">';
+    s.photos.forEach(function(p){
+      photoHtml+='<img src="'+p+'" style="width:72px;height:72px;object-fit:cover;border-radius:6px;border:0.5px solid rgba(201,168,76,0.3);">';
+    });
+    photoHtml+='</div>';
+  }
+  document.getElementById('sc-date').innerHTML=photoHtml;
+
+  document.getElementById('modal-share').style.display='flex';
+  var fd=document.getElementById('sc-footer-date');
+  if(fd)fd.textContent=s.date?'Smoked '+s.date:'';
+}
+
+function shareSmokCard(){
+  var el=document.getElementById('modal-share');
+  var s=el._entry;
+  if(!s)return;
+
+  // Build rich text message
+  var line='─────────────────';
+  var text='✦ TORCIDA — THE ART OF THE CIGAR\n'+line+'\n';
+  text+=(s.name||'Unknown')+(s.brand?'\n'+s.brand.toUpperCase():'');
+  if(s.date||s.location){text+='\n';if(s.date)text+=s.date;if(s.location)text+=(s.date?' · ':'')+s.location;}
+  text+='\n';
+  if(s.rating)text+='\nRating: '+'★'.repeat(s.rating)+'☆'.repeat(5-s.rating);
+  if(s.ratings){
+    var attrs=[];
+    ['draw','burn','flavor','construction'].forEach(function(a){if(s.ratings[a])attrs.push(a.charAt(0).toUpperCase()+a.slice(1)+': '+'★'.repeat(s.ratings[a]));});
+    if(attrs.length)text+='\n'+attrs.join('  ');
+  }
+  if(s.drink&&(s.drink.type||s.drink.name)){
+    text+='\n\nPairing: '+(s.drink.type||'')+(s.drink.name?' — '+s.drink.name:'');
+    if(s.drink.rating)text+=' '+'★'.repeat(s.drink.rating);
+  }
+  if(s.notes)text+='\n\n"'+s.notes+'"';
+  text+='\n'+line+'\nLogged with Torcida';
+
+  // Share with photos if Web Share API supports files
+  if(navigator.share&&s.photos&&s.photos.length){
+    // Convert base64 photos to File objects
+    try{
+      var files=s.photos.map(function(p,i){
+        var arr=p.split(',');var mime=arr[0].match(/:(.*?);/)[1];
+        var bstr=atob(arr[1]);var n=bstr.length;var u8=new Uint8Array(n);
+        for(var j=0;j<n;j++)u8[j]=bstr.charCodeAt(j);
+        return new File([u8],'torcida-smoke-'+i+'.jpg',{type:mime});
+      });
+      if(navigator.canShare&&navigator.canShare({files:files})){
+        navigator.share({title:'Torcida — '+(s.name||''),text:text,files:files}).catch(function(){});
+        return;
+      }
+    }catch(e){}
+  }
+  // Standard share (text only)
+  if(navigator.share){
+    navigator.share({title:'Torcida — '+(s.name||''),text:text}).catch(function(){});
   } else {
-    showToast('Take a screenshot to save your smoke card!');
+    window.open('sms:?body='+encodeURIComponent(text),'_blank');
   }
 }
 
