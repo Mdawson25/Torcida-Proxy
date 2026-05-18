@@ -1495,11 +1495,9 @@ function renderBar(){
     topRow.appendChild(iconEl);topRow.appendChild(body);
     card.appendChild(topRow);
 
-    // Bottom row: bottle count + low stock + actions
-    var bottomRow=document.createElement('div');
-    bottomRow.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px;border-top:0.5px solid var(--border);';
-
-    // Bottle count with +/- controls
+    // Bottle count row
+    var bottleRow=document.createElement('div');
+    bottleRow.style.cssText='display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:0.5px solid var(--border);';
     var bottleCtrl=document.createElement('div');bottleCtrl.style.cssText='display:flex;align-items:center;gap:6px;';
     var minusBtn=document.createElement('button');minusBtn.className='qty-btn';minusBtn.textContent='−';
     minusBtn.onclick=(function(sid){return function(){changeBarBottles(sid,-1);};})(s.id);
@@ -1508,41 +1506,46 @@ function renderBar(){
     plusBtn.onclick=(function(sid){return function(){changeBarBottles(sid,1);};})(s.id);
     var bottleLbl=document.createElement('span');bottleLbl.style.cssText='font-size:11px;color:var(--muted);';bottleLbl.textContent='bottles';
     bottleCtrl.appendChild(minusBtn);bottleCtrl.appendChild(bottleNum);bottleCtrl.appendChild(plusBtn);bottleCtrl.appendChild(bottleLbl);
-
-    // Low stock badge
     if(isLow){
       var lowBadge=document.createElement('span');
       lowBadge.style.cssText='font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(196,80,58,0.12);border:0.5px solid #C4503A;color:#C4503A;font-weight:600;';
       lowBadge.textContent='Low Stock';
       bottleCtrl.appendChild(lowBadge);
     }
+    bottleRow.appendChild(bottleCtrl);
+    card.appendChild(bottleRow);
 
-    // Action buttons
-    var btns=document.createElement('div');btns.style.cssText='display:flex;gap:5px;';
-    var pairBtn=document.createElement('button');pairBtn.className='btn btn-sm btn-ghost';pairBtn.style.fontSize='12px';
-    pairBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px;"><path d="M18 8.5 Q19 6.5 18 4.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.45"/><ellipse cx="16.5" cy="11" rx="1.4" ry="1.4" fill="#E8762A" opacity="0.95"/><rect x="2.5" y="9.5" width="14.2" height="3" rx="1.5" fill="currentColor" opacity="0.9"/><rect x="10.5" y="9.5" width="2.8" height="3" fill="currentColor" opacity="0.4"/><ellipse cx="2.8" cy="11" rx="1.2" ry="1.5" fill="currentColor" opacity="0.7"/></svg>Pair';
+    // Action buttons row — 2×2 grid + delete
+    var btnRow=document.createElement('div');
+    btnRow.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:6px;padding-top:8px;';
+
+    var pairBtn=document.createElement('button');pairBtn.className='btn btn-sm btn-ghost';
+    pairBtn.innerHTML='<svg width="12" height="12" viewBox="0 0 22 22" fill="none" style="display:inline-block;vertical-align:middle;margin-right:3px;"><path d="M18 8.5 Q19 6.5 18 4.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.45"/><ellipse cx="16.5" cy="11" rx="1.4" ry="1.4" fill="#E8762A" opacity="0.95"/><rect x="2.5" y="9.5" width="14.2" height="3" rx="1.5" fill="currentColor" opacity="0.9"/></svg>Pair Cigar';
     pairBtn.onclick=(function(sid){return function(){findCigarForSpirit(sid);};})(s.id);
 
-    var editBtn=document.createElement('button');editBtn.className='btn btn-sm btn-ghost';editBtn.textContent='Edit';
+    var editBtn=document.createElement('button');editBtn.className='btn btn-sm btn-ghost';editBtn.textContent='✏️ Edit';
     editBtn.onclick=(function(sid){return function(){openEditBar(sid);};})(s.id);
 
     var restockBtn=document.createElement('button');restockBtn.className='btn btn-sm btn-ghost';
-    restockBtn.style.cssText='font-size:11px;color:var(--gold-light);border-color:var(--gold-light);';
-    restockBtn.textContent='Restock';
+    restockBtn.style.cssText='color:var(--gold-light);border-color:var(--gold-light);font-size:12px;';
+    restockBtn.textContent='↺ Restock';
     restockBtn.onclick=(function(sid){return function(){restockToWishlist(sid);};})(s.id);
 
     var altBtn=document.createElement('button');altBtn.className='btn btn-sm btn-ghost';
-    altBtn.style.cssText='font-size:11px;color:var(--muted);';
+    altBtn.style.cssText='font-size:12px;';
     altBtn.textContent='≈ Alternatives';
     altBtn.onclick=(function(ss){return function(){findAlternativesForSpirit(ss.name,ss.type||'',ss.brand||'');};})(s);
 
-    var delBtn=document.createElement('button');delBtn.className='btn btn-sm btn-danger';delBtn.textContent='✕';
-    delBtn.onclick=(function(sid){return function(){removeFromBar(sid);};})(s.id);
+    // Delete spans full width
+    var delBtn=document.createElement('button');delBtn.className='btn btn-sm btn-danger';
+    delBtn.style.cssText='grid-column:1/-1;font-size:12px;';
+    delBtn.textContent='Remove from Bar';
+    delBtn.onclick=(function(sid){return function(){if(confirm('Remove from bar?'))removeFromBar(sid);};})(s.id);
 
-    btns.appendChild(pairBtn);btns.appendChild(editBtn);btns.appendChild(restockBtn);btns.appendChild(altBtn);btns.appendChild(delBtn);
-    bottomRow.appendChild(bottleCtrl);bottomRow.appendChild(btns);
-    card.appendChild(bottomRow);
-    list.appendChild(card);
+    btnRow.appendChild(pairBtn);btnRow.appendChild(editBtn);
+    btnRow.appendChild(restockBtn);btnRow.appendChild(altBtn);
+    btnRow.appendChild(delBtn);
+    card.appendChild(btnRow);
   });
 }
 
@@ -1660,13 +1663,13 @@ function renderBarWishList(){
     if(c.reason){var note=document.createElement('div');note.className='personal-note';note.textContent=c.reason;body.appendChild(note);}
     topRow.appendChild(band);topRow.appendChild(body);
     card.appendChild(topRow);
-    // Bottom row
-    var bottomRow=document.createElement('div');bottomRow.style.cssText='display:flex;align-items:center;justify-content:flex-end;gap:6px;padding-top:8px;border-top:0.5px solid var(--border);flex-wrap:wrap;';
-    var altBtn=document.createElement('button');altBtn.className='btn btn-sm btn-ghost';altBtn.style.cssText='font-size:11px;color:var(--muted);';altBtn.textContent='≈ Alternatives';
+    // Bottom row — 2 col grid
+    var bottomRow=document.createElement('div');bottomRow.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:6px;padding-top:8px;border-top:0.5px solid var(--border);';
+    var altBtn=document.createElement('button');altBtn.className='btn btn-sm btn-ghost';altBtn.style.cssText='font-size:12px;';altBtn.textContent='≈ Alternatives';
     altBtn.onclick=(function(wc){return function(){findAlternativesForSpirit(wc.name,wc.spiritType||'',wc.brand||'');};})(c);
-    var aBtn=document.createElement('button');aBtn.className='btn btn-sm btn-primary';aBtn.textContent='Add to Bar';
+    var aBtn=document.createElement('button');aBtn.className='btn btn-sm btn-primary';aBtn.style.cssText='font-size:12px;';aBtn.textContent='Add to Bar';
     aBtn.onclick=(function(wid){return function(){moveWishSpiritToBar(wid);};})(c.id);
-    var dBtn=document.createElement('button');dBtn.className='btn btn-sm btn-danger';dBtn.textContent='✕';
+    var dBtn=document.createElement('button');dBtn.className='btn btn-sm btn-danger';dBtn.style.cssText='grid-column:1/-1;font-size:12px;';dBtn.textContent='Remove';
     dBtn.onclick=(function(wid){return function(){removeWish(wid);renderBarWishList();};})(c.id);
     bottomRow.appendChild(altBtn);bottomRow.appendChild(aBtn);bottomRow.appendChild(dBtn);
     card.appendChild(bottomRow);
