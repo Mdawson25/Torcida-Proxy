@@ -1655,7 +1655,7 @@ async function findCigarForSpirit(id){
   var s=myBar.find(function(x){return x.id===id;});if(!s)return;showToast('Finding the perfect cigar pairing...');
   try{
     var q=(s.brand||'')+' '+(s.name||'')+' '+(s.type||'spirit');
-    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:'Suggest the single best cigar to pair with '+q.trim()+'. Return JSON: cigar_name, cigar_brand, why (one sentence).'}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:'Suggest the single best cigar to pair with '+q.trim()+'. Return JSON: cigar_name, cigar_brand, why (one sentence).'}]})});
     if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();if(data.error)throw new Error(data.error.message||'API error');
     var text=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
@@ -1816,16 +1816,37 @@ function renderAll(){renderHumidorTabs();renderHumidorInfoBar();renderHumidor();
 function handleScan(input){if(!input.files[0])return;document.getElementById('cigar-search').value='Identifying cigar...';var reader=new FileReader();reader.onload=async function(e){await identifyCigarFromImage(e.target.result.split(',')[1]);};reader.readAsDataURL(input.files[0]);}
 async function identifyCigarFromImage(b64){
   var btn=document.getElementById('search-btn');btn.innerHTML='Searching<span class="loader"></span>';btn.disabled=true;
-  try{var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify whether this is a cigar or a spirit/liquor. Return ONLY JSON with: type (cigar or spirit), name, brand, and if cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 5),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]}]})});
+  try{var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify whether this is a cigar or a spirit/liquor. Return ONLY JSON with: type (cigar or spirit), name, brand, and if cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 5),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]}]})});
   var data=await res.json();var cigar=JSON.parse(data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim());displayResult(cigar);document.getElementById('cigar-search').value=cigar.name;}
   catch(e){showToast('Could not identify — try searching by name');}
   btn.innerHTML='Search';btn.disabled=false;
 }
+// ── GLOBAL ERROR SAFETY NET ───────────────────────────────────
+// Catches any unhandled promise rejections so the app never silently locks
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('Unhandled rejection:', e.reason);
+  // Re-enable any stuck search button
+  var btn = document.getElementById('search-btn');
+  if(btn && btn.disabled) { btn.innerHTML = 'Search'; btn.disabled = false; }
+  var occBtn = document.getElementById('occ-match-btn');
+  if(occBtn && occBtn.disabled) { occBtn.textContent = 'Find My Perfect Match'; occBtn.disabled = false; }
+});
+
+// ── FETCH WITH TIMEOUT ────────────────────────────────────────
+// Prevents the app locking up when the proxy is slow or unresponsive
+function fetchWithTimeout(url, options, timeoutMs) {
+  timeoutMs = timeoutMs || 18000; // 18 second default
+  var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timer = setTimeout(function() { if(controller) controller.abort(); }, timeoutMs);
+  if(controller) options.signal = controller.signal;
+  return fetch(url, options).then(function(r){ clearTimeout(timer); return r; }, function(e){ clearTimeout(timer); throw e; });
+}
+
 async function searchCigar(){
   var q=document.getElementById('cigar-search').value.trim();if(!q)return;
   var btn=document.getElementById('search-btn');btn.disabled=true;btn.innerHTML='Searching<span class="loader"></span>';
   try{
-    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:'You are a cigar and spirits expert. Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:'Identify "'+q+'". Return JSON: type("cigar" or "spirit"), name, brand. If cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(6 words),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(6 words),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:'You are a cigar and spirits expert. Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:'Identify "'+q+'". Return JSON: type("cigar" or "spirit"), name, brand. If cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(6 words),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(6 words),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]})});
     if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();if(data.error)throw new Error(data.error.message||'API error');
     var raw=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
@@ -1833,8 +1854,9 @@ async function searchCigar(){
     var result=JSON.parse(match[0]);displayResult(result);fetchRecipes(q,result.type||'cigar');
   }catch(e){
     var msg=e.message||'Check your connection';
-    if(msg.includes('allowlist')||msg.includes('403')||msg.includes('401')){msg='Open the app from its hosted URL — local files are blocked by the proxy.';}
-    else if(msg.includes('Failed to fetch')||msg.includes('NetworkError')){msg='Network error — check connection or open from the hosted URL.';}
+    if(msg.includes('abort')||msg.includes('timeout')){msg='Request timed out — check your connection and try again.';}
+    else if(msg.includes('allowlist')||msg.includes('403')){msg='Open from the hosted URL — local files are blocked by the proxy.';}
+    else if(msg.includes('Failed to fetch')||msg.includes('NetworkError')){msg='Network error — check your connection.';}
     showToast('Search error: '+msg.slice(0,80));
     console.error('searchCigar error:',e);
   }
@@ -1851,7 +1873,7 @@ async function fetchRecipes(q,type){
     var prompt=type==='spirit'
       ?'For the spirit "'+q+'", return JSON: drink_name,drink_desc,drink_recipe,drink_recipe_search,drink_zero_proof.'
       :'For the cigar "'+q+'", return JSON: cocktail_name,cocktail_desc,cocktail_recipe,cocktail_recipe_search,zero_proof_recipe,bar_match(string or null),bar_match_why(string or null).'+barContext;
-    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})});
     if(!res.ok)return;var data=await res.json();if(data.error)return;
     var raw=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();var match=raw.match(/\{[\s\S]*\}/);if(!match)return;
     var r=JSON.parse(match[0]);if(currentResult)Object.assign(currentResult,r);
@@ -1866,7 +1888,10 @@ async function fetchRecipes(q,type){
       showBarMatchBanner(r.bar_match,r.bar_match_why);
     }
     if(type==='spirit'&&r.drink_name){document.getElementById('spirit-drink-name').textContent=r.drink_name||'';document.getElementById('spirit-drink-desc').textContent=r.drink_desc||'';document.getElementById('spirit-full-text').textContent=r.drink_recipe||'';document.getElementById('spirit-zero-text').textContent=r.drink_zero_proof||'';if(r.drink_recipe_search)document.getElementById('spirit-drink-link').href='https://www.google.com/search?q='+encodeURIComponent(r.drink_recipe_search+' recipe');document.getElementById('spirit-drink-block').style.display='block';}
-  }catch(e){}
+  }catch(e){
+    console.error('fetchRecipes error:',e);
+    if(e.message&&(e.message.includes('abort')||e.message.includes('timeout'))){showToast('Pairing timed out — try again');}
+  }
 }
 function showBarMatchBanner(matchName,matchWhy){
   var banner=document.getElementById('bar-match-banner');
@@ -2060,7 +2085,7 @@ function confirmStartTimer(){
 }
 
 function startTimerTick(){
-  if(timerInterval)clearInterval(timerInterval);
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
   timerInterval=setInterval(function(){
     if(!timerIsRunning()){clearInterval(timerInterval);timerInterval=null;return;}
     var sec=timerElapsed();
@@ -2250,7 +2275,7 @@ async function findCigar(){
   var shape=selectorChoices.shape[0]||'any shape';var size=selectorChoices.size[0]||'any size';var strength=selectorChoices.strength[0]||'any strength';var notes=selectorChoices.notes.length?selectorChoices.notes.join(', '):'no specific preference';
   document.getElementById('sel-loading').classList.add('show');document.getElementById('selector-result').classList.remove('show');
   try{
-    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:'Recommend ONE specific premium cigar for someone who prefers: shape='+shape+', size='+size+', strength='+strength+', flavor notes='+notes+'. Return ONLY JSON with keys: name, brand, vitola, strength, why (2-3 sentences), flavor_tags (array of 5 words).'}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:'Recommend ONE specific premium cigar for someone who prefers: shape='+shape+', size='+size+', strength='+strength+', flavor notes='+notes+'. Return ONLY JSON with keys: name, brand, vitola, strength, why (2-3 sentences), flavor_tags (array of 5 words).'}]})});
     var data=await res.json();if(data.error)throw new Error(data.error.message||'API error');
     var rawText=data.content.map(function(i){return i.text||'';}).join('');var jsonMatch=rawText.match(/\{[\s\S]*\}/);if(!jsonMatch)throw new Error('No JSON');
     var rec=JSON.parse(jsonMatch[0]);
@@ -2273,7 +2298,7 @@ function resetQuiz(){quizAnswers={};for(var i=1;i<=5;i++){var step=document.getE
 async function submitQuiz(){
   document.getElementById('quiz-loading').style.display='block';
   try{
-    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:'Based on these quiz answers about a cigar beginner (light/medium/full preferences): '+JSON.stringify(quizAnswers)+'. Return JSON with: recommended_strength (one of: Mild, Mild-Medium, Medium, Medium-Full, Full), profile_description (2 sentences), cigars (array of exactly 3 objects each with name, brand, why).'}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:'Based on these quiz answers about a cigar beginner (light/medium/full preferences): '+JSON.stringify(quizAnswers)+'. Return JSON with: recommended_strength (one of: Mild, Mild-Medium, Medium, Medium-Full, Full), profile_description (2 sentences), cigars (array of exactly 3 objects each with name, brand, why).'}]})});
     var data=await res.json();if(data.error)throw new Error(data.error.message||'Error');
     var text=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();var match=text.match(/\{[\s\S]*\}/);if(!match)throw new Error('No JSON');
     var result=JSON.parse(match[0]);
@@ -2296,7 +2321,7 @@ async function analyzeAsh(input){
     var b64=e.target.result.split(',')[1];
     document.getElementById('ash-photo').src=e.target.result;document.getElementById('ash-result').classList.remove('show');document.getElementById('ash-loading').classList.add('show');
     try{
-      var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:'You are an expert cigar sommelier and judge. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Analyze this cigar ash photo. Return ONLY JSON with keys: estimated_length (e.g. 1.5 inches), construction_analysis (2-3 sentences), why_contests_exist (2-3 sentences), quality_verdict (Excellent, Very Good, Good, or Fair).'}]}]})});
+      var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:'You are an expert cigar sommelier and judge. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Analyze this cigar ash photo. Return ONLY JSON with keys: estimated_length (e.g. 1.5 inches), construction_analysis (2-3 sentences), why_contests_exist (2-3 sentences), quality_verdict (Excellent, Very Good, Good, or Fair).'}]}]})});
       var data=await res.json();if(data.error)throw new Error(data.error.message);
       var text=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();var result=JSON.parse(text);
       document.getElementById('ash-loading').classList.remove('show');document.getElementById('ash-length-badge').textContent=result.estimated_length||'Measured';document.getElementById('ash-analysis-text').textContent=result.construction_analysis||'';document.getElementById('ash-edu-text').textContent=result.why_contests_exist||'';
@@ -2581,7 +2606,7 @@ async function runOccasionMatch(){
     +'Return JSON only: {cigar_name, cigar_brand, cigar_size, cigar_strength, cigar_why, drink_name, drink_why, occasion_note}';
 
   try{
-    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:600,system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:600,system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})});
     var data=await res.json();
     var raw=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
     var match=raw.match(/\{[\s\S]*\}/);if(!match)throw new Error('No JSON');
@@ -2650,7 +2675,7 @@ async function openAlternativesModal(name,profile,kind){
       +'Return JSON array only: [{name,brand,strength,wrapper,why_similar,price_range}]';
 
   try{
-    var res=await fetch('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:700,system:'Return ONLY valid compact JSON array, no markdown.',messages:[{role:'user',content:prompt}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:700,system:'Return ONLY valid compact JSON array, no markdown.',messages:[{role:'user',content:prompt}]})});
     var data=await res.json();
     var raw=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
     var match=raw.match(/\[[\s\S]*\]/);if(!match)throw new Error('No JSON');
