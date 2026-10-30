@@ -151,3 +151,13 @@ input[type="file"]::file-selector-button{min-height:48px;font:14px var(--sans);b
 .timer-btn{font-family:var(--sans);font-size:14px;}
 @media(max-width:600px){.info-pills{flex-wrap:nowrap;overflow-x:auto;padding-bottom:10px!important;scroll-padding-inline:16px;}.info-pills .pill{flex:0 0 auto;white-space:nowrap;}}
 .orig-btn .ob-name{font-size:13px!important;}.orig-btn .ob-reg{font-size:11px!important;color:#645344;}
+
+/* Recovery never covers the screen. Details and downloads use normal dialogs. */
+.collection-notice{position:relative!important;inset:auto!important;z-index:auto!important;max-height:none!important;overflow:visible!important;margin:16px 20px;padding:16px!important;border:1px solid #b6a18a;border-radius:12px;background:#fff6e6;color:#493020;box-shadow:none;}
+.collection-notice[hidden]{display:none!important;}
+.collection-notice p{font-size:14px;line-height:1.6;margin:0 0 10px;}
+.collection-notice-actions{display:flex;flex-wrap:wrap;gap:8px;}
+.storage-recovery-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+#modal-storage-recovery .modal-box,#modal-backup-download .modal-box{max-width:560px;}
+#modal-backup-download .btn{margin:16px 8px 0 0;}
+#collection-recovery-text{overflow-wrap:anywhere;}
