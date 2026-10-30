@@ -824,7 +824,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           <label class="form-label">Photos</label>
           <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
             <p id="photo-upload-status" role="status" aria-live="polite"></p><div id="s-photo-preview" style="display:flex;gap:7px;flex-wrap:wrap"></div>
-            <label for="s-photo-input"><div class="photo-add">+</div></label>
+            <button type="button" class="photo-add" aria-label="Add journal photos" onclick="document.getElementById('s-photo-input').click()">+</button>
             <input type="file" id="s-photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this)">
           </div>
         </div>
@@ -1149,8 +1149,8 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <p id="backup-status">Your collection is stored on this device.</p>
       <p>Backups include humidors, spirits, wish lists, journal entries, photos, and your ash record. Save the file somewhere private. Restore it on another device to transfer your collection. Accounts and automatic cloud sync are not enabled.</p>
       <button class="btn" onclick="exportCollection(false)">Download backup</button>
-      <label class="btn btn-ghost" for="restore-file" style="display:inline-block;cursor:pointer;">Restore backup</label>
-      <input type="file" id="restore-file" accept="application/json,.json" onchange="previewCollectionRestore(this)" style="display:block;margin-top:8px;" aria-label="Choose a Torcida backup to restore">
+      <button type="button" class="btn btn-ghost" onclick="document.getElementById('restore-file').click()">Restore backup</button>
+      <input type="file" id="restore-file" accept="application/json,.json" onchange="previewCollectionRestore(this)" style="display:none;" aria-label="Choose a Torcida backup to restore">
     </div>
     <div class="about-hero">
       <div class="about-logo-word">Torcida</div>
