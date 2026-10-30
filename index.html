@@ -1149,6 +1149,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <p id="backup-status">Your collection is stored on this device.</p>
       <p>Backups include humidors, spirits, wish lists, journal entries, photos, and your ash record. Save the file somewhere private. Restore it on another device to transfer your collection. Accounts and automatic cloud sync are not enabled.</p>
       <button class="btn" onclick="exportCollection(false)">Download backup</button>
+      <button class="btn btn-ghost" onclick="openCollectionRecovery()">Storage recovery</button>
       <button type="button" class="btn btn-ghost" onclick="document.getElementById('restore-file').click()">Restore backup</button>
       <input type="file" id="restore-file" accept="application/json,.json" onchange="previewCollectionRestore(this)" style="display:none;" aria-label="Choose a Torcida backup to restore">
     </div>
@@ -1364,11 +1365,23 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   </div>
 </div>
 
-<div id="collection-alert" role="alert" hidden style="position:fixed;top:0;left:0;right:0;max-height:45vh;overflow:auto;z-index:2200;background:#fff3cd;color:#3A2410;padding:14px;border:2px solid #8B5E3C;">
-  <p id="collection-alert-text"></p>
-  <button id="retry-collection" class="btn btn-sm" onclick="retryCollectionSave()">Retry save</button>
-  <button class="btn btn-sm btn-ghost" onclick="exportCollection(true)">Download unsaved backup</button>
-  <button class="btn btn-sm btn-ghost" onclick="exportRecoveryData()">Download recovery data</button>
+<aside id="collection-alert" class="collection-notice" role="status" hidden>
+ <p id="collection-alert-text"></p><div class="collection-notice-actions">
+ <button class="btn btn-sm" onclick="openCollectionRecovery()">Recovery options</button>
+ <button class="btn btn-sm btn-ghost" onclick="dismissCollectionNotice()">Dismiss</button></div>
+</aside>
+<div class="modal-overlay" id="modal-storage-recovery" onclick="if(event.target===this)closeModal('modal-storage-recovery')">
+ <div class="modal-box"><h2 class="modal-title">Storage recovery</h2><p id="collection-recovery-text">Your saved collection is safe. You can retry or save a backup.</p>
+ <div class="storage-recovery-actions">
+ <button id="retry-collection" class="btn btn-primary" onclick="retryCollectionSave()">Retry save</button>
+ <button id="download-unsaved-collection" class="btn btn-ghost" onclick="exportCollection(true)">Download unsaved backup</button>
+ <button class="btn btn-ghost" onclick="exportRecoveryData()">Download recovery data</button>
+ <button class="btn btn-ghost" onclick="closeModal('modal-storage-recovery');dismissCollectionNotice()">Close</button></div></div>
+</div>
+<div class="modal-overlay" id="modal-backup-download" onclick="if(event.target===this)closeModal('modal-backup-download')">
+ <div class="modal-box"><h2 class="modal-title">Your backup is ready</h2><p>If the download did not start, tap Save backup file. On iPhone, you can also use Share to save the opened file to Files.</p>
+ <a id="backup-download-link" class="btn btn-primary" target="_blank" rel="noopener">Save backup file</a>
+ <button class="btn btn-ghost" onclick="closeModal('modal-backup-download')">Close</button></div>
 </div>
 <div class="modal-overlay" id="modal-restore" role="dialog" aria-modal="true" aria-labelledby="restore-title">
  <div class="modal-box"><h2 id="restore-title">Restore a backup</h2><p id="restore-summary"></p>
@@ -1380,6 +1393,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <script src="/assets/mobile.js"></script>
 <script src="/assets/guide.js"></script>
 <script src="/assets/data.js"></script>
+<script src="/assets/storage.js"></script>
 <script src="/assets/collection.js"></script>
 <script src="/assets/ai-client.js"></script>
 <script>
@@ -1412,7 +1426,7 @@ function renderHumidorTabs(){
   var add=document.createElement('button');add.className='humidor-tab-btn add-new';add.textContent='+ New';
   add.onclick=function(){openNewHumidorModal();};tabs.appendChild(add);
 }
-function switchHumidor(id){activeHumidorId=id;saveHumidors();renderHumidorTabs();renderHumidorInfoBar();renderHumidor();}
+async function switchHumidor(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}activeHumidorId=id;await saveHumidors();renderHumidorTabs();renderHumidorInfoBar();renderHumidor();}
 var HUMIDOR_SETTINGS={
   'Desktop':{humidity:'65–70%',temp:'65–70°F',suggestion:'Boveda 65 or 69 packs work perfectly. Season the Spanish cedar before first use and rotate cigars monthly.'},
   'Cabinet':{humidity:'65–70%',temp:'65–70°F',suggestion:'Use an electronic humidifier like Cigar Oasis for consistent control.'},
@@ -1445,7 +1459,7 @@ function openNewHumidorModal(editId){
   openModal('modal-new-humidor');
 }
 function editActiveHumidor(){var h=getActiveHumidor();if(h)openNewHumidorModal(h.id);}
-function saveNewHumidor(){
+async function saveNewHumidor(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var editId=document.getElementById('hm-edit-id').value;
   var name=document.getElementById('hm-name').value.trim()||'My Humidor';
   var type=document.getElementById('hm-type').value||'Desktop';
@@ -1453,13 +1467,13 @@ function saveNewHumidor(){
   var temp=parseInt(document.getElementById('hm-temp').value)||68;
   if(editId){var h=humidors.find(function(x){return x.id===editId;});if(h){h.name=name;h.type=type;h.humidity=humidity;h.temp=temp;}}
   else{var newH={id:'humi_'+Date.now(),name:name,type:type,humidity:humidity,temp:temp,cigars:[]};humidors.push(newH);activeHumidorId=newH.id;}
-  saveHumidors();closeModal('modal-new-humidor');renderHumidorTabs();renderHumidorInfoBar();renderHumidor();showToast(editId?'Humidor updated ✓':'New humidor created ✓');
+  await saveHumidors();closeModal('modal-new-humidor');renderHumidorTabs();renderHumidorInfoBar();renderHumidor();showToast(editId?'Humidor updated ✓':'New humidor created ✓');
 }
-function deleteActiveHumidor(){
+async function deleteActiveHumidor(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var h=getActiveHumidor();if(!h)return;if(humidors.length===1){showToast('You need at least one humidor');return;}
   if(!confirm('Delete '+h.name+'? All cigars in this humidor will be removed.'))return;
   humidors=humidors.filter(function(x){return x.id!==h.id;});activeHumidorId=humidors[0].id;
-  saveHumidors();renderHumidorTabs();renderHumidorInfoBar();renderHumidor();showToast(h.name+' deleted');
+  await saveHumidors();renderHumidorTabs();renderHumidorInfoBar();renderHumidor();showToast(h.name+' deleted');
 }
 
 // ── HUMIDOR PICKER ─────────────────────────────────────────────
@@ -1480,11 +1494,11 @@ function pickHumidor(action,data){
   });
   openModal('modal-pick-humidor');
 }
-function executeHumidorAction(action,data,humidorId){
+async function executeHumidorAction(action,data,humidorId){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var h=humidors.find(function(x){return x.id===humidorId;});if(!h)return;
-  if(action==='fromResult'){if(!currentResult)return;h.cigars.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1,price:0});save();saveHumidors();renderHumidor();showToast('Added to '+h.name+' ✓');}
-  else if(action==='fromWishlist'){var wid=data.wid;var c=wishlist.find(function(w){return w.id===wid;});if(!c)return;h.cigars.push({id:Date.now(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(function(w){return w.id!==wid;});save();saveHumidors();renderWishlist();renderHumidor();showToast('Moved to '+h.name+' ✓');}
-  else if(action==='fromSelector'){var rec=data;h.cigars.push({id:Date.now(),brand:rec.brand||'',name:rec.name||'',size:rec.vitola||'',wrapper:'',strength:rec.strength||'',notes:'Recommended by Cigar Selector',qty:1});save();saveHumidors();renderHumidor();showToast(rec.name+' added to '+h.name+' ✓');}
+  if(action==='fromResult'){if(!currentResult)return;h.cigars.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1,price:0});await save();renderHumidor();showToast('Added to '+h.name+' ✓');}
+  else if(action==='fromWishlist'){var wid=data.wid;var c=wishlist.find(function(w){return w.id===wid;});if(!c)return;h.cigars.push({id:Date.now(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(function(w){return w.id!==wid;});await save();renderWishlist();renderHumidor();showToast('Moved to '+h.name+' ✓');}
+  else if(action==='fromSelector'){var rec=data;h.cigars.push({id:Date.now(),brand:rec.brand||'',name:rec.name||'',size:rec.vitola||'',wrapper:'',strength:rec.strength||'',notes:'Recommended by Cigar Selector',qty:1});await save();renderHumidor();showToast(rec.name+' added to '+h.name+' ✓');}
 }
 
 // ── MY BAR ────────────────────────────────────────────────────
@@ -1603,13 +1617,13 @@ function renderBar(){
   });
 }
 
-function changeBarBottles(id,delta){
+async function changeBarBottles(id,delta){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var s=myBar.find(function(x){return x.id===id;});if(!s)return;
   s.bottles=Math.max(0,(parseInt(s.bottles)||1)+delta);
-  saveBar();renderBar();
+  await saveBar();renderBar();
 }
 
-function addToBarManually(){
+async function addToBarManually(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('bar-name').value.trim();if(!name){showToast('Please enter a spirit name');return;}
   myBar.push({
     id:'bar_'+Date.now(),
@@ -1624,7 +1638,7 @@ function addToBarManually(){
     notes:document.getElementById('bar-notes').value,
     lowstock:parseInt(document.getElementById('bar-lowstock').value)||1
   });
-  saveBar();
+  await saveBar();
   ['bar-name','bar-brand','bar-age','bar-proof','bar-notes'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('bar-price').value='';document.getElementById('bar-bottles').value='1';document.getElementById('bar-size').value='';document.getElementById('bar-lowstock').value='1';
   renderBar();toggleAddForm('bar-form');showToast('Added to My Bar ✓');
@@ -1646,7 +1660,7 @@ function openEditBar(id){
   openModal('modal-edit-bar');
 }
 
-function saveEditBar(){
+async function saveEditBar(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var id=document.getElementById('edit-bar-id').value;
   var s=myBar.find(function(x){return x.id===id;});if(!s)return;
   s.name=document.getElementById('edit-bar-name').value;
@@ -1659,19 +1673,19 @@ function saveEditBar(){
   s.price=parseFloat(document.getElementById('edit-bar-price').value)||0;
   s.notes=document.getElementById('edit-bar-notes').value;
   s.lowstock=parseInt(document.getElementById('edit-bar-lowstock').value)||1;
-  saveBar();renderBar();closeModal('modal-edit-bar');showToast('Bar updated ✓');
+  await saveBar();renderBar();closeModal('modal-edit-bar');showToast('Bar updated ✓');
 }
 
-function restockToWishlist(id){
+async function restockToWishlist(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var s=myBar.find(function(x){return x.id===id;});if(!s)return;
   wishlist.push({id:Date.now(),itemType:'spirit',brand:s.brand||'',name:s.name||'',spiritType:s.type||'',price:'',reason:'Restock — running low'});
-  save();renderBarWishList();showToast((s.name||'Spirit')+' added to Bar Wish List ✓');
+  await save();renderBarWishList();showToast((s.name||'Spirit')+' added to Bar Wish List ✓');
 }
-function removeFromBar(id){myBar=myBar.filter(function(s){return s.id!==id;});saveBar();renderBar();}
-function addToBarFromResult(){
+async function removeFromBar(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}myBar=myBar.filter(function(s){return s.id!==id;});await saveBar();renderBar();}
+async function addToBarFromResult(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(!currentResult)return;
   myBar.push({id:'bar_'+Date.now(),name:currentResult.name||'',brand:currentResult.brand||'',type:currentResult.spirit_type||'Other',age:currentResult.age||'',proof:currentResult.proof||'',price:0,notes:currentResult.tasting_notes||''});
-  saveBar();renderBar();showToast((currentResult.name||'Spirit')+' added to My Bar ✓');
+  await saveBar();renderBar();showToast((currentResult.name||'Spirit')+' added to My Bar ✓');
 }
 // ── FETCH WITH TIMEOUT ────────────────────────────────────────
 // Prevents the app locking up when the proxy is slow or unresponsive
@@ -1699,10 +1713,10 @@ async function findCigarForSpirit(id){
 function openBarWishForm(){
   var form=document.getElementById('bar-wish-form');if(form&&!form.classList.contains('show'))form.classList.add('show');
 }
-function addToBarWishlist(){
+async function addToBarWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('bw-name').value.trim();if(!name){showToast('Please enter a spirit name');return;}
   wishlist.push({id:Date.now(),itemType:'spirit',brand:document.getElementById('bw-brand').value,name:name,spiritType:document.getElementById('bw-spirit-type').value||'',price:document.getElementById('bw-price').value,reason:document.getElementById('bw-reason').value});
-  save();
+  await save();
   ['bw-brand','bw-name','bw-price','bw-reason'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('bw-spirit-type').value='';
   renderBarWishList();toggleAddForm('bar-wish-form');showToast(name+' added to Bar Wish List ✓');
 }
@@ -1739,31 +1753,31 @@ function renderBarWishList(){
     list.appendChild(card);
   });
 }
-function moveWishSpiritToBar(id){
+async function moveWishSpiritToBar(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var c=wishlist.find(function(w){return w.id===id;});if(!c)return;
   myBar.push({id:'bar_'+Date.now(),name:c.name,brand:c.brand||'',type:c.spiritType||'Other',age:'',proof:'',price:0,notes:''});
   wishlist=wishlist.filter(function(w){return w.id!==id;});
-  saveBar();save();renderBar();renderBarWishList();showToast(c.name+' moved to My Bar ✓');
+  await save();renderBar();renderBarWishList();showToast(c.name+' moved to My Bar ✓');
 }
 
 // ── CIGAR WISH LIST ───────────────────────────────────────────
 function openWishForm(type){
   var form=document.getElementById('wish-form');if(form&&!form.classList.contains('show'))form.classList.add('show');
 }
-function addToWishlist(){
+async function addToWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('w-name').value.trim();if(!name){showToast('Please enter a name');return;}
   var brand=document.getElementById('w-brand').value;var size=document.getElementById('w-size').value;var price=document.getElementById('w-price').value;var reason=document.getElementById('w-reason').value;
   wishlist.push({id:Date.now(),itemType:'cigar',brand:brand,name:name,size:size,price:price,reason:reason});
-  save();
+  await save();
   ['w-brand','w-name','w-size','w-price','w-reason'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   renderWishlist();toggleAddForm('wish-form');showToast(name+' added to Cigar Wish List ✓');
 }
-function addToWishlistFromResult(){
+async function addToWishlistFromResult(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(!currentResult)return;
   var isSpirit=currentResult.type==='spirit';
   if(isSpirit){wishlist.push({id:Date.now(),itemType:'spirit',brand:currentResult.brand||'',name:currentResult.name||'',spiritType:currentResult.spirit_type||'',price:'',reason:''});}
   else{wishlist.push({id:Date.now(),itemType:'cigar',brand:currentResult.brand||'',name:currentResult.name||'',size:currentResult.size||'',price:'',reason:''});}
-  save();renderWishlist();renderBarWishList();showToast((currentResult.name||'Item')+' added to wish list ✓');
+  await save();renderWishlist();renderBarWishList();showToast((currentResult.name||'Item')+' added to wish list ✓');
 }
 function renderWishlist(){
   var cigarList=document.getElementById('cigar-wish-list');if(!cigarList)return;
@@ -1792,7 +1806,7 @@ function renderWishlist(){
     card.appendChild(actions);cigarList.appendChild(card);
   });
 }
-function removeWish(id){wishlist=wishlist.filter(function(w){return w.id!==id;});save();renderWishlist();renderBarWishList();}
+async function removeWish(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}wishlist=wishlist.filter(function(w){return w.id!==id;});await save();renderWishlist();renderBarWishList();}
 function moveToHumidor(id){pickHumidor('fromWishlist',{wid:id});}
 
 // ── SUB-TAB SWITCHERS ─────────────────────────────────────────
@@ -1814,7 +1828,7 @@ function switchBarMode(mode){
 }
 
 // ── CORE UTILITIES ────────────────────────────────────────────
-function loadData(){initializeCollection();renderAll();}
+async function loadData(){await initializeCollection();renderAll();}
 function save(){return persistCollection();}
 function showPage(id,tab,fromHistory){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
@@ -2013,18 +2027,18 @@ function addToSmokedFromResult(){
 }
 
 // ── HUMIDOR ───────────────────────────────────────────────────
-function addToHumidor(){
+async function addToHumidor(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('h-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}
   var ah=getActiveHumidor();if(!ah)return;
   ah.cigars.push({id:Date.now(),brand:document.getElementById('h-brand').value,name:name,size:document.getElementById('h-size').value,wrapper:document.getElementById('h-wrapper').value,strength:document.getElementById('h-strength').value,qty:parseInt(document.getElementById('h-qty').value)||1,purchaseDate:document.getElementById('h-date').value||null,price:parseFloat(document.getElementById('h-price').value)||0,notes:document.getElementById('h-notes').value});
-  saveHumidors();
+  await saveHumidors();
   ['h-brand','h-name','h-size','h-wrapper','h-notes'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('h-qty').value='1';document.getElementById('h-date').value='';document.getElementById('h-price').value='';
   renderHumidor();toggleAddForm('humidor-form');showToast('Added to '+ah.name+' ✓');
 }
-function changeQty(id,delta){
+async function changeQty(id,delta){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var ah=getActiveHumidor();var humidor=ah?ah.cigars:[];var c=humidor.find(function(h){return h.id===id;});if(!c)return;
   c.qty=Math.max(0,(c.qty||1)+delta);if(c.qty===0){ah.cigars=ah.cigars.filter(function(h){return h.id!==id;});showToast('Removed from Humidor');}
-  saveHumidors();renderHumidor();
+  await saveHumidors();renderHumidor();
 }
 function renderHumidor(){
   var ah=getActiveHumidor();var humidorCigars=ah?ah.cigars:[];
@@ -2053,7 +2067,7 @@ function renderHumidor(){
 }
 
 // ── JOURNAL / SMOKED ─────────────────────────────────────────
-function logSmokeFromHumidor(id){
+async function logSmokeFromHumidor(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   // Find cigar across all humidors
   var found=null,foundH=null;
   humidors.forEach(function(h){var c=h.cigars.find(function(x){return x.id===id;});if(c){found=c;foundH=h;}});
@@ -2066,13 +2080,13 @@ function logSmokeFromHumidor(id){
   var smokedNav=document.querySelector('.nav-tab[onclick*="smoked"]');
   if(smokedNav)showPage('smoked',smokedNav);
   var f=document.getElementById('smoked-form');
-  if(f&&!f.classList.contains('show')){f.classList.add('show');setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'nearest'});},250);}
+  if(f&&!f.classList.contains('show')){f.classList.add('show');setTimeout(async function(){f.scrollIntoView({behavior:'smooth',block:'nearest'});},250);}
   // Ask to decrement humidor count
-  setTimeout(function(){
+  setTimeout(async function(){
     if(confirm('Remove one '+found.name+' from '+foundH.name+'?')){
       found.qty=Math.max(0,(found.qty||1)-1);
       if(found.qty===0)foundH.cigars=foundH.cigars.filter(function(x){return x.id!==id;});
-      saveHumidors();renderHumidor();
+      await saveHumidors();renderHumidor();
     }
   },400);
   showToast('Pre-filled from '+foundH.name+' — add your notes!');
@@ -2091,17 +2105,17 @@ async function handlePhotoUpload(input){
   finally{TorcidaMobile.setPhotoJobs(-1);}
 }
 
-function logSmoke(){
+async function logSmoke(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(TorcidaMobile.photoBusy()){showToast('Please wait for your photos to finish preparing.');return;}
   var name=document.getElementById('s-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}
   smoked.push({id:Date.now(),brand:document.getElementById('s-brand').value,name:name,date:document.getElementById('s-date').value,location:document.getElementById('s-location').value,rating:newRatingVal,ratings:{draw:attrRatings.draw,burn:attrRatings.burn,flavor:attrRatings.flavor,construction:attrRatings.construction},notes:document.getElementById('s-notes').value,drink:{type:document.getElementById('s-drink-type').value,name:document.getElementById('s-drink-name').value,rating:pairingRatingVal},photos:[...pendingPhotos]});
-  save();
+  await save();
   ['s-brand','s-name','s-location','s-notes','s-drink-name'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('s-drink-type').value='';document.getElementById('s-date').value='';document.getElementById('s-photo-preview').innerHTML='';document.getElementById('s-photo-input').value='';
   pendingPhotos=[];newRatingVal=0;pairingRatingVal=0;attrRatings={draw:0,burn:0,flavor:0,construction:0};
   document.querySelectorAll('#new-stars .star, .mini-stars .star').forEach(function(s){s.classList.remove('lit');});
   renderSmoked();toggleAddForm('smoked-form');showToast('Smoke logged ✓');
 }
-function removeSmoked(id){smoked=smoked.filter(function(s){return s.id!==id;});save();renderSmoked();}
+async function removeSmoked(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}smoked=smoked.filter(function(s){return s.id!==id;});await save();renderSmoked();}
 function setSmokedFilter(val,el){smokedFilter=val;document.querySelectorAll('.filter-pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');renderSmoked();}
 function renderSmoked(){
   var ratings=smoked.filter(function(s){return s.rating>0;}).map(function(s){return s.rating;});
@@ -2316,7 +2330,7 @@ function humidorAutocomplete(val,dropId){
   }).join('');
   drop.classList.add('show');acFocusIdx=-1;
 }
-function selectHumidorCigar(id,hid,dropId){
+async function selectHumidorCigar(id,hid,dropId){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   dropId=dropId||'s-name-drop';
   var targetH=humidors.find(function(h){return h.id==hid;})||getActiveHumidor();
   if(!targetH)return;
@@ -2328,7 +2342,7 @@ function selectHumidorCigar(id,hid,dropId){
     document.getElementById('s-name').value=c.name;document.getElementById('s-brand').value=c.brand||'';
   }
   document.getElementById(dropId).classList.remove('show');
-  if(!isTimer&&(c.qty||1)>0&&confirm('Remove one '+c.name+' from '+targetH.name+'?')){c.qty=Math.max(0,(c.qty||1)-1);if(c.qty===0)targetH.cigars=targetH.cigars.filter(function(h){return h.id!==id;});saveHumidors();renderHumidor();showToast('Removed from '+targetH.name+' ✓');}
+  if(!isTimer&&(c.qty||1)>0&&confirm('Remove one '+c.name+' from '+targetH.name+'?')){c.qty=Math.max(0,(c.qty||1)-1);if(c.qty===0)targetH.cigars=targetH.cigars.filter(function(h){return h.id!==id;});await saveHumidors();renderHumidor();showToast('Removed from '+targetH.name+' ✓');}
 }
 function autocompleteKeydown(e,dropId){
   dropId=dropId||'s-name-drop';
@@ -2360,7 +2374,7 @@ async function findCigar(){
   document.getElementById('sel-loading').classList.remove('show');
 }
 function searchSelectorCigar(){var rec=document.getElementById('selector-result')._rec;if(!rec)return;var q=(rec.brand?rec.brand+' ':'')+rec.name;document.getElementById('cigar-search').value=q.trim();var tab=document.querySelectorAll('.nav-tab')[0];if(tab)showPage('scanner',tab);searchCigar();}
-function addSelectorToWishlist(){var rec=document.getElementById('selector-result')._rec;if(!rec)return;wishlist.push({id:Date.now(),itemType:'cigar',name:rec.name,brand:rec.brand||'',size:rec.vitola||'',reason:'Recommended by Cigar Selector'});save();renderWishlist();showToast(rec.name+' added to Wish List ✓');}
+async function addSelectorToWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}var rec=document.getElementById('selector-result')._rec;if(!rec)return;wishlist.push({id:Date.now(),itemType:'cigar',name:rec.name,brand:rec.brand||'',size:rec.vitola||'',reason:'Recommended by Cigar Selector'});await save();renderWishlist();showToast(rec.name+' added to Wish List ✓');}
 function addSelectorToHumidor(){var rec=document.getElementById('selector-result')._rec;if(!rec)return;pickHumidor('fromSelector',rec);}
 
 // ── STRENGTH FINDER QUIZ ───────────────────────────────────────
@@ -2387,7 +2401,7 @@ function searchFromQuizIdx(idx){var cigars=window._quizCigars||[];var c=cigars[i
 var ashPersonalBest=null;
 function loadAshBest(){}
 function saveAshBest(){return persistCollection();}
-async function analyzeAsh(input){
+async function analyzeAsh(input){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(!input.files[0])return;
   var file=input.files[0];input.value='';
   try{
@@ -2399,7 +2413,7 @@ async function analyzeAsh(input){
       document.getElementById('ash-loading').classList.remove('show');document.getElementById('ash-length-badge').textContent=result.estimated_length||'Measured';document.getElementById('ash-analysis-text').textContent=result.construction_analysis||'';document.getElementById('ash-edu-text').textContent=result.why_contests_exist||'';
       loadAshBest();var entry={length:result.estimated_length,verdict:result.quality_verdict,date:new Date().toLocaleDateString()};
       if(!ashPersonalBest){ashPersonalBest=entry;}else{var oldLen=parseFloat(ashPersonalBest.length)||0;var newLen=parseFloat(result.estimated_length)||0;if(newLen>oldLen)ashPersonalBest=entry;}
-      saveAshBest();document.getElementById('ash-best-val').textContent=ashPersonalBest.length;document.getElementById('ash-best-sub').textContent=ashPersonalBest.verdict+' · '+ashPersonalBest.date;document.getElementById('ash-result').classList.add('show');
+      await saveAshBest();document.getElementById('ash-best-val').textContent=ashPersonalBest.length;document.getElementById('ash-best-sub').textContent=ashPersonalBest.verdict+' · '+ashPersonalBest.date;document.getElementById('ash-result').classList.add('show');
     }catch(err){document.getElementById('ash-loading').classList.remove('show');showToast(err.message||'Could not analyze. Try a clearer photo.');}
   }catch(e){showToast(e.message||'This photo could not be opened.');}
 }
@@ -2411,26 +2425,26 @@ function openEditHumidor(id){
   document.getElementById('edit-h-id').value=id;document.getElementById('edit-h-brand').value=c.brand||'';document.getElementById('edit-h-name').value=c.name||'';document.getElementById('edit-h-size').value=c.size||'';document.getElementById('edit-h-wrapper').value=c.wrapper||'';document.getElementById('edit-h-strength').value=c.strength||'Medium';document.getElementById('edit-h-qty').value=c.qty||1;document.getElementById('edit-h-date').value=c.purchaseDate||'';document.getElementById('edit-h-price').value=c.price||'';document.getElementById('edit-h-notes').value=c.notes||'';
   openModal('modal-humidor');
 }
-function saveEditHumidor(){
+async function saveEditHumidor(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var id=parseInt(document.getElementById('edit-h-id').value);var ah=getActiveHumidor();var humidorCigars=ah?ah.cigars:[];var c=humidorCigars.find(function(h){return h.id===id;});if(!c)return;
   c.brand=document.getElementById('edit-h-brand').value;c.name=document.getElementById('edit-h-name').value;c.size=document.getElementById('edit-h-size').value;c.wrapper=document.getElementById('edit-h-wrapper').value;c.strength=document.getElementById('edit-h-strength').value;c.qty=parseInt(document.getElementById('edit-h-qty').value)||1;c.purchaseDate=document.getElementById('edit-h-date').value||null;c.price=parseFloat(document.getElementById('edit-h-price').value)||0;c.notes=document.getElementById('edit-h-notes').value;
-  save();saveHumidors();renderHumidor();closeModal('modal-humidor');showToast('Humidor entry updated ✓');
+  await save();renderHumidor();closeModal('modal-humidor');showToast('Humidor entry updated ✓');
 }
-function deleteFromHumidor(){
+async function deleteFromHumidor(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var id=parseInt(document.getElementById('edit-h-id').value);var ah=getActiveHumidor();if(ah)ah.cigars=ah.cigars.filter(function(h){return h.id!==id;});
-  save();saveHumidors();renderHumidor();closeModal('modal-humidor');showToast('Removed from Humidor');
+  await save();renderHumidor();closeModal('modal-humidor');showToast('Removed from Humidor');
 }
 function openEditWishlist(id){
   var c=wishlist.find(function(w){return w.id===id;});if(!c)return;
   document.getElementById('edit-w-id').value=id;document.getElementById('edit-w-brand').value=c.brand||'';document.getElementById('edit-w-name').value=c.name||'';document.getElementById('edit-w-size').value=c.size||'';document.getElementById('edit-w-price').value=c.price||'';document.getElementById('edit-w-reason').value=c.reason||'';
   openModal('modal-wishlist');
 }
-function saveEditWishlist(){
+async function saveEditWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var id=parseInt(document.getElementById('edit-w-id').value);var c=wishlist.find(function(w){return w.id===id;});if(!c)return;
   c.brand=document.getElementById('edit-w-brand').value;c.name=document.getElementById('edit-w-name').value;c.size=document.getElementById('edit-w-size').value;c.price=document.getElementById('edit-w-price').value;c.reason=document.getElementById('edit-w-reason').value;
-  save();renderWishlist();closeModal('modal-wishlist');showToast('Wish list entry updated ✓');
+  await save();renderWishlist();closeModal('modal-wishlist');showToast('Wish list entry updated ✓');
 }
-function deleteFromWishlist(){var id=parseInt(document.getElementById('edit-w-id').value);wishlist=wishlist.filter(function(w){return w.id!==id;});save();renderWishlist();closeModal('modal-wishlist');showToast('Removed from Wish List');}
+async function deleteFromWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}var id=parseInt(document.getElementById('edit-w-id').value);wishlist=wishlist.filter(function(w){return w.id!==id;});await save();renderWishlist();closeModal('modal-wishlist');showToast('Removed from Wish List');}
 function setEditRating(n){editRatingVal=n;document.querySelectorAll('#edit-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<n);});}
 function openEditSmoked(id){
   var c=smoked.find(function(s){return s.id===id;});if(!c)return;
@@ -2438,12 +2452,12 @@ function openEditSmoked(id){
   editRatingVal=c.rating||0;document.querySelectorAll('#edit-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<editRatingVal);});
   openModal('modal-smoked');
 }
-function saveEditSmoked(){
+async function saveEditSmoked(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var id=parseInt(document.getElementById('edit-s-id').value);var c=smoked.find(function(s){return s.id===id;});if(!c)return;
   c.brand=document.getElementById('edit-s-brand').value;c.name=document.getElementById('edit-s-name').value;c.date=document.getElementById('edit-s-date').value;c.location=document.getElementById('edit-s-location').value;c.notes=document.getElementById('edit-s-notes').value;c.rating=editRatingVal;
-  save();renderSmoked();closeModal('modal-smoked');showToast('Smoke log updated ✓');
+  await save();renderSmoked();closeModal('modal-smoked');showToast('Smoke log updated ✓');
 }
-function deleteFromSmoked(){var id=parseInt(document.getElementById('edit-s-id').value);smoked=smoked.filter(function(s){return s.id!==id;});save();renderSmoked();closeModal('modal-smoked');showToast('Entry deleted');}
+async function deleteFromSmoked(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}var id=parseInt(document.getElementById('edit-s-id').value);smoked=smoked.filter(function(s){return s.id!==id;});await save();renderSmoked();closeModal('modal-smoked');showToast('Entry deleted');}
 
 // ── GUIDE: SHAPES ──────────────────────────────────────────────
 var quotes=[{q:"A good cigar is as great a comfort to a man as a good cry to a woman.",a:"Edward Bulwer-Lytton"},{q:"The cigar is the perfect complement of a good life.",a:"Zino Davidoff"},{q:"If I had taken my doctor's advice and quit smoking when he advised me to, I wouldn't have lived to go to his funeral.",a:"George Burns"},{q:"A woman is just a woman, but a good cigar is a smoke.",a:"Rudyard Kipling"},{q:"Happiness is a good cigar and a good book.",a:"Groucho Marx"},{q:"There are two things a man never forgets: his first love and his first cigar.",a:"Anonymous"},{q:"Life is too short to smoke bad cigars.",a:"Anonymous"},{q:"Smoke slowly. Think deeply. Ash gracefully.",a:"Anonymous"},{q:"The first third is introduction, the second third is conversation, the final third is revelation.",a:"Cigar Aficionado"},{q:"Find a porch, a sunset, and a well-constructed cigar. The rest follows.",a:"Anonymous"}];
@@ -2772,7 +2786,7 @@ function searchForAlternativeSpirit(encoded){
 }
 document.getElementById('s-date').value=TorcidaMobile.localDate();
 loadAshBest();
-loadData();
+loadData().then(function(){
 TorcidaMobile.initialize();
 (function(){var pages=['scanner','cigar','bar','smoked','guide','about'];function restorePage(){var page=location.hash.slice(1);showPage(pages.includes(page)?page:'scanner',null,true);}window.addEventListener('popstate',restorePage);restorePage();})();
 var selWrap=document.getElementById('cigar-selector-wrap');if(selWrap)selWrap.style.display=document.getElementById('page-scanner').classList.contains('active')?'block':'none';
@@ -2788,8 +2802,10 @@ var selWrap=document.getElementById('cigar-selector-wrap');if(selWrap)selWrap.st
     }
   }
 })();
+}).catch(function(error){collectionNotice('The collection could not finish loading. Existing data has not been changed.');console.error(error);});
 </script>
 </body>
 </html>
+
 
 

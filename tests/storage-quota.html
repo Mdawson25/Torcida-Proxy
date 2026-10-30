@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Torcida storage migration check</title><style>body{font:16px/1.6 system-ui;background:#f2ece2;color:#30251d;margin:24px;max-width:760px}button,a{font:inherit;min-height:48px;padding:12px 18px;margin:8px 8px 8px 0;border:1px solid #77532e;border-radius:8px;background:#fffdf8;color:#493020;display:inline-block}pre{white-space:pre-wrap;background:#fffdf8;padding:18px;border-radius:10px}</style></head><body><h1>Storage migration check</h1><p>Run only on a fresh preview origin. This fixture refuses to replace an existing collection.</p><button id="seed">Seed full legacy storage</button><a id="open-app" href="/#smoked">Open app</a><button id="inspect">Inspect migration</button><pre id="result" role="status">Ready</pre><script>
+const report=document.getElementById('result');
+const keys=['tc_collection_v1','tc_humidors','tc_active_humidor','tc_humidor','tc_wishlist','tc_smoked','tc_bar','tc_ashbest'];
+document.getElementById('seed').onclick=async function(){
+ try{
+  if(keys.some(key=>localStorage.getItem(key)!==null))throw Error('Existing legacy data found. Use a new preview origin.');
+  if(!indexedDB.databases)throw Error('This fixture needs database inventory support.');
+  if((await indexedDB.databases()).some(db=>db.name==='torcida-collection-v2'))throw Error('An existing collection database was found. Use a fresh preview origin.');
+  const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;const ctx=canvas.getContext('2d'),image=ctx.createImageData(512,512);let seed=17;
+  for(let i=0;i<image.data.length;i+=4){for(let j=0;j<3;j++){seed=(seed*1664525+1013904223)>>>0;image.data[i+j]=seed>>>24;}image.data[i+3]=255;}ctx.putImageData(image,0,0);const photo=canvas.toDataURL('image/jpeg',.85);
+  const entries=[];while(JSON.stringify(entries).length<1200000)entries.push({id:entries.length+1,name:'Legacy photo '+(entries.length+1),brand:'Migration fixture',rating:4,photos:[photo]});
+  localStorage.setItem('tc_humidors',JSON.stringify([{id:'qa_humidor',name:'Fixture humidor',cigars:[{id:100,name:'Saved cigar',qty:3}]}]));localStorage.setItem('tc_active_humidor','qa_humidor');localStorage.setItem('tc_wishlist',JSON.stringify([{id:200,name:'Saved wish'}]));localStorage.setItem('tc_bar',JSON.stringify([{id:'bar_1',name:'Saved spirit'}]));localStorage.setItem('tc_smoked',JSON.stringify(entries));
+  let filler='A'.repeat(1024),last='';for(;;){try{localStorage.setItem('tc_quota_test_fill',filler);last=filler;filler+='A'.repeat(8192);}catch(error){if(error.name!=='QuotaExceededError')throw error;break;}}
+  report.textContent=JSON.stringify({photoEntries:entries.length,photos:entries.length,legacyCharacters:JSON.stringify(entries).length,localStorageQuotaReached:true,fillerCharacters:last.length},null,2);
+ }catch(error){report.textContent=error.message;}
+};
+document.getElementById('inspect').onclick=async function(){
+ try{
+  if(!(await indexedDB.databases()).some(db=>db.name==='torcida-collection-v2'))throw Error('No migrated database yet.');
+  const db=await new Promise((resolve,reject)=>{const request=indexedDB.open('torcida-collection-v2');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});
+  const read=key=>new Promise((resolve,reject)=>{const request=db.transaction('state','readonly').objectStore('state').get(key);request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});const current=await read('current'),archive=await read('legacyArchive');db.close();
+  report.textContent=JSON.stringify({saved:!!current,photoEntries:current?.data.smoked.length,photos:current?.data.smoked.reduce((n,entry)=>n+(entry.photos||[]).length,0),cigarQuantity:current?.data.humidors[0].cigars[0].qty,wishlistEntries:current?.data.wishlist.length,barEntries:current?.data.myBar.length,archivePresent:!!archive,archivedKeys:archive?Object.keys(archive.values).filter(key=>archive.values[key]!==null):[],legacyKeysRemaining:keys.filter(key=>localStorage.getItem(key)!==null),unrelatedFillerPreserved:localStorage.getItem('tc_quota_test_fill')!==null},null,2);
+ }catch(error){report.textContent=error.message;}
+};
+</script></body></html>
