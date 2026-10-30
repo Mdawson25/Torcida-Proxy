@@ -21,6 +21,8 @@ Create an Upstash Redis database and add its REST credentials as Vercel environm
 
 Use a shared database for all instances of the app. Production and preview deployments using that database share daily limits. Use a separate database for previews if you need independent test allowances.
 
+The Vercel Marketplace integration may instead supply `KV_REST_API_URL` and `KV_REST_API_TOKEN`. The app accepts these directly, so credentials do not need to be copied. Do not use the read-only token: rate limits require writes.
+
 Production/hosted AI calls intentionally return a setup message until these variables exist. A Redis outage also pauses AI calls. Local collections, backups and journaling continue to work. There is no unprotected production fallback to per-instance counters.
 
 After changing Vercel environment variables, create a new deployment. Test the preview before merging the pull request. An older HTML file copied by itself is no longer a complete app: deploy `index.html`, `assets/`, and `api/` together. The dated HTML copy is archival and should not be used as the entry point.

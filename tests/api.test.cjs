@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 let api;
 const valid=(extra={})=>({operation:'identify',max_tokens:999999,model:'untrusted-model',system:'Return JSON',messages:[{role:'user',content:'Padron 1964'}],...extra});
 const originalEnv={...process.env};
-function resetEnv(){for(const k of Object.keys(process.env))if(/^(AI_|UPSTASH_|TORCIDA_|ANTHROPIC_|VERCEL|NODE_ENV|CLAUDE_MODEL)/.test(k))delete process.env[k];}
+function resetEnv(){for(const k of Object.keys(process.env))if(/^(AI_|UPSTASH_|KV_|TORCIDA_|ANTHROPIC_|VERCEL|NODE_ENV|CLAUDE_MODEL)/.test(k))delete process.env[k];}
 function response(){return {headers:{},statusCode:200,body:null,setHeader(k,v){this.headers[k]=v;},status(n){this.statusCode=n;return this;},json(v){this.body=v;return this;},end(){return this;}};}
 function request(body=valid(),extra={}){return {method:'POST',headers:{origin:'https://torcida-proxy.vercel.app'},socket:{remoteAddress:'127.0.0.1'},body,...extra};}
 test.before(async()=>{api=await import('../api/chat.js');});
@@ -54,4 +54,9 @@ test('proxy normalizes responses and hides upstream failures and secrets',async(
 test('truncated, malformed, and missing content results fail safely',async()=>{
  const saved=global.fetch;process.env.ANTHROPIC_KEY='test-key';
  try{for(const data of [{stop_reason:'max_tokens',content:[]},{content:'bad'},{content:[{type:'text',text:'{"name":'}]},{content:[{type:'text',text:'{"type":"cigar"}'}]}]){global.fetch=async()=>({ok:true,json:async()=>data});let r=response();await api.default(request(),r);assert.ok([422,502].includes(r.statusCode));assert.ok(r.body.error.message);}}finally{global.fetch=saved;}
+});
+
+test('Vercel Marketplace KV REST variables work without copying secrets',async()=>{
+ process.env.VERCEL='1';process.env.KV_REST_API_URL='https://marketplace.example.test';process.env.KV_REST_API_TOKEN='marketplace-secret';
+ await api.reserveUsage('marketplace',100,async(url,options)=>{assert.equal(url,'https://marketplace.example.test');assert.equal(options.headers.Authorization,'Bearer marketplace-secret');return {ok:true,json:async()=>({result:0})};});
 });

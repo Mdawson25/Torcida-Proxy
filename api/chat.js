@@ -66,7 +66,8 @@ async function reserveUsage(ip, reserved, fetcher = fetch, now = Date.now()) {
     [`tc:global:${day}`, 1, limit('AI_DAILY_REQUEST_LIMIT', 500, 10000), 172800],
     [`tc:budget:${day}`, reserved, limit('AI_DAILY_TOKEN_BUDGET', 250000, 10000000), 172800]
   ];
-  const url = process.env.UPSTASH_REDIS_REST_URL, token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
   let exceeded;
   if (url && token) {
     try {
