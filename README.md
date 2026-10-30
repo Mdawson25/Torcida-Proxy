@@ -53,3 +53,14 @@ node --test tests/*.test.cjs
 ```
 
 Tests cover migration, photo-inclusive backups, failed saves, recovery, restore confirmation, stale-tab conflicts, corrupted storage, malformed AI responses, all nine request paths, server caps, access checks, rate limits, global allowances and fail-closed Redis behavior. API requests in tests use mocked provider responses and a mocked Redis transport. A real Redis integration and live provider request still need a configured deployment.
+
+
+## Visual and mobile update
+
+- Five persistent destinations: Find, Humidor, Bar, Journal and Guide. Settings/About and backup controls are reached with the header settings button. Hash navigation supports browser Back and home-screen shortcuts.
+- Ivory surfaces, walnut header, brass accents, stronger contrast, native system text for controls, consistent line icons and larger touch targets.
+- Guide silhouettes use one physical scale for inches and ring gauge. The comparison panel keeps that scale across both selected shapes. Sizes are representative and vary by brand. Cut illustrations show the tool, a schematic cut location, and the resulting cap opening.
+- Zoom remains enabled. Safe-area insets, dynamic visual-viewport sizing, keyboard handling, modal focus containment/return, native chip buttons, labels and reduced-motion behavior improve mobile use.
+- Camera/gallery images are resized and re-encoded as JPEG before AI requests. Journal photos use a smaller size ceiling. Undecodable formats show an actionable message. This does not promise native HEIC decoding in browsers that do not support it.
+- Journal dates use the local calendar date. Sharing uses native file/text sharing where available, then copy text. The app includes a manifest, maskable and Apple icons, and a service worker for the offline collection shell. AI requests always require a network and are never cached. Offline protection does not replace downloaded backups.
+- `tests/responsive.html` is an internal preview harness with common narrow widths, tablet/landscape sizes, overflow checks and touch-target checks. It is not a real iOS or Android emulator. Hardware camera, operating-system share sheets, installation, background behavior and safe-area/keyboard behavior still require real-device verification.
