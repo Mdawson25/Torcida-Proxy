@@ -1918,7 +1918,12 @@ async function fetchRecipes(q,type){
 function showBarMatchBanner(matchName,matchWhy){
   var banner=document.getElementById('bar-match-banner');
   if(!banner)return;
-  if(matchName){
+  var match=typeof matchName==='string'?matchName.trim().toLowerCase():'';
+  var owned=match&&myBar.some(function(spirit){
+    return (spirit.bottles===undefined||spirit.bottles>0)&&
+      ((spirit.name||'').trim().toLowerCase()===match||((spirit.brand||'')+' '+(spirit.name||'')).trim().toLowerCase()===match);
+  });
+  if(owned){
     document.getElementById('bar-match-name').textContent=matchName;
     document.getElementById('bar-match-why').textContent=matchWhy||'A great match for this cigar.';
     banner.style.display='block';

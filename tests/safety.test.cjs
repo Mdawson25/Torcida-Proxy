@@ -73,3 +73,10 @@ test('every browser AI request uses the shared validated response reader and an 
  const s=fs.readFileSync(require.resolve('../index.html'),'utf8');assert.equal((s.match(/await readAIResponse\(/g)||[]).length,9);assert.equal((s.match(/operation:'/g)||[]).length,9);assert.ok(!s.includes('data.content.map'));
  for(const m of s.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
 });
+test('AI bar-match claims require an owned bottle with stock remaining',()=>{
+ const html=fs.readFileSync(require.resolve('../index.html'),'utf8');const start=html.indexOf('function showBarMatchBanner(');const end=html.indexOf('function renderFlavorTags(',start);
+ const nodes={'bar-match-banner':{style:{}},'bar-match-name':{},'bar-match-why':{}};const ctx={document:{getElementById:id=>nodes[id]},myBar:[]};vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ ctx.showBarMatchBanner('Death & Co','AI claim');assert.equal(nodes['bar-match-banner'].style.display,'none');
+ ctx.myBar=[{name:'Reserve',brand:'Example',bottles:1}];ctx.showBarMatchBanner('Example Reserve','Match');assert.equal(nodes['bar-match-banner'].style.display,'block');
+ ctx.myBar[0].bottles=0;ctx.showBarMatchBanner('Example Reserve','Match');assert.equal(nodes['bar-match-banner'].style.display,'none');
+});
