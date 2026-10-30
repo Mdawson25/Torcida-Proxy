@@ -1874,7 +1874,7 @@ async function searchCigar(){
   var q=document.getElementById('cigar-search').value.trim();if(!q)return;
   var btn=document.getElementById('search-btn');btn.disabled=true;btn.innerHTML='Searching<span class="loader"></span>';
   try{
-    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:'You are a cigar and spirits expert. Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:'Identify "'+q+'". Return JSON: type("cigar" or "spirit"), name, brand. If cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(6 words),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(6 words),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]})});
+    var res=await fetchWithTimeout('https://torcida-proxy.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:'You are a cigar and spirits expert. Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:'Identify "'+q+'". Return JSON: type("cigar" or "spirit"), name, brand. If cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 6 strings),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 6 strings),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]})});
     if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();if(data.error)throw new Error(data.error.message||'API error');
     var raw=data.content.map(function(i){return i.text||'';}).join('').replace(/```json|```/g,'').trim();
@@ -1932,6 +1932,18 @@ function showBarMatchBanner(matchName,matchWhy){
     banner.style.display='none';
   }
 }
+function renderFlavorTags(value){
+  if(typeof value==='string'){
+    var text=value.trim();
+    try{var parsed=JSON.parse(text);if(Array.isArray(parsed))value=parsed;}catch(e){}
+    if(typeof value==='string')value=text.split(/[,;|\n]+/);
+  }
+  if(!Array.isArray(value))value=[];
+  return value.filter(function(t){return typeof t==='string'&&t.trim();}).map(function(t){
+    var safe=t.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    return '<span class="tag gold">'+safe+'</span>';
+  }).join('');
+}
 function displayResult(cigar){
   currentResult=cigar;var isSpirit=cigar.type==='spirit';
   document.getElementById('res-name').textContent=cigar.name||'Unknown';
@@ -1943,7 +1955,7 @@ function displayResult(cigar){
   else{if(cigar.size)gridItems.push(['Size',cigar.size]);if(cigar.wrapper)gridItems.push(['Wrapper',cigar.wrapper]);if(cigar.strength)gridItems.push(['Strength',cigar.strength]);if(cigar.rating)gridItems.push(['Rating',cigar.rating]);}
   document.getElementById('res-grid').innerHTML=gridItems.map(function(x){return '<div class="stat-box"><div class="stat-label">'+x[0]+'</div><div class="stat-val">'+x[1]+'</div></div>';}).join('');
   document.getElementById('res-tasting').textContent=cigar.tasting_notes||'';
-  document.getElementById('res-tags').innerHTML=(cigar.flavor_tags||[]).map(function(t){return '<span class="tag gold">'+t+'</span>';}).join('');
+  document.getElementById('res-tags').innerHTML=renderFlavorTags(cigar.flavor_tags);
   document.getElementById('res-pairing').textContent=cigar.pairing||'';
   document.getElementById('res-about').textContent=cigar.about||'';
   var spiritBlock=document.getElementById('spirit-pairing-block');var spiritDrinkBlock=document.getElementById('spirit-drink-block');
@@ -2307,7 +2319,7 @@ async function findCigar(){
     var data=await res.json();if(data.error)throw new Error(data.error.message||'API error');
     var rawText=data.content.map(function(i){return i.text||'';}).join('');var jsonMatch=rawText.match(/\{[\s\S]*\}/);if(!jsonMatch)throw new Error('No JSON');
     var rec=JSON.parse(jsonMatch[0]);
-    document.getElementById('sel-name').textContent=rec.name||'';document.getElementById('sel-brand').textContent=((rec.brand||'').toUpperCase())+(rec.vitola?' · '+rec.vitola:'')+(rec.strength?' · '+rec.strength:'');document.getElementById('sel-why').textContent=rec.why||'';document.getElementById('sel-tags').innerHTML=(rec.flavor_tags||[]).map(function(t){return '<span class="tag gold">'+t+'</span>';}).join('');
+    document.getElementById('sel-name').textContent=rec.name||'';document.getElementById('sel-brand').textContent=((rec.brand||'').toUpperCase())+(rec.vitola?' · '+rec.vitola:'')+(rec.strength?' · '+rec.strength:'');document.getElementById('sel-why').textContent=rec.why||'';document.getElementById('sel-tags').innerHTML=renderFlavorTags(rec.flavor_tags);
     document.getElementById('selector-result')._rec=rec;document.getElementById('selector-result').classList.add('show');
   }catch(err){showToast('Selector error: '+(err.message||'try again').slice(0,40));}
   document.getElementById('sel-loading').classList.remove('show');
