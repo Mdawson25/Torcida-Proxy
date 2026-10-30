@@ -150,3 +150,4 @@ input[type="file"]::file-selector-button{min-height:48px;font:14px var(--sans);b
 .shape-desc{text-align:left;}
 .timer-btn{font-family:var(--sans);font-size:14px;}
 @media(max-width:600px){.info-pills{flex-wrap:nowrap;overflow-x:auto;padding-bottom:10px!important;scroll-padding-inline:16px;}.info-pills .pill{flex:0 0 auto;white-space:nowrap;}}
+.orig-btn .ob-name{font-size:13px!important;}.orig-btn .ob-reg{font-size:11px!important;color:#645344;}

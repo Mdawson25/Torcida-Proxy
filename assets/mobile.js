@@ -112,7 +112,9 @@
     viewport();window.addEventListener('resize',viewport);if(window.visualViewport){visualViewport.addEventListener('resize',viewport);visualViewport.addEventListener('scroll',viewport);}
     document.addEventListener('focusin',viewport);document.addEventListener('focusout',function(){setTimeout(viewport,100);});
     document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&typeof refreshTimerUI==='function'){refreshTimerUI();if(timerIsRunning()){startTimerTick();scheduleCheckin();}}});
-    if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});
+    var offlineStatus=document.getElementById('offline-status');
+    if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').then(function(){return navigator.serviceWorker.ready;}).then(function(){if(offlineStatus)offlineStatus.textContent='Offline collection files are ready on this device. AI search and recommendations still need an internet connection.';}).catch(function(){if(offlineStatus)offlineStatus.textContent='Offline app loading could not be prepared. You can still download a backup and use the app while online.';});}
+    else if(offlineStatus)offlineStatus.textContent='Offline app loading is not supported in this browser. Keep a downloaded backup of your collection.';
   }
   var api={icon:icon,localDate:localDate,preparePhoto:preparePhoto,setPhotoJobs:setPhotoJobs,photoBusy:photoBusy,copyShareText:copyShareText,showMessage:showMessage,modalOpen:modalOpen,modalClose:modalClose,initialize:initialize};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.TorcidaMobile=api;
