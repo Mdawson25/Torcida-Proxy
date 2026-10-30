@@ -87,13 +87,13 @@
   function initialize(){
     document.querySelectorAll('.nav-tab').forEach(function(button){var name=button.dataset.icon;button.querySelector('.nav-icon').innerHTML=icon(name);});
     document.querySelector('.header-settings').innerHTML=icon('settings');
-    var hero=document.querySelector('.scanner-box>div:first-child');if(hero){hero.innerHTML=icon('camera');hero.classList.add('scanner-hero-icon');}
+    var hero=document.querySelector('.scanner-hero-icon');if(hero){hero.innerHTML=icon('camera');hero.classList.add('scanner-hero-icon');}
     document.querySelectorAll('.form-group').forEach(function(group){var label=group.querySelector('label'),field=group.querySelector('input,select,textarea');if(label&&field&&field.id)label.htmlFor=field.id;});
     document.querySelectorAll('input[type="number"]').forEach(function(input){input.inputMode=input.step&&input.step!=='1'?'decimal':'numeric';});
     document.querySelectorAll('input[id$="search"],#cigar-search').forEach(function(input){input.enterKeyHint='search';});
     document.querySelectorAll('.modal-overlay').forEach(function(el){el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');});
     decorate(document);
-    var scheduled=false;new MutationObserver(function(){if(scheduled)return;scheduled=true;requestAnimationFrame(function(){scheduled=false;decorate(document);});}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+    var scheduled=false;new MutationObserver(function(records){var relevant=records.some(function(record){return record.type==='attributes'&&record.target.matches('.pill,.sel-chip,.note-chip,.occ-chip,.quiz-opt,.filter-pill')||record.type==='childList'&&Array.from(record.addedNodes).some(function(node){return node.nodeType===1;});});if(!relevant||scheduled)return;scheduled=true;requestAnimationFrame(function(){scheduled=false;decorate(document);});}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
     document.addEventListener('keydown',function(e){
       if(e.key!=='Tab'||!modalStack.length)return;
       var modal=document.getElementById(modalStack[modalStack.length-1]);if(!modal||!modal.classList.contains('show'))return;

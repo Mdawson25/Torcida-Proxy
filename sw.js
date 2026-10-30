@@ -1,5 +1,5 @@
 /* Offline shell only. Collection backups, API calls and access tokens are never cached. */
-const CACHE='torcida-shell-design-v1';
+const CACHE='torcida-shell-design-v2';
 const SHELL=['/','/assets/data.js','/assets/collection.js','/assets/ai-client.js','/assets/design.css','/assets/mobile.js','/assets/guide.js','/manifest.webmanifest','/assets/icon.svg','/assets/icon-192.png','/assets/icon-512.png','/assets/apple-touch-icon.png','/assets/icon-maskable.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('torcida-shell-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
@@ -12,6 +12,7 @@ self.addEventListener('fetch',event=>{
   // Never store share-link query strings or other authenticated transient URLs.
   if(url.search)return;
   if(request.mode==='navigate'){
+    if(!['/','/index.html'].includes(url.pathname)){event.respondWith(fetch(request));return;}
     event.respondWith(fetch(request).then(response=>{
       if(response.ok&&!response.redirected){const copy=response.clone();event.waitUntil(caches.open(CACHE).then(cache=>cache.put('/',copy)));}
       return response;

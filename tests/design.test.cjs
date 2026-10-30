@@ -35,3 +35,8 @@ test('home-screen assets are complete and the offline shell never caches API req
  const manifest=JSON.parse(fs.readFileSync(require.resolve('../manifest.webmanifest'),'utf8'));assert.equal(manifest.display,'standalone');for(const icon of manifest.icons)assert.ok(fs.existsSync(require('path').join(__dirname,'..',icon.src)));
  const sw=fs.readFileSync(require.resolve('../sw.js'),'utf8');new vm.Script(sw);assert.match(sw,/url.pathname.startsWith\('\/api\/'\)/);assert.match(sw,/if\(url.search\)return/);assert.ok(!sw.includes('skipWaiting'));assert.match(sw,/if\(url.origin!==self.location.origin\)return/);
 });
+test('offline navigation caches only the app entry, never the responsive test page',async()=>{
+ const listeners={},puts=[];const ctx={URL,Response,Promise,self:{location:{origin:'https://torcida.example'},clients:{claim:async()=>{}},addEventListener:(name,handler)=>listeners[name]=handler},caches:{open:async()=>({put:(path,response)=>puts.push(path)}),match:async()=>new Response('offline app')},fetch:async()=>new Response('app',{status:200})};vm.createContext(ctx);vm.runInContext(fs.readFileSync(require.resolve('../sw.js'),'utf8'),ctx);
+ async function navigate(path){let result,waits=[];listeners.fetch({request:{url:'https://torcida.example'+path,method:'GET',mode:'navigate'},respondWith(p){result=p;},waitUntil(p){waits.push(p);}});await result;await Promise.all(waits);}
+ await navigate('/tests/responsive.html');assert.deepEqual(puts,[]);await navigate('/');assert.deepEqual(puts,['/']);await navigate('/?_vercel_share=private');assert.deepEqual(puts,['/']);
+});
