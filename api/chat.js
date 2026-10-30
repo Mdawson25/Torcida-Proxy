@@ -1,6 +1,4 @@
-import { createHash, timingSafeEqual } from 'node:crypto';
-import { createRequire } from 'node:module';
-const require = createRequire(import.meta.url);
+const { createHash, timingSafeEqual } = require('node:crypto');
 const { parseAI, normalizeAI } = require('../assets/data.js');
 
 const ORIGINS = new Set(['https://torcida-orcin.vercel.app', 'https://torcida-proxy.vercel.app']);
@@ -19,7 +17,7 @@ function validAccess(value) {
   const a = Buffer.from(value), b = Buffer.from(expected);
   return a.length === b.length && timingSafeEqual(a, b);
 }
-export function validateRequest(body) {
+function validateRequest(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body) || !Object.hasOwn(CAPS, body.operation)) throw fail(400, 'INVALID_REQUEST', 'Choose a supported Torcida feature.');
   if (Buffer.byteLength(JSON.stringify(body)) > 3500000) throw fail(413, 'IMAGE_TOO_LARGE', 'This photo is too large. Choose a smaller photo or search by name.');
   if (!Array.isArray(body.messages) || body.messages.length !== 1 || body.messages[0]?.role !== 'user') throw fail(400, 'INVALID_REQUEST', 'Send one request at a time.');
@@ -59,7 +57,7 @@ for i=1,#KEYS do
   redis.call('EXPIRE', KEYS[i], ARGV[(i-1)*3+3])
 end
 return 0`;
-export async function reserveUsage(ip, reserved, fetcher = fetch, now = Date.now()) {
+async function reserveUsage(ip, reserved, fetcher = fetch, now = Date.now()) {
   const minute = Math.floor(now / 60000), day = new Date(now).toISOString().slice(0, 10);
   const hash = createHash('sha256').update(ip).digest('hex').slice(0,32);
   const counters = [
@@ -88,7 +86,7 @@ export async function reserveUsage(ip, reserved, fetcher = fetch, now = Date.now
   if (exceeded) throw fail(429, 'USAGE_LIMIT', exceeded < 3 ? 'Your AI request limit has been reached. Please try again later.' : 'Torcida has reached its daily AI allowance. Please try again tomorrow.', exceeded === 1 ? 60 : 86400 - Math.floor(now/1000)%86400);
 }
 
-export default async function handler(req,res) {
+async function handler(req,res) {
   const origin = req.headers.origin;
   res.setHeader('Cache-Control','no-store');res.setHeader('Vary','Origin');
   if (origin && ORIGINS.has(origin)) res.setHeader('Access-Control-Allow-Origin',origin);
@@ -124,3 +122,7 @@ export default async function handler(req,res) {
     return res.status(error.status || (timedOut?504:502)).json({error:{code:error.code || (timedOut?'AI_TIMEOUT':'AI_UNAVAILABLE'),message:error.status?error.message:timedOut?'AI took too long. Please try again.':'AI is temporarily unavailable. Please try again later.'}});
   }
 }
+
+module.exports = handler;
+module.exports.validateRequest = validateRequest;
+module.exports.reserveUsage = reserveUsage;
