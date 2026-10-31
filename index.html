@@ -346,7 +346,7 @@ body{font-family:'Crimson Pro',serif,'Apple Color Emoji','Segoe UI Emoji','Noto 
 .sub-tab.active{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:600;}
 /* SPIRIT CARDS */
 .spirit-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:13px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;min-width:0;}
-.spirit-icon{font-size:28px;flex-shrink:0;}
+.spirit-icon{width:64px;flex:0 0 64px;line-height:0;}.spirit-icon svg{display:block;width:100%;height:auto;}
 .spirit-body{flex:1;min-width:0;}
 .spirit-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:600;margin-bottom:2px;word-break:break-word;}
 .spirit-brand{font-size:13px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
@@ -1536,7 +1536,7 @@ function renderBar(){
 
     // Top row: icon + body
     var topRow=document.createElement('div');topRow.style.cssText='display:flex;gap:12px;align-items:flex-start;';
-    var iconEl=document.createElement('div');iconEl.className='spirit-icon';iconEl.textContent=icon;
+    var iconEl=document.createElement('div');iconEl.className='spirit-icon';iconEl.innerHTML=TorcidaGuide.spiritSVG(s.type);
     var body=document.createElement('div');body.className='spirit-body';body.style.flex='1';
 
     var nameEl=document.createElement('div');nameEl.className='spirit-name';nameEl.textContent=s.name||'';
