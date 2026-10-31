@@ -69,3 +69,16 @@
 [data-theme="dark"] .ash-upload-cta{background:#c3a16b;color:#21190f;}
 [data-theme="dark"] :is(.orig-btn.active,.quiz-opt.selected,.humidor-tab-btn.active){background:#c3a16b;color:#21190f;border-color:#c3a16b;}
 [data-theme="dark"] .orig-btn.active .ob-reg{color:#322719;}
+
+/* Filled amber stars and hollow neutral stars distinguish ratings by shape and color. */
+.rating-stars .star{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;box-sizing:border-box;border:1px solid transparent;border-radius:9px;font-family:Arial,sans-serif;color:#655e54;background:transparent;}
+.rating-stars .star.lit{color:#8a4b00;background:#fff0c8;border-color:#b88a42;}
+[data-theme="dark"] .rating-stars .star{color:#c4c2bd;background:transparent;}
+[data-theme="dark"] .rating-stars .star.lit{color:#ffcf70;background:#51371c;border-color:#d7a754;}
+.rating-stars [role="radio"]:hover{border-color:var(--gold);}
+.scan-journal-photo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px;border:1px solid var(--border);border-radius:10px;font:13px/1.5 var(--sans);color:var(--muted);width:100%;box-sizing:border-box;}
+
+@media(max-width:600px){.journal-ratings-grid{grid-template-columns:1fr!important;}}
+
+.journal-pairing-inputs>*{min-width:0;}
+@media(max-width:600px){.journal-pairing-inputs{flex-wrap:wrap;}.journal-pairing-inputs>*{width:100%!important;flex-basis:100%!important;box-sizing:border-box;}}

@@ -1,5 +1,15 @@
 /* User workflows. Collection writes continue through the existing atomic store. */
 var journalSource=null,sessionDraftInForm=false,sessionDraftToken=null;
+function scanPhotoForResult(result,photo){return result&&result.type!=='spirit'&&typeof photo==='string'&&/^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/.test(photo)?photo:null;}
+function attachScanPhotoToJournal(photo){
+  if(!photo)return;
+  pendingPhotos.push(photo);
+  var wrap=document.createElement('div');wrap.className='scan-journal-photo';
+  var image=document.createElement('img');image.src=photo;image.className='photo-thumb';image.alt='Cigar photo from your label scan';wrap.appendChild(image);
+  var caption=document.createElement('span');caption.textContent='Scan photo included';wrap.appendChild(caption);
+  var remove=document.createElement('button');remove.type='button';remove.className='btn btn-sm btn-ghost';remove.textContent='Remove scan photo';remove.onclick=function(){var i=pendingPhotos.indexOf(photo);if(i>=0)pendingPhotos.splice(i,1);wrap.remove();};wrap.appendChild(remove);
+  document.getElementById('s-photo-preview').appendChild(wrap);
+}
 function spiritThumbnail(type){
   var cells={'Bourbon':0,'Rye Whiskey':0,'Scotch':1,'Irish Whiskey':1,'Japanese Whisky':1,'Rum':2,'Cognac':3,'Armagnac':3,'Tequila':4,'Mezcal':4,'Gin':5,'Vodka':6,'Port':7,'Red Wine':7,'Other':2};
   var cell=cells[type]===undefined?2:cells[type],x=(cell%4)*100/3,y=cell<4?0:100;
@@ -71,7 +81,7 @@ function initializeReliabilityUI(){
   ['logSmoke','addToHumidor','addToBarManually','addToBarFromResult','addToBarWishlist','addToWishlist','addToWishlistFromResult','addSelectorToWishlist','restockToWishlist','saveNewHumidor','saveEditHumidor','saveEditBar','saveEditSmoked','saveEditWishlist','confirmCollectionRestore','retryCollectionSave','removeSmoked','removeWish','removeFromBar','deleteFromSmoked','undoLastRemoval','findCigar','searchCigar','executeHumidorAction','moveWishSpiritToBar','deleteFromWishlist'].forEach(guardAction);
   // One central rating state keeps mouse, keyboard and assistive technology aligned.
   document.querySelectorAll('.rating-stars').forEach(function(group){var interactive=group.querySelector('[onclick]');group.setAttribute('role',interactive?'radiogroup':'img');group.setAttribute('aria-label',interactive?group.id.replace(/-/g,' ')+' rating':group.querySelectorAll('.lit').length+' of 5 stars');});
-  function ratingState(){document.querySelectorAll('.rating-stars').forEach(function(group){var stars=Array.from(group.querySelectorAll('[onclick]')),value=stars.filter(function(s){return s.classList.contains('lit');}).length;stars.forEach(function(star,i){star.setAttribute('role','radio');star.setAttribute('aria-checked',String(i+1===value));star.setAttribute('aria-label',(i+1)+' of 5');star.tabIndex=value?i+1===value?0:-1:i===0?0:-1;});});}
+  function ratingState(){document.querySelectorAll('.rating-stars').forEach(function(group){var stars=Array.from(group.querySelectorAll('[onclick]')),value=stars.filter(function(s){return s.classList.contains('lit');}).length;stars.forEach(function(star,i){star.textContent=star.classList.contains('lit')?'★':'☆';star.setAttribute('role','radio');star.setAttribute('aria-checked',String(i+1===value));star.setAttribute('aria-label',(i+1)+' of 5');star.tabIndex=value?i+1===value?0:-1:i===0?0:-1;});});}
   ratingState();document.addEventListener('click',function(e){if(e.target.closest('.rating-stars'))ratingState();});
   document.addEventListener('keydown',function(e){var star=e.target.closest('.rating-stars [role="radio"]');if(!star||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key))return;e.preventDefault();var stars=Array.from(star.parentElement.querySelectorAll('[onclick]')),i=stars.indexOf(star),next=e.key==='Home'?0:e.key==='End'?stars.length-1:(i+(['ArrowRight','ArrowDown'].includes(e.key)?1:stars.length-1))%stars.length;stars[next].click();stars[next].focus();ratingState();});
   new MutationObserver(ratingState).observe(document.getElementById('smoked-form'),{subtree:true,attributes:true,attributeFilter:['class']});

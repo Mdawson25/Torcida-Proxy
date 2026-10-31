@@ -812,7 +812,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="form-group"><label class="form-label">Location / Occasion</label><input class="form-input" id="s-location" placeholder="Backyard, evening"></div>
         <div class="form-group full">
           <label class="form-label">Ratings</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
+          <div class="journal-ratings-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
             <div><div style="font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">Draw</div><div class="rating-stars mini-stars" id="stars-draw"><span class="star" onclick="setAttrRating('draw',1)">★</span><span class="star" onclick="setAttrRating('draw',2)">★</span><span class="star" onclick="setAttrRating('draw',3)">★</span><span class="star" onclick="setAttrRating('draw',4)">★</span><span class="star" onclick="setAttrRating('draw',5)">★</span></div></div>
             <div><div style="font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">Burn</div><div class="rating-stars mini-stars" id="stars-burn"><span class="star" onclick="setAttrRating('burn',1)">★</span><span class="star" onclick="setAttrRating('burn',2)">★</span><span class="star" onclick="setAttrRating('burn',3)">★</span><span class="star" onclick="setAttrRating('burn',4)">★</span><span class="star" onclick="setAttrRating('burn',5)">★</span></div></div>
             <div><div style="font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">Flavor</div><div class="rating-stars mini-stars" id="stars-flavor"><span class="star" onclick="setAttrRating('flavor',1)">★</span><span class="star" onclick="setAttrRating('flavor',2)">★</span><span class="star" onclick="setAttrRating('flavor',3)">★</span><span class="star" onclick="setAttrRating('flavor',4)">★</span><span class="star" onclick="setAttrRating('flavor',5)">★</span></div></div>
@@ -823,7 +823,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="form-group full"><label class="form-label">Tasting Notes &amp; Impressions</label><textarea class="smoke-note-area" id="s-notes" placeholder="Describe what you tasted, draw, construction, finish..."></textarea></div>
         <div class="form-group full">
           <label class="form-label">Drink Pairing</label>
-          <div style="display:flex;gap:8px;align-items:center;">
+          <div class="journal-pairing-inputs" style="display:flex;gap:8px;align-items:center;">
             <select class="form-input" id="s-drink-type" style="width:140px;flex-shrink:0;"><option value="">None</option><option>Bourbon</option><option>Scotch</option><option>Rye Whiskey</option><option>Irish Whiskey</option><option>Rum</option><option>Cognac</option><option>Armagnac</option><option>Mezcal</option><option>Red Wine</option><option>Port</option><option>Espresso</option><option>Coffee</option><option>Beer</option><option>Other</option></select>
             <input class="form-input" id="s-drink-name" placeholder="e.g. Pappy Van Winkle 15yr" style="flex:1;">
           </div>
@@ -1404,7 +1404,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 // STATE
 // ═══════════════════════════════════════════════════════════════
 var torcidaApiUrl=window.location.hostname==='torcida-orcin.vercel.app'?'https://torcida-proxy.vercel.app/api/chat':'/api/chat';
-var humidor=[], wishlist=[], smoked=[], currentResult=null;
+var humidor=[], wishlist=[], smoked=[], currentResult=null, currentResultPhoto=null;
 var newRatingVal=0, pendingPhotos=[], pairingRatingVal=0;
 var attrRatings={draw:0,burn:0,flavor:0,construction:0};
 var editRatingVal=0;
@@ -1499,7 +1499,7 @@ function pickHumidor(action,data){
 }
 async function executeHumidorAction(action,data,humidorId){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var h=humidors.find(function(x){return x.id===humidorId;});if(!h)return;
-  if(action==='fromResult'){if(!currentResult)return;h.cigars.push({id:TorcidaReliability.nextId(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1,price:0});await save();renderHumidor();showToast('Added to '+h.name+' ✓');}
+  if(action==='fromResult'){if(!currentResult)return;h.cigars.push({id:TorcidaReliability.nextId(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1,price:0,photos:currentResultPhoto?[currentResultPhoto]:[]});await save();renderHumidor();showToast('Added to '+h.name+' ✓');}
   else if(action==='fromWishlist'){var wid=data.wid;var c=wishlist.find(function(w){return w.id===wid;});if(!c)return;h.cigars.push({id:TorcidaReliability.nextId(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(function(w){return w.id!==wid;});await save();renderWishlist();renderHumidor();showToast('Moved to '+h.name+' ✓');}
   else if(action==='fromSelector'){var rec=data;h.cigars.push({id:TorcidaReliability.nextId(),brand:rec.brand||'',name:rec.name||'',size:rec.vitola||'',wrapper:'',strength:rec.strength||'',notes:'Recommended by Cigar Selector',qty:1});await save();renderHumidor();showToast(rec.name+' added to '+h.name+' ✓');}
 }
@@ -1895,14 +1895,14 @@ async function handleScan(input){
   var file=input.files&&input.files[0];input.value='';if(!file)return;
   var btn=document.getElementById('search-btn');if(btn.disabled){showToast('Please wait for the current search.');return;}
   btn.disabled=true;btn.textContent='Preparing photo…';
-  try{var photo=await TorcidaMobile.preparePhoto(file);await identifyCigarFromImage(photo.base64);}
+  try{var photo=await TorcidaMobile.preparePhoto(file,{maxDimension:1200,maxBytes:450000});await identifyCigarFromImage(photo.base64);}
   catch(e){showToast(e.message||'This photo could not be opened.');}
   finally{btn.textContent='Search';btn.disabled=false;}
 }
 async function identifyCigarFromImage(b64){
   var btn=document.getElementById('search-btn');btn.innerHTML='Searching<span class="loader"></span>';btn.disabled=true;
   try{var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'identify',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify whether this is a cigar or a spirit/liquor. Return ONLY JSON with: type (cigar or spirit), name, brand, and if cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 5),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]}]})});
-  var cigar=await readAIResponse(res,'identify');displayResult(cigar);document.getElementById('cigar-search').value=cigar.name;}
+  var cigar=await readAIResponse(res,'identify');displayResult(cigar,'data:image/jpeg;base64,'+b64);document.getElementById('cigar-search').value=cigar.name;}
   catch(e){showToast(e.message||'Could not identify. Try searching by name.');}
   btn.innerHTML='Search';btn.disabled=false;
 }
@@ -2007,8 +2007,8 @@ function renderFlavorTags(value){
     return '<span class="tag gold">'+safe+'</span>';
   }).join('');
 }
-function displayResult(cigar){
-  currentResult=cigar;var isSpirit=cigar.type==='spirit';
+function displayResult(cigar,photo){
+  currentResult=cigar;currentResultPhoto=scanPhotoForResult(cigar,photo);var isSpirit=cigar.type==='spirit';
   document.getElementById('res-name').textContent=cigar.name||'Unknown';
   document.getElementById('res-brand').textContent=(cigar.brand||'').toUpperCase();
   document.getElementById('result-actions-cigar').style.display=isSpirit?'none':'flex';
@@ -2048,6 +2048,7 @@ function addToHumidorFromResult(){if(!currentResult)return;pickHumidor('fromResu
 function addToSmokedFromResult(){
   if(!confirmReplaceJournalDraft())return;clearJournalSource();
   if(!currentResult)return;document.getElementById('s-name').value=currentResult.name||'';document.getElementById('s-brand').value=currentResult.brand||'';document.getElementById('s-date').value=TorcidaMobile.localDate();
+  attachScanPhotoToJournal(currentResultPhoto);
   var tab=document.querySelectorAll('.nav-tab')[3];if(tab)showPage('smoked',tab);var f=document.getElementById('smoked-form');if(f){if(!f.classList.contains('show'))f.classList.add('show');setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'start'});},200);}
   showToast('Pre-filled in Smoked — add your notes!');
 }
@@ -2144,7 +2145,7 @@ function renderSmoked(){
   var el=document.getElementById('smoked-list');
   if(!sList.length){el.innerHTML=q||minRating?'<div class="empty-state"><div class="empty-text">No smokes match your filter</div></div>':'<div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">Nothing smoked yet</div><div class="empty-sub">Start logging your smokes, ratings, and tasting notes</div></div>';return;}
   el.innerHTML=sList.map(function(c){
-    var stars=c.rating?('<div class="rating-stars" style="margin-top:5px">'+('<span class="star lit">★</span>').repeat(c.rating)+('<span class="star">★</span>').repeat(5-c.rating)+'</div>'):'';
+    var stars=c.rating?('<div class="rating-stars" style="margin-top:5px">'+('<span class="star lit">★</span>').repeat(c.rating)+('<span class="star">☆</span>').repeat(5-c.rating)+'</div>'):'';
     var note=c.notes?('<div class="personal-note">'+c.notes+'</div>'):'';
     var datePill=c.date?('<span class="meta-pill">'+c.date+'</span>'):'';var locPill=c.location?('<span class="meta-pill">'+c.location+'</span>'):'';
     var photos=c.photos&&c.photos.length?('<div class="photo-strip">'+c.photos.map(function(p){return '<img src="'+p+'" class="photo-thumb">';}).join('')+'</div>'):'';
