@@ -416,6 +416,28 @@ input,select,textarea{font-size:17px !important;}
 input[type="date"]{appearance:none;-webkit-appearance:none;}
 select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
 .wrapper-label{font-size:13px !important;color:var(--gold);}
+
+/* Long Ash Challenge */
+.ash-challenge-box.ash-challenge-box{padding:24px;border:1px solid #c7ad7c;border-radius:20px;background:linear-gradient(145deg,#fffaf0,#eee2cc);box-shadow:0 8px 24px rgba(64,40,24,.07);color:#3c2a20;}
+.ash-challenge-box::before{background:radial-gradient(ellipse at 100% 0,rgba(175,128,48,.14),transparent 60%);}
+.ash-eyebrow{font-size:10px;font-weight:700;letter-spacing:1.7px;color:#806236;margin-bottom:12px;}
+.ash-challenge-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.ash-challenge-box .ash-title{font-size:clamp(24px,5vw,30px);line-height:1.15;color:#3c2a20;margin:0 0 7px;}
+.ash-tagline{font-size:14px;color:#795c3c;margin:0;}
+.ash-emblem{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border:1px solid #b79558;border-radius:50%;font-size:26px;color:#967132;}
+.ash-challenge-box .ash-subtitle{font-size:15px;line-height:1.6;color:#65513e;margin:17px 0;}
+.ash-craft-note{border-left:2px solid #b08b49;padding:0 0 0 12px;font-size:13px;line-height:1.6;color:#6c5947;margin-bottom:20px;}
+.ash-craft-label{display:block;color:#493423;font-size:13px;font-weight:700;margin-bottom:3px;}
+.ash-challenge-box .ash-upload-area{display:flex;flex-direction:column;align-items:center;width:100%;box-sizing:border-box;border:1px dashed #ad8a54;border-radius:14px;background:rgba(255,253,247,.8);padding:22px 12px;margin:0;font-family:inherit;touch-action:manipulation;}
+.ash-challenge-box .ash-upload-area:hover{background:#fffdf7;border-color:#795526;}
+.ash-upload-area:focus-visible{outline:3px solid #805c29;outline-offset:4px;}
+.ash-challenge-box .ash-upload-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#eee2c9;color:#795829;margin-bottom:12px;}
+.ash-challenge-box .ash-upload-text{font-family:'Playfair Display',serif;font-size:21px;color:#3c2a20;}
+.ash-challenge-box .ash-upload-sub{font-size:13px;color:#74604d;margin-top:6px;line-height:1.5;}
+.ash-upload-cta{display:inline-flex;align-items:center;gap:18px;background:#4b3426;color:#fff5e3;border-radius:8px;padding:12px 18px;margin-top:16px;font-size:14px;font-weight:600;min-height:44px;box-sizing:border-box;}
+.ash-photo-tip{font-size:12px;line-height:1.6;color:#75634f;margin:11px 2px 0;}
+@media(max-width:380px){.ash-challenge-box{padding:18px;}.ash-emblem{display:none;}}
+
 </style>
 <link rel="stylesheet" href="/assets/design.css">
 </head>
@@ -775,21 +797,25 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
     <!-- LONG ASH CHALLENGE -->
     <div class="ash-challenge-box">
-      <div class="ash-title">🏆 Long Ash Challenge</div>
-      <div class="ash-subtitle">Submit a photo of your long ash. Claude will analyze its length and what it reveals about your cigar's construction.</div>
-      <div class="ash-upload-area" onclick="document.getElementById('ash-input').click()">
-        <span class="ash-upload-icon">🪶</span>
-        <div class="ash-upload-text">Tap to upload your long ash photo</div>
-        <div class="ash-upload-sub">Hold your cigar steady — the longer the better</div>
-      </div>
+      <div class="ash-eyebrow">THE ART OF TAKING YOUR TIME</div>
+      <div class="ash-challenge-heading"><div><h3 class="ash-title">Long Ash Challenge</h3><p class="ash-tagline">A little patience. A little bragging rights.</p></div><span class="ash-emblem" aria-hidden="true">✦</span></div>
+      <p class="ash-subtitle">Celebrate the craft behind the cigar and the patience behind the puff. Show us the ash that held on.</p>
+      <div class="ash-craft-note"><span class="ash-craft-label">More than a measurement</span>A lasting ash can hint at cohesive construction and a steady burn. Every cigar is different. Enjoy the smoke, then see how yours stacks up.</div>
+      <button type="button" class="ash-upload-area" onclick="document.getElementById('ash-input').click()" aria-describedby="ash-photo-tip">
+        <span class="ash-upload-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none"><path d="M5 10h6l2-4h6l2 4h6v16H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="16" cy="18" r="5" stroke="currentColor" stroke-width="1.7"/><path d="M24 13h1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span class="ash-upload-text">Show off your long ash</span>
+        <span class="ash-upload-sub">Take a photo or choose from your gallery</span>
+        <span class="ash-upload-cta">Upload your photo <span aria-hidden="true">↑</span></span>
+      </button>
+      <p class="ash-photo-tip" id="ash-photo-tip">Get the full cigar and ash in frame, in good light. Torcida will estimate the length and share observations about the burn.</p>
       <input type="file" id="ash-input" accept="image/*" style="display:none" onchange="analyzeAsh(this)">
-      <div class="ash-loading" id="ash-loading"><span class="loader"></span><div style="font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;">Measuring your ash...</div></div>
+      <div class="ash-loading" id="ash-loading"><span class="loader"></span><div style="font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;">Taking a closer look at your ash...</div></div>
       <div class="ash-result" id="ash-result">
         <div class="ash-photo-wrap"><img id="ash-photo" class="ash-photo" src="" alt="Long ash photo"><div class="ash-badge" id="ash-length-badge">—</div></div>
-        <div class="ash-analysis"><div class="ash-analysis-title">✦ Construction Analysis</div><div class="ash-analysis-text" id="ash-analysis-text"></div></div>
-        <div class="ash-edu-box"><div class="ash-edu-title">Why Long Ash Contests Exist</div><div class="ash-edu-text" id="ash-edu-text"></div></div>
+        <div class="ash-analysis"><div class="ash-analysis-title">What your ash reveals</div><div class="ash-analysis-text" id="ash-analysis-text"></div></div>
+        <div class="ash-edu-box"><div class="ash-edu-title">The craft behind the challenge</div><div class="ash-edu-text" id="ash-edu-text"></div></div>
         <div class="ash-personal-best" id="ash-best-wrap"><div><div class="ash-best-label">Your Personal Best</div><div class="ash-best-val" id="ash-best-val">—</div><div class="ash-best-sub" id="ash-best-sub">No entries yet</div></div></div>
-        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%;" onclick="resetAsh()">Try Another Photo</button>
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%;" onclick="resetAsh()">Upload another photo</button>
       </div>
     </div>
 
