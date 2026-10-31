@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="/assets/theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -466,6 +467,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 </style>
 <link rel="stylesheet" href="/assets/design.css">
 <link rel="stylesheet" href="/assets/atelier.css">
+<link rel="stylesheet" href="/assets/theme.css">
 </head>
 <body>
 <div class="smoke-bg" aria-hidden="true">
@@ -1076,9 +1078,10 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           var ctx=canvas.getContext('2d');
           var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,R=Math.min(W,H)/2-28,N=6;
           ctx.clearRect(0,0,W,H);
-          var isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
-          var gc=isDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.08)';
-          var lc=isDark?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.4)';
+          var isDark=document.documentElement.dataset.theme==='dark';
+          if(isDark)col='#d1af77';
+          var gc=isDark?'#806746':'rgba(0,0,0,0.08)';
+          var lc=isDark?'#cfbda7':'#645344';
           for(var ring=1;ring<=5;ring++){
             ctx.beginPath();
             for(var i=0;i<N;i++){var a=(i/N)*Math.PI*2-Math.PI/2,r=R*(ring/5);i===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}
@@ -1096,7 +1099,10 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           for(var i=0;i<N;i++){var a=(i/N)*Math.PI*2-Math.PI/2,r=R*(scores[i]/10);ctx.beginPath();ctx.arc(cx+r*Math.cos(a),cy+r*Math.sin(a),3.5,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();}
         }
 
+        var selectedOrigin=0;
+        window.addEventListener('torcida:themechange',function(){window.origSelect(selectedOrigin);});
         window.origSelect=function(idx){
+          selectedOrigin=idx;
           document.querySelectorAll('.orig-btn').forEach(function(b,i){b.classList.toggle('active',i===idx);});
           var c=ctrs[idx];
           var bars=DIMS.map(function(dim,i){
@@ -1145,6 +1151,11 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   <!-- ═══════════════════════════════════════════════ -->
   <div id="page-about" class="page">
     <h1 class="sec-title">Settings &amp; About</h1>
+    <section class="about-section" aria-labelledby="appearance-title"><h2 class="about-section-title" id="appearance-title">Set the mood</h2><p>Choose warm daylight or settle into Torcida After Hours.</p><fieldset style="border:0;padding:0;margin:0"><legend class="form-label">Appearance</legend><div class="appearance-options">
+      <label class="appearance-option"><input type="radio" name="tc-appearance" value="light"><span><span class="appearance-swatch" aria-hidden="true"></span>Light<small>Ivory and warm walnut</small></span></label>
+      <label class="appearance-option appearance-dark"><input type="radio" name="tc-appearance" value="dark"><span><span class="appearance-swatch" aria-hidden="true"></span>After Hours<small>Espresso and muted brass</small></span></label>
+      <label class="appearance-option appearance-system"><input type="radio" name="tc-appearance" value="system"><span><span class="appearance-swatch" aria-hidden="true"></span>Follow Device<small>Match your device appearance</small></span></label>
+    </div></fieldset><p id="appearance-status" class="privacy-note" role="status" aria-live="polite"></p><p class="privacy-note">Saved on this device. Tasting-card exports keep their signature ivory design.</p></section>
     <details class="settings-install"><summary>Add Torcida to your home screen</summary><p>On iPhone or iPad, open Torcida in Safari, tap Share, then Add to Home Screen. On Android, open it in Chrome and choose Install app or Add to Home screen from the browser menu.</p><p id="offline-status" role="status">Offline app loading is being prepared. AI search and recommendations need an internet connection.</p></details>
     <div class="about-section"><div class="about-section-title">Your collection and backups</div>
       <p id="backup-status">Your collection is stored on this device.</p>

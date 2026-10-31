@@ -1,6 +1,6 @@
 /* Offline shell only. Collection backups, API calls and access tokens are never cached. */
-const CACHE='torcida-shell-atelier-v5';
-const SHELL=['/','/assets/atelier.js','/assets/atelier.css','/assets/reliability.js','/assets/workflows.js','/assets/spirit-categories.jpg','/assets/data.js','/assets/collection.js','/assets/storage.js','/assets/ai-client.js','/assets/design.css','/assets/mobile.js','/assets/guide.js','/manifest.webmanifest','/assets/icon.svg','/assets/icon-192.png','/assets/icon-512.png','/assets/apple-touch-icon.png','/assets/icon-maskable.png'];
+const CACHE='torcida-shell-after-hours-v6';
+const SHELL=['/','/assets/theme.js','/assets/theme.css','/assets/atelier.js','/assets/atelier.css','/assets/reliability.js','/assets/workflows.js','/assets/spirit-categories.jpg','/assets/data.js','/assets/collection.js','/assets/storage.js','/assets/ai-client.js','/assets/design.css','/assets/mobile.js','/assets/guide.js','/manifest.webmanifest','/assets/icon.svg','/assets/icon-192.png','/assets/icon-512.png','/assets/apple-touch-icon.png','/assets/icon-maskable.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('torcida-shell-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',event=>{

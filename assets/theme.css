@@ -1,0 +1,71 @@
+/* Appearance is independent of collection data and exported tasting cards. */
+.appearance-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0;}
+.appearance-option{position:relative;display:flex;align-items:center;gap:10px;min-height:76px;padding:14px;border:1px solid var(--border-s);border-radius:12px;cursor:pointer;font:600 14px/1.5 var(--sans);background:var(--surface);color:var(--text);}
+.appearance-option:has(input:checked){border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold);background:var(--surface2);}
+.appearance-option input{width:20px;height:20px;accent-color:var(--gold);flex:0 0 20px;}
+.appearance-option small{display:block;font:12px/1.5 var(--sans);color:var(--muted);font-weight:400;}
+.appearance-swatch{height:6px;border-radius:5px;display:block;margin-bottom:8px;background:linear-gradient(90deg,#f2ece2 65%,#b89660 65%);}
+.appearance-dark .appearance-swatch{background:linear-gradient(90deg,#241e19 65%,#b89660 65%);}
+.appearance-system .appearance-swatch{background:linear-gradient(90deg,#f2ece2 35%,#241e19 35%,#241e19 70%,#b89660 70%);}
+[data-theme="dark"]{--bg:#191613;--surface:#28211c;--surface2:#342b23;--surface3:#44372b;--text:#f4eadb;--muted:#cfbda7;--dim:#bda68b;--gold:#d1af77;--gold-light:#f1d4a3;--gold-dark:#c3a16b;--border:#574636;--border-s:#917655;--btn-bg:#28211c;--btn-bg-h:#3a3026;--btn-border:#a58a65;--red:#f3a694;--red-l:#ffc2b3;--depth:0 12px 30px #0003,0 2px 5px #0002;color-scheme:dark;}
+[data-theme="dark"] body{background:radial-gradient(ellipse at 50% 0,#8f643013,transparent 60%),var(--bg);}
+[data-theme="dark"] .header{background:linear-gradient(120deg,#211a15,#3b2b1f 60%,#211a15);box-shadow:0 6px 18px #0004;}
+[data-theme="dark"] .nav{background:#211c18;box-shadow:0 -8px 28px #0003;}
+[data-theme="dark"] .nav-tab.active{background:#453625;color:#f6dfb8;}
+[data-theme="dark"] .nav-tab:hover:not(.active){background:var(--surface2);}
+[data-theme="dark"] :is(.stat-box,.summary-item,.value-summary,.settings-install,.daily-wisdom,.tag,.meta-pill,.cut-vis,.cut-badge){background:var(--surface2)!important;color:var(--muted)!important;}
+[data-theme="dark"] :is(.summary-num,.value-num,.qty-btn,.modal-title,.timer-display,.collection-name,.tasting-studio-heading .modal-title,.saved-smoke-moment strong){color:var(--text);}
+[data-theme="dark"] :is(.tag.gold,.note-chip.chosen){color:#f2d7a8!important;background:#4c3a25;border-color:#b4986d;}
+[data-theme="dark"] :is(.btn-ghost,.shape-compare,.text-link){color:#ebcea4;border-color:#917655;}
+[data-theme="dark"] .btn-primary{background:#c3a16b;color:#21190f;border-color:#c3a16b;box-shadow:0 4px 10px #0002;}
+[data-theme="dark"] .btn-primary:hover{background:#dabc8c;color:#21190f;}
+[data-theme="dark"] .btn-danger{background:#442721;color:#ffc3b4;border-color:#a76554;}
+[data-theme="dark"] :is(.pill.active,.sel-chip.chosen){background:#c3a16b;color:#21190f;border-color:#c3a16b;}
+[data-theme="dark"] :is(.star,.mini-star){color:#9c8b77;}
+[data-theme="dark"] :is(.star.lit,.mini-star.lit){color:#e0b975;}
+[data-theme="dark"] :is(input,select,textarea){border-color:#917655;accent-color:#d1af77;}
+[data-theme="dark"] :is(input,textarea)::placeholder{color:#b9a791;}
+[data-theme="dark"] input[type="file"]::file-selector-button{background:var(--surface2);color:var(--text);border-color:#917655;}
+[data-theme="dark"] :focus-visible{outline-color:#e7bd7b!important;}
+[data-theme="dark"] :is(.optional-preferences,.ash-feature,.guide-wisdom,.draft-stock,.session-draft,.storage-explainer,.collection-notice,.removal-undo,.saved-smoke-moment){background:#30271e;color:var(--text);border-color:#806746;}
+[data-theme="dark"] :is(.optional-preferences>summary,.ash-feature>summary,.guide-wisdom>summary){color:#edddc6;}
+[data-theme="dark"] :is(.feature-summary-sub,.storage-explainer,.privacy-note,.collection-meta,.collection-aging,.collection-stock-actions,.detail-note,.detail-journal,.saved-smoke-moment span,.card-privacy-controls label,#card-status){color:var(--muted);}
+[data-theme="dark"] :is(.collection-brand,.collection-eyebrow,.cigar-detail-facts dt,.moment-dismiss,.orig-btn .ob-reg){color:#d4b484;}
+[data-theme="dark"] .humidor-view-toolbar p{color:var(--text);}
+[data-theme="dark"] .humidor-view-switch{background:#34291f;border-color:#806746;}
+[data-theme="dark"] .humidor-view-switch button{color:#cfbda7;}
+[data-theme="dark"] .humidor-view-switch button[aria-pressed="true"]{background:#55412c;color:#fff0d4;}
+[data-theme="dark"] .humidor-shelf{background:repeating-linear-gradient(1deg,#ffffff02 0,#ffffff02 2px,#00000008 3px,#00000008 6px),linear-gradient(120deg,#503925,#6a4b30 45%,#48301e);border-color:#806746;box-shadow:inset 0 2px 18px #0004;}
+[data-theme="dark"] .collection-cigar.cigar-card{background:#2d241d;border-color:#775a3b;box-shadow:0 8px 0 -3px #1b120d,0 11px 12px -5px #0008;}
+[data-theme="dark"] :is(.collection-stock-actions,.collection-photo,.detail-journal){border-color:#624c36;}
+[data-theme="dark"] .cigar-detail-facts{background:#624c36;border-color:#624c36;}
+[data-theme="dark"] .cigar-detail-facts>div{background:#33291f;}
+[data-theme="dark"] .cigar-detail-facts dd{color:var(--text);}
+[data-theme="dark"] .tasting-preview-wrap{background:#1d1814;}
+[data-theme="dark"] :is(.card-privacy-controls,.tasting-studio-heading .modal-close){border-color:#806746;}
+[data-theme="dark"] .card-privacy-controls legend{color:#d9bf99;}
+[data-theme="dark"] .tasting-studio-heading .modal-close{background:#3c2e21;color:#f4dfbf;}
+[data-theme="dark"] .cut-pro{color:#a9d3ae;}[data-theme="dark"] .cut-con{color:#f3ad9e;}
+[data-theme="dark"] .scanner-hero-icon{color:#d1af77;}
+[data-theme="dark"] .toast{background:#eee0ca;color:#302319;}
+/* Older generated panels use inline brand colors. Keep their text legible. */
+[data-theme="dark"] [style*="color:#8B5E3C" i],[data-theme="dark"] [style*="color:#5C3A1E" i],[data-theme="dark"] [style*="color:#493326" i],[data-theme="dark"] [style*="color:#3c2a20" i]{color:#e2c293!important;}
+[data-theme="dark"] [style*="background:#fffdf7" i],[data-theme="dark"] [style*="background:#F5EDD8" i]{background:var(--surface2)!important;}
+[data-theme="dark"] [style*="color:#3A6820" i],[data-theme="dark"] [style*="color:#4A8A5A" i],[data-theme="dark"] [style*="color:#5A8A3A" i]{color:#b2d5a4!important;}
+@media(max-width:600px){.appearance-options{grid-template-columns:1fr;}.appearance-option{min-height:68px;}.appearance-option>span{flex:1;}.appearance-swatch{max-width:120px;}}
+[data-theme="dark"] .guide-topic-intro h2{color:var(--text);}
+[data-theme="dark"] :is(.guide-topic-intro p,.guide-topic-desc,.ash-tagline,.ash-challenge-box .ash-subtitle,.ash-craft-note,.ash-photo-tip,.ash-challenge-box .ash-upload-sub){color:var(--muted);}
+[data-theme="dark"] :is(.guide-topic-eyebrow,.guide-topic-arrow,.ash-eyebrow,.ash-emblem){color:#d4b484;}
+[data-theme="dark"] .guide-topic-card{background:linear-gradient(145deg,#332a21,#28211c);border-color:#806746;color:var(--text);}
+[data-theme="dark"] .guide-topic-card:hover{background:#3c3024;border-color:#bc9a65;}
+[data-theme="dark"] .guide-topic-featured{background:linear-gradient(120deg,#58402a,#3b2a1c);border-color:#b49362;}
+[data-theme="dark"] :is(.guide-topic-icon,.guide-topic-featured .guide-topic-icon){background:#4b3927;color:#e1c08d;}
+[data-theme="dark"] .guide-topic-back{background:var(--surface2);color:#ebcea4;border-color:#917655;}
+[data-theme="dark"] .ash-challenge-box.ash-challenge-box{background:linear-gradient(145deg,#35291e,#251e18);border-color:#806746;color:var(--text);}
+[data-theme="dark"] :is(.ash-challenge-box .ash-title,.ash-challenge-box .ash-upload-text,.ash-craft-label){color:var(--text);}
+[data-theme="dark"] .ash-challenge-box .ash-upload-area{background:#211b16;border-color:#b29160;}
+[data-theme="dark"] .ash-challenge-box .ash-upload-area:hover{background:#3b2d20;}
+[data-theme="dark"] .ash-challenge-box .ash-upload-icon{background:#4b3927;color:#e1c08d;}
+[data-theme="dark"] .ash-upload-cta{background:#c3a16b;color:#21190f;}
+[data-theme="dark"] :is(.orig-btn.active,.quiz-opt.selected,.humidor-tab-btn.active){background:#c3a16b;color:#21190f;border-color:#c3a16b;}
+[data-theme="dark"] .orig-btn.active .ob-reg{color:#322719;}
