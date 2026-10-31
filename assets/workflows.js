@@ -75,4 +75,5 @@ function initializeReliabilityUI(){
   ratingState();document.addEventListener('click',function(e){if(e.target.closest('.rating-stars'))ratingState();});
   document.addEventListener('keydown',function(e){var star=e.target.closest('.rating-stars [role="radio"]');if(!star||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key))return;e.preventDefault();var stars=Array.from(star.parentElement.querySelectorAll('[onclick]')),i=stars.indexOf(star),next=e.key==='Home'?0:e.key==='End'?stars.length-1:(i+(['ArrowRight','ArrowDown'].includes(e.key)?1:stars.length-1))%stars.length;stars[next].click();stars[next].focus();ratingState();});
   new MutationObserver(ratingState).observe(document.getElementById('smoked-form'),{subtree:true,attributes:true,attributeFilter:['class']});
+  TorcidaAtelier.initialize();
 }

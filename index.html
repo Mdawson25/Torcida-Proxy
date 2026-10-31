@@ -465,6 +465,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
 </style>
 <link rel="stylesheet" href="/assets/design.css">
+<link rel="stylesheet" href="/assets/atelier.css">
 </head>
 <body>
 <div class="smoke-bg" aria-hidden="true">
@@ -661,6 +662,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         </div>
       </div>
       <div class="sec-title" id="h-section-title" style="margin-top:8px;margin-bottom:14px;">My Humidor</div>
+<div class="humidor-view-toolbar"><div><span class="collection-eyebrow">YOUR COLLECTION</span><p>Your cigars, kept in view.</p></div><div class="humidor-view-switch" role="group" aria-label="Humidor view"><button type="button" id="humidor-view-shelf" aria-pressed="true" onclick="TorcidaAtelier.setView('shelf')">Cedar shelf</button><button type="button" id="humidor-view-list" aria-pressed="false" onclick="TorcidaAtelier.setView('list')">List</button></div></div><p id="humidor-photo-status" class="privacy-note" role="status"></p><input type="file" id="humidor-photo-input" accept="image/*" hidden aria-label="Choose a cigar or box photo">
       <div id="humidor-list"></div>
     </div>
 
@@ -797,6 +799,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Smoked</div></div>
       <div class="summary-item"><div class="summary-num" id="s-avg">—</div><div class="summary-lbl">Avg Rating</div></div>
     </div>
+<div id="saved-smoke-moment" class="saved-smoke-moment" hidden role="status"><div><strong>Saved to your journal.</strong><span>Make this moment a Torcida tasting card.</span></div><button type="button" class="btn" id="saved-smoke-card-button">Create tasting card</button><button type="button" class="moment-dismiss" aria-label="Dismiss saved smoke message" onclick="document.getElementById('saved-smoke-moment').hidden=true">×</button></div>
 <div id="session-draft-banner" class="session-draft" hidden><span>A completed smoke session is ready to log.</span><button type="button" class="btn btn-sm" onclick="resumeSessionDraft()">Resume session draft</button></div>    <button class="btn btn-full" onclick="toggleAddForm('smoked-form')">+ Log a Smoke</button>
     <div class="add-form" id="smoked-form">
       <div class="sec-title" style="font-size:16px;">Log a Smoke</div><div id="journal-stock-choice" class="draft-stock" hidden><label><input type="checkbox" id="s-decrement-stock" checked> Remove one cigar from the source humidor when this entry saves</label></div>
@@ -1166,32 +1169,19 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 </div>
 
 <!-- ── SHARE CARD MODAL ─────────────────────────────────── -->
-<div class="modal-overlay" id="modal-share" onclick="if(event.target===this)closeModal('modal-share')" style="z-index:1800;">
-  <div class="modal-box" style="max-width:360px;padding:0;overflow:hidden;">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px 0;background:var(--surface);">
-      <div style="font-size:14px;font-weight:600;color:var(--text);">Smoke Card</div>
-      <button onclick="closeModal('modal-share')" style="background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;line-height:1;padding:0;">×</button>
-    </div>
-    <div id="share-card" style="background:linear-gradient(145deg,#1A1208,#2C1A0A);padding:28px 24px 22px;position:relative;">
-      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;opacity:0.8;">✦ TORCIDA · THE ART OF THE CIGAR</div>
-      <div id="sc-name" style="font-family:'Playfair Display',serif;font-size:22px;color:#FFFDF7;font-weight:600;margin-bottom:4px;line-height:1.3;"></div>
-      <div id="sc-brand" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-bottom:16px;opacity:0.8;"></div>
-      <div style="display:flex;gap:6px;margin-bottom:14px;" id="sc-stars"></div>
-      <div id="sc-notes" style="font-size:13px;color:#D4C4A0;line-height:1.6;font-style:italic;margin-bottom:16px;border-left:2px solid #C9A84C;padding-left:10px;"></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="sc-pills"></div>
-      <div id="sc-drink" style="font-size:12px;color:#C9A84C;margin-bottom:12px;opacity:0.85;"></div>
-      <div id="sc-date" style="margin-bottom:12px;"></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid rgba(201,168,76,0.3);padding-top:12px;">
-        <div id="sc-footer-date" style="font-size:11px;color:#8B7A5A;"></div>
-        <div style="font-family:'Playfair Display',serif;font-size:14px;color:#C9A84C;letter-spacing:1px;">Torcida</div>
-      </div>
-    </div>
-    <div style="padding:14px 16px 20px;background:var(--surface);display:flex;gap:8px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="shareSmokCard()">💬 Send / Share</button>
-      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('modal-share')">Close</button>
-    </div>
+<div class="modal-overlay" id="modal-share" onclick="if(event.target===this)TorcidaAtelier.closeCard()" style="z-index:1800;">
+  <div class="modal-box tasting-studio">
+    <div class="tasting-studio-heading"><div><span class="collection-eyebrow">THE TORCIDA JOURNAL</span><h2 class="modal-title">Make a moment worth keeping.</h2></div><button type="button" class="modal-close" aria-label="Close tasting card" onclick="TorcidaAtelier.closeCard()">×</button></div>
+    <div class="tasting-studio-grid"><div class="tasting-preview-wrap"><img id="tasting-card-preview" alt="Your Torcida tasting card preview" hidden></div><div class="tasting-studio-controls">
+      <label class="form-label" for="card-format">Card format</label><select class="form-input" id="card-format"><option value="square">Square · 1080 × 1080</option><option value="story">Story · 1080 × 1920</option><option value="compact">Tasting card · 1200 × 800</option></select>
+      <label class="form-label" for="card-photo">Featured photo</label><select class="form-input" id="card-photo"><option value="0">Torcida illustration</option></select>
+      <fieldset class="card-privacy-controls"><legend>What appears on your card</legend><label><input type="checkbox" id="card-date" checked> Include date</label><label><input type="checkbox" id="card-notes"> Include personal tasting notes</label><label><input type="checkbox" id="card-location"> Include location / occasion</label></fieldset>
+      <p class="privacy-note">Your card is made on this device. Notes and location stay off unless you select them. Review the photo for anything private before sharing.</p><p id="card-status" role="status" aria-live="polite"></p><p id="card-truncation" class="privacy-note"></p>
+      <a id="card-download-link" class="btn btn-primary" download target="_blank" rel="noopener" aria-disabled="true">Download PNG</a><button type="button" class="btn btn-ghost" id="card-share-button" disabled onclick="TorcidaAtelier.shareCard()">Share image</button><p class="privacy-note">If sharing is unavailable, save the PNG and share it from Photos or Files.</p>
+    </div></div>
   </div>
 </div>
+<div class="modal-overlay" id="modal-cigar-detail" onclick="if(event.target===this)closeModal('modal-cigar-detail')"><div class="modal-box cigar-detail"><div class="tasting-studio-heading"><h2 class="modal-title" id="cigar-detail-title">Your cigar</h2><button type="button" class="modal-close" aria-label="Close cigar details" onclick="closeModal('modal-cigar-detail')">×</button></div><div id="cigar-detail-content"></div></div></div>
 
 <!-- ── OCCASION MATCHER MODAL ───────────────────────────── -->
 <div class="modal-overlay" id="modal-occasion" onclick="if(event.target===this)closeModal('modal-occasion')" style="z-index:1800;">
@@ -1397,6 +1387,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <script src="/assets/collection.js"></script>
 <script src="/assets/ai-client.js"></script>
 <script src="/assets/workflows.js"></script>
+<script src="/assets/atelier.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════
 // STATE
@@ -2080,14 +2071,10 @@ function renderHumidor(){
   else if(sort==='strength'){var o=['Mild','Mild-Medium','Medium','Medium-Full','Full'];hList.sort(function(a,b){return o.indexOf(a.strength)-o.indexOf(b.strength);});}
   else if(sort==='aging')hList.sort(function(a,b){return (a.purchaseDate||'9999')>(b.purchaseDate||'9999')?1:-1;});
   var el=document.getElementById('humidor-list');
-  if(!hList.length){el.innerHTML=q?'<div class="empty-state"><div class="empty-text">No cigars match your search</div></div>':'<div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or use Find to identify a label.</div></div>';return;}
+  if(!hList.length){TorcidaAtelier.applyView(el,hList);el.innerHTML=q?'<div class="empty-state"><div class="empty-text">No cigars match your search</div></div>':'<div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or use Find to identify a label.</div></div>';return;}
   var today=new Date();
-  el.innerHTML=hList.map(function(c){
-    var agingHtml='';
-    if(c.purchaseDate){var days=Math.floor((today-new Date(c.purchaseDate))/86400000);var cls=days<30?'aging-new':days<180?'aging-mid':'aging-long';agingHtml='<span class="aging-badge '+cls+'">'+days+'d aging</span>';}
-    var priceHtml=c.price?'<span class="meta-pill">$'+(c.price*1).toFixed(0)+'/ea</span>':'';
-    return '<div class="cigar-card" style="flex-direction:column;gap:10px;"><div style="display:flex;gap:12px;align-items:flex-start;"><div class="card-band" style="align-self:stretch;min-height:auto;"></div><div class="card-body"><div class="card-name">'+c.name+'</div><div class="card-brand">'+(c.brand||'Unknown Brand')+'</div><div class="card-meta">'+(c.size?'<span class="meta-pill">'+c.size+'</span>':'')+(c.wrapper?'<span class="meta-pill">'+c.wrapper+'</span>':'')+(c.strength?'<span class="meta-pill">'+c.strength+'</span>':'')+priceHtml+agingHtml+'</div>'+(c.notes?'<div class="personal-note">'+c.notes+'</div>':'')+'</div></div><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:6px;border-top:0.5px solid var(--border);"><div class="qty-control"><button class="qty-btn" onclick="changeQty('+c.id+',-1)">−</button><span class="qty-num">'+(c.qty||1)+'</span><button class="qty-btn" onclick="changeQty('+c.id+',1)">+</button></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;"><button class="btn btn-sm btn-ghost" onclick="openEditHumidor('+c.id+')">Edit</button><button class="btn btn-sm btn-ghost" style="color:var(--gold-light);border-color:var(--gold-light);" onclick="logSmokeFromHumidor('+c.id+')">Log Smoke</button><button class="btn btn-sm btn-ghost" style="font-size:12px;" onclick="findAlternativesFromHumidor('+c.id+')">≈ Similar</button></div></div>';
-  }).join('');
+  TorcidaAtelier.applyView(el,hList);
+  el.innerHTML=hList.map(function(c){return TorcidaAtelier.cardMarkup(c);}).join('');
 }
 
 // ── JOURNAL / SMOKED ─────────────────────────────────────────
@@ -2123,14 +2110,14 @@ async function logSmoke(){if(!collectionLoaded){showToast('Your collection is st
   var decrement=sourceCigar&&document.getElementById('s-decrement-stock').checked;
   if(decrement&&TorcidaReliability.stock(sourceCigar.qty)<1){showToast('This cigar is out of stock. Uncheck stock removal to save a journal-only entry.');return;}
   var recordId=typeof TorcidaReliability!=='undefined'?TorcidaReliability.nextId():Date.now();
-  smoked.push({id:recordId,brand:document.getElementById('s-brand').value,name:name,date:document.getElementById('s-date').value,location:document.getElementById('s-location').value,rating:newRatingVal,ratings:{draw:attrRatings.draw,burn:attrRatings.burn,flavor:attrRatings.flavor,construction:attrRatings.construction},notes:document.getElementById('s-notes').value,drink:{type:document.getElementById('s-drink-type').value,name:document.getElementById('s-drink-name').value,rating:pairingRatingVal},photos:[...pendingPhotos],strength:sourceCigar?sourceCigar.strength||'':'',size:sourceCigar?sourceCigar.size||'':'',wrapper:sourceCigar?sourceCigar.wrapper||'':''});
+  smoked.push({id:recordId,brand:document.getElementById('s-brand').value,name:name,date:document.getElementById('s-date').value,location:document.getElementById('s-location').value,rating:newRatingVal,ratings:{draw:attrRatings.draw,burn:attrRatings.burn,flavor:attrRatings.flavor,construction:attrRatings.construction},notes:document.getElementById('s-notes').value,drink:{type:document.getElementById('s-drink-type').value,name:document.getElementById('s-drink-name').value,rating:pairingRatingVal},photos:pendingPhotos.length?[...pendingPhotos]:(sourceCigar&&sourceCigar.photos?sourceCigar.photos.slice(0,1):[]),sourceCigarId:sourceCigar?sourceCigar.id:null,strength:sourceCigar?sourceCigar.strength||'':'',size:sourceCigar?sourceCigar.size||'':'',wrapper:sourceCigar?sourceCigar.wrapper||'':''});
   if(decrement){sourceCigar.qty=TorcidaReliability.stock(sourceCigar.qty)-1;if(sourceCigar.qty===0)source.cigars=source.cigars.filter(function(c){return c.id!==sourceCigar.id;});}
   await save();
   ['s-brand','s-name','s-location','s-notes','s-drink-name'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('s-drink-type').value='';document.getElementById('s-date').value='';document.getElementById('s-photo-preview').innerHTML='';document.getElementById('s-photo-input').value='';
   pendingPhotos=[];newRatingVal=0;pairingRatingVal=0;attrRatings={draw:0,burn:0,flavor:0,construction:0};
   document.querySelectorAll('#new-stars .star, .mini-stars .star').forEach(function(s){s.classList.remove('lit');});
   if(typeof journalSource!=='undefined'){journalSource=null;document.getElementById('journal-stock-choice').hidden=true;renderHumidor();completeSessionDraft();}
-  renderSmoked();toggleAddForm('smoked-form');showToast('Smoke logged ✓');
+  renderSmoked();toggleAddForm('smoked-form');showToast('Smoke logged ✓');if(typeof TorcidaAtelier!=='undefined')TorcidaAtelier.savedSmoke(recordId);
 }
 async function removeSmoked(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}smoked=smoked.filter(function(s){return s.id!==id;});await save();renderSmoked();}
 function setSmokedFilter(val,el){smokedFilter=val;document.querySelectorAll('.filter-pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');renderSmoked();}
@@ -2501,109 +2488,8 @@ var flames=[{name:'Cedar spill',badge:'Best',col:'#7AC49A',desc:'Zero off-flavor
 document.getElementById('flame-guide').innerHTML=flames.map(function(f){return '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:9px;padding-bottom:9px;border-bottom:0.5px solid var(--border);"><span style="font-size:11px;padding:2px 9px;border-radius:10px;background:'+f.col+'20;border:0.5px solid '+f.col+'40;color:'+f.col+';white-space:nowrap;flex-shrink:0;">'+f.badge+'</span><div><div style="font-size:13px;color:var(--gold-light);font-weight:600;margin-bottom:2px;">'+f.name+'</div><div style="font-size:12px;color:var(--muted);">'+f.desc+'</div></div></div>';}).join('');
 
 // ── FEATURE 1: SHARE CARD ─────────────────────────────────────
-function openShareCard(id){
-  var s=smoked.find(function(x){return x.id===id;});
-  if(!s)return;
-  // Store full entry on the modal for sharing
-  document.getElementById('modal-share')._entry=s;
-
-  document.getElementById('sc-name').textContent=s.name||'';
-  document.getElementById('sc-brand').textContent=s.brand||'';
-
-  // Stars
-  var starsHtml='';
-  for(var i=1;i<=5;i++)starsHtml+='<span class="sc-star'+(i<=(s.rating||0)?'':' dim')+'">★</span>';
-  document.getElementById('sc-stars').innerHTML=starsHtml;
-  document.getElementById('sc-stars').style.display=s.rating?'flex':'none';
-
-  // Notes
-  document.getElementById('sc-notes').textContent=s.notes||'';
-  document.getElementById('sc-notes').style.display=s.notes?'block':'none';
-
-  // Pills — location, date, drink
-  var pills='';
-  if(s.date)pills+='<span class="sc-pill">'+s.date+'</span>';
-  if(s.location)pills+='<span class="sc-pill">'+s.location+'</span>';
-  if(s.drink&&s.drink.name)pills+='<span class="sc-pill">'+(s.drink.type?s.drink.type+': ':'')+s.drink.name+'</span>';
-  document.getElementById('sc-pills').innerHTML=pills;
-
-  // Attr ratings
-  var attrHtml='';
-  if(s.ratings&&(s.ratings.draw||s.ratings.burn||s.ratings.flavor||s.ratings.construction)){
-    var attrs=['draw','burn','flavor','construction'];
-    attrHtml='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">';
-    attrs.forEach(function(a){
-      if(s.ratings[a])attrHtml+='<span style="font-size:11px;color:#9A8060;">'+a.charAt(0).toUpperCase()+a.slice(1)+': <span style="color:#C9A84C;">'+'★'.repeat(s.ratings[a])+'</span></span>';
-    });
-    attrHtml+='</div>';
-  }
-  document.getElementById('sc-drink').innerHTML=attrHtml;
-  document.getElementById('sc-drink').style.display=attrHtml?'block':'none';
-
-  // Photos
-  var photoHtml='';
-  if(s.photos&&s.photos.length){
-    photoHtml='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">';
-    s.photos.forEach(function(p){
-      photoHtml+='<img src="'+p+'" style="width:72px;height:72px;object-fit:cover;border-radius:6px;border:0.5px solid rgba(201,168,76,0.3);">';
-    });
-    photoHtml+='</div>';
-  }
-  document.getElementById('sc-date').innerHTML=photoHtml;
-
-  openModal('modal-share');
-  var fd=document.getElementById('sc-footer-date');
-  if(fd)fd.textContent=s.date?'Smoked '+s.date:'';
-}
-
-function shareSmokCard(){
-  var el=document.getElementById('modal-share');
-  var s=el._entry;
-  if(!s)return;
-
-  // Build rich text message
-  var line='─────────────────';
-  var text='✦ TORCIDA — THE ART OF THE CIGAR\n'+line+'\n';
-  text+=(s.name||'Unknown')+(s.brand?'\n'+s.brand.toUpperCase():'');
-  if(s.date||s.location){text+='\n';if(s.date)text+=s.date;if(s.location)text+=(s.date?' · ':'')+s.location;}
-  text+='\n';
-  if(s.rating)text+='\nRating: '+'★'.repeat(s.rating)+'☆'.repeat(5-s.rating);
-  if(s.ratings){
-    var attrs=[];
-    ['draw','burn','flavor','construction'].forEach(function(a){if(s.ratings[a])attrs.push(a.charAt(0).toUpperCase()+a.slice(1)+': '+'★'.repeat(s.ratings[a]));});
-    if(attrs.length)text+='\n'+attrs.join('  ');
-  }
-  if(s.drink&&(s.drink.type||s.drink.name)){
-    text+='\n\nPairing: '+(s.drink.type||'')+(s.drink.name?' — '+s.drink.name:'');
-    if(s.drink.rating)text+=' '+'★'.repeat(s.drink.rating);
-  }
-  if(s.notes)text+='\n\n"'+s.notes+'"';
-  text+='\n'+line+'\nLogged with Torcida';
-
-  // Share with photos if Web Share API supports files
-  if(navigator.share&&s.photos&&s.photos.length){
-    // Convert base64 photos to File objects
-    try{
-      var files=s.photos.map(function(p,i){
-        var arr=p.split(',');var mime=arr[0].match(/:(.*?);/)[1];
-        var bstr=atob(arr[1]);var n=bstr.length;var u8=new Uint8Array(n);
-        for(var j=0;j<n;j++)u8[j]=bstr.charCodeAt(j);
-        var ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'}[mime]||'jpg';
-        return new File([u8],'torcida-smoke-'+i+'.'+ext,{type:mime});
-      });
-      if(navigator.canShare&&navigator.canShare({files:files})){
-        navigator.share({title:'Torcida — '+(s.name||''),text:text,files:files}).catch(function(error){if(error.name!=='AbortError')TorcidaMobile.copyShareText(text);});
-        return;
-      }
-    }catch(e){}
-  }
-  // Standard share (text only)
-  if(navigator.share){
-    navigator.share({title:'Torcida — '+(s.name||''),text:text}).catch(function(error){if(error.name!=='AbortError')TorcidaMobile.copyShareText(text);});
-  } else {
-    TorcidaMobile.copyShareText(text);
-  }
-}
+function openShareCard(id){TorcidaAtelier.openCard(id);}
+function shareSmokCard(){TorcidaAtelier.shareCard();}
 
 // ── FEATURE 2: TASTE PROFILE ──────────────────────────────────
 function openTasteProfile(){

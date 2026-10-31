@@ -1,0 +1,61 @@
+/* Torcida collection shelf and local tasting-card studio. */
+.humidor-view-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:24px 0 16px;}
+.collection-eyebrow{font:700 10px/1.5 var(--sans);letter-spacing:1.8px;color:#8b6b3d;}
+.humidor-view-toolbar p{font:24px/1.3 var(--serif);color:#493326;margin:5px 0 0;}
+.humidor-view-switch{display:flex;gap:4px;padding:4px;background:#e8dcc6;border:1px solid #cdb898;border-radius:12px;flex-shrink:0;}
+.humidor-view-switch button{min-height:48px;padding:8px 14px;border:0;border-radius:8px;background:transparent;color:#70573d;font:600 13px var(--sans);cursor:pointer;}
+.humidor-view-switch button[aria-pressed="true"]{background:#fffbf2;color:#432e20;box-shadow:0 2px 5px #432e2019;}
+.humidor-shelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 18px;padding:22px 18px 28px;border:1px solid #b08b5b;border-radius:18px;background:repeating-linear-gradient(1deg,#ffffff02 0px,#ffffff02 2px,#3c221004 3px,#3c221004 6px),linear-gradient(120deg,#cdaa78,#e2c69c 45%,#bb915c);box-shadow:inset 0 2px 18px #69401f22;}
+.collection-cigar.cigar-card{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;min-width:0;margin:0;border:1px solid #d4c0a0;border-radius:13px;background:#fffaf0;overflow:hidden;box-shadow:0 8px 0 -3px #80563055,0 11px 12px -5px #44291255;}
+.collection-photo{position:relative;display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:1.55;min-height:120px;padding:0;border:0;border-bottom:1px solid #d3bb95;background:radial-gradient(ellipse,#725034,#35261b);cursor:pointer;overflow:hidden;}
+.collection-photo img{display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.collection-photo svg{width:94%;height:auto;filter:drop-shadow(0 5px 4px #0004);}
+.collection-photo-caption{position:absolute;left:10px;right:10px;bottom:13px;font:11px/1.4 var(--sans);color:#f2dec0;}
+.collection-stock{position:absolute;right:10px;top:10px;padding:5px 9px;border:1px solid #ead2a36b;border-radius:20px;background:#302117d9;color:#fff4dc;font:600 11px/1.5 var(--sans);}
+.collection-copy{padding:17px 15px 14px;}
+.collection-brand{font:600 10px/1.5 var(--sans);letter-spacing:1.25px;text-transform:uppercase;color:#86653d;overflow-wrap:anywhere;margin:0 0 5px;}
+.collection-name{font:600 23px/1.18 var(--serif);color:#3e2c1f;margin:0 0 9px;overflow-wrap:anywhere;}
+.collection-meta{font:13px/1.5 var(--sans);color:#65513b;overflow-wrap:anywhere;}
+.collection-aging{font:12px/1.5 var(--sans);color:#85704f;margin:8px 0 14px;}
+.collection-actions{display:flex;gap:7px;flex-wrap:wrap;}
+.collection-actions .btn{flex:1;white-space:normal;padding:8px 10px;min-height:48px;font-size:12px!important;}
+.collection-stock-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #dfcfb6;margin-top:12px;padding-top:9px;font:12px/1.5 var(--sans);color:#735b40;}
+.collection-stock-actions>.btn:last-child{margin-left:auto;}
+.collection-stock-actions .qty-btn{min-width:48px;min-height:48px;}
+.humidor-photo-list{display:flex;flex-direction:column;gap:14px;}
+.humidor-photo-list .collection-cigar{display:grid;grid-template-columns:190px minmax(0,1fr);box-shadow:0 3px 10px #46301b0c;}
+.humidor-photo-list .collection-photo{height:100%;aspect-ratio:auto;border-bottom:0;border-right:1px solid #d3bb95;}
+.humidor-photo-list .collection-photo-caption{font-size:10px;}
+.tasting-studio.modal-box{max-width:1080px!important;overflow-y:auto!important;}
+.tasting-studio-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;}
+.tasting-studio-heading .modal-title{margin:5px 0 0;font:27px/1.25 var(--serif);color:#432e20;}
+.tasting-studio-heading .modal-close{flex:0 0 48px;width:48px;min-height:48px;border:1px solid #cdb99c;background:#f7eddb;color:#5b412b;cursor:pointer;}
+.tasting-studio-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,1fr);gap:26px;align-items:start;}
+.tasting-preview-wrap{display:flex;justify-content:center;align-items:flex-start;padding:18px;border-radius:12px;background:#e6dac5;min-height:220px;}
+#tasting-card-preview{display:block;width:100%;height:auto;max-height:68vh;object-fit:contain;filter:drop-shadow(0 5px 8px #35241533);}
+#tasting-card-preview[hidden],#saved-smoke-moment[hidden]{display:none!important;}
+.tasting-studio-controls .form-input{width:100%;box-sizing:border-box;margin-bottom:16px;}
+.card-privacy-controls{margin:6px 0 16px;padding:12px;border:1px solid #cdb99d;border-radius:10px;}
+.card-privacy-controls legend{font:600 13px var(--sans);padding:0 6px;color:#644b31;}
+.card-privacy-controls label{display:flex;align-items:center;gap:10px;min-height:48px;font:14px/1.5 var(--sans);color:#5a452f;}
+.card-privacy-controls input{width:22px;height:22px;accent-color:#75512e;flex:0 0 22px;}
+.tasting-studio-controls>.btn{display:flex;justify-content:center;align-items:center;width:100%;box-sizing:border-box;margin-top:10px;text-decoration:none;}
+#card-status{font:13px/1.5 var(--sans);color:#674c2f;}
+.cigar-detail.modal-box{max-width:760px!important;}
+.detail-photo{display:flex;align-items:center;justify-content:center;min-height:190px;max-height:350px;background:linear-gradient(110deg,#4c3423,#251c15);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.detail-photo img{width:100%;height:310px;object-fit:contain;}
+.detail-photo svg{width:90%;height:auto;}
+.cigar-detail-facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#dac8ad;border:1px solid #dac8ad;border-radius:10px;overflow:hidden;margin:16px 0;}
+.cigar-detail-facts>div{padding:12px;background:#f9f2e5;min-width:0;}
+.cigar-detail-facts dt{font:600 10px/1.5 var(--sans);letter-spacing:.8px;text-transform:uppercase;color:#8b6a40;}
+.cigar-detail-facts dd{margin:4px 0 0;font:15px/1.5 var(--sans);color:#4b3624;overflow-wrap:anywhere;}
+.detail-note{white-space:pre-wrap;font:14px/1.6 var(--sans);color:#6b5339;}
+.detail-journal{border-top:1px solid #d9c8ad;padding:12px 0;font:13px/1.6 var(--sans);color:#6b5339;}
+.detail-journal>span{float:right;}.detail-journal p{margin:7px 0;white-space:pre-wrap;}
+.saved-smoke-moment{display:flex;gap:14px;align-items:center;position:relative;margin:16px 0;padding:16px 48px 16px 16px;border:1px solid #bda16b;border-radius:12px;background:#f4e6c9;animation:moment-in .2s ease-out;}
+.saved-smoke-moment>div{flex:1;}.saved-smoke-moment strong,.saved-smoke-moment span{display:block;}.saved-smoke-moment strong{font:600 19px var(--serif);color:#493120;}.saved-smoke-moment span{font:12px/1.5 var(--sans);color:#795d3b;margin-top:4px;}
+.moment-dismiss{position:absolute;right:2px;top:2px;width:48px;height:48px;border:0;background:none;font-size:24px;color:#73512e;cursor:pointer;}
+@keyframes moment-in{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+@media(min-width:1000px){.humidor-shelf{gap:24px;padding:24px;}}
+@media(max-width:600px){.humidor-view-toolbar{align-items:flex-start;flex-direction:column;gap:12px;}.humidor-view-toolbar p{font-size:23px;}.humidor-shelf{grid-template-columns:1fr;padding:16px;gap:23px;}.collection-photo{aspect-ratio:1.7;}.collection-name{font-size:24px;}.humidor-photo-list .collection-cigar{grid-template-columns:105px minmax(0,1fr);}.humidor-photo-list .collection-copy{padding:12px;}.humidor-photo-list .collection-name{font-size:20px;}.humidor-photo-list .collection-photo-caption{display:none;}.tasting-studio-grid{grid-template-columns:1fr;gap:20px;}.tasting-preview-wrap{padding:12px;}#tasting-card-preview{max-height:60vh;}.tasting-studio-heading .modal-title{font-size:24px;}.saved-smoke-moment{flex-direction:column;align-items:flex-start;}.saved-smoke-moment .btn{width:100%;}.collection-actions .btn{font-size:12px!important;}.cigar-detail-facts{grid-template-columns:1fr 1fr;}}
+@media(prefers-reduced-motion:reduce){.saved-smoke-moment{animation:none;}}
