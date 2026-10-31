@@ -79,7 +79,7 @@
       if(!el.hasAttribute('role'))el.setAttribute('role','button');if(!el.hasAttribute('tabindex'))el.tabIndex=0;
       if(!el.dataset.keyEnabled){el.dataset.keyEnabled='true';el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});}
       var action=el.getAttribute('onclick')||'',rating=action.match(/set(?:Attr|Pairing|Edit)?Rating\([^)]*?(\d)\)/);
-      if(rating)el.setAttribute('aria-label',((action.match(/'(\w+)'/)||[])[1]||'Rating')+' '+rating[1]+' of 5');
+      if(rating&&el.getAttribute('role')!=='radio')el.setAttribute('aria-label',((action.match(/'(\w+)'/)||[])[1]||'Rating')+' '+rating[1]+' of 5');
     });
     rootNode.querySelectorAll('.pill,.sel-chip,.note-chip,.occ-chip,.quiz-opt,.filter-pill').forEach(function(el){el.setAttribute('aria-pressed',String(el.classList.contains('active')||el.classList.contains('chosen')||el.classList.contains('selected')));});
     rootNode.querySelectorAll('.empty-icon').forEach(function(el){var text=el.textContent.trim();var match=glyphs.find(function(g){return text===g[0];});if(match)el.innerHTML=icon(match[1]);});
@@ -119,3 +119,4 @@
   var api={icon:icon,localDate:localDate,preparePhoto:preparePhoto,setPhotoJobs:setPhotoJobs,photoBusy:photoBusy,copyShareText:copyShareText,showMessage:showMessage,modalOpen:modalOpen,modalClose:modalClose,initialize:initialize};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.TorcidaMobile=api;
 })(typeof window!=='undefined'?window:globalThis);
+

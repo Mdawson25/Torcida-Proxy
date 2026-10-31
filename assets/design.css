@@ -161,3 +161,24 @@ input[type="file"]::file-selector-button{min-height:48px;font:14px var(--sans);b
 #modal-storage-recovery .modal-box,#modal-backup-download .modal-box{max-width:560px;}
 #modal-backup-download .btn{margin:16px 8px 0 0;}
 #collection-recovery-text{overflow-wrap:anywhere;}
+
+/* Reliability release: task-first layouts and compact photography. */
+#cigar-selector-wrap[hidden],#journal-stock-choice[hidden],#session-draft-banner[hidden],#removal-undo[hidden]{display:none!important;}
+#cigar-selector-wrap:not([hidden]){display:block!important;}
+.storage-explainer,.privacy-note{font:12px/1.6 var(--sans);color:#6d5946;margin:10px 0 16px;}
+.storage-explainer{border-left:2px solid #b89a62;padding:8px 12px;background:#f6eddf;border-radius:0 8px 8px 0;}
+.text-link{border:0;background:none;text-decoration:underline;color:#604024;font:inherit;min-height:48px;padding:4px 8px;cursor:pointer;}
+.optional-preferences,.ash-feature,.guide-wisdom{border:1px solid #d5c4a7;border-radius:14px;background:#fbf6ec;margin:16px 0;}
+.optional-preferences>summary,.ash-feature>summary,.guide-wisdom>summary{font:600 15px/1.5 var(--sans);color:#513a27;padding:16px;min-height:48px;box-sizing:border-box;cursor:pointer;}
+.optional-preferences[open]{padding:0 14px 12px;}.optional-preferences[open]>summary{padding-left:0;}
+.feature-summary-sub{display:block;font:12px/1.5 var(--sans);color:#76614b;margin:3px 0 0 18px;}
+.ash-feature .ash-challenge-box{margin:0;border-radius:0 0 14px 14px;border:0;box-shadow:none;}
+.guide-wisdom{margin:8px 16px 24px;}.guide-wisdom .quote-banner{margin:0;padding:16px;}
+.guide-topic-intro h2{margin-top:4px;}.guide-topic-home{padding-top:16px;}
+.compact-timer{padding:14px!important;gap:10px!important;margin-top:20px;}.compact-timer .timer-display{font-size:24px!important;line-height:1.2;}.compact-timer .timer-label{font-size:10px!important;}.compact-timer .timer-cigar{font-size:12px!important;}
+.draft-stock,.session-draft{padding:12px;border:1px solid #c8b18a;border-radius:10px;background:#f7eddb;margin:12px 0;font:14px/1.6 var(--sans);}.draft-stock input{width:22px;height:22px;vertical-align:middle;margin-right:8px;}.session-draft{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.removal-undo{position:fixed;bottom:calc(92px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:2300;display:flex;gap:12px;align-items:center;max-width:calc(100vw - 32px);width:max-content;padding:12px 16px;background:#fff7e5;color:#493326;border:1px solid #ba9b64;border-radius:12px;box-shadow:0 5px 20px #39271933;font:13px/1.5 var(--sans);}.removal-undo span{overflow-wrap:anywhere;}
+.spirit-icon{width:58px;flex:0 0 58px;}.spirit-photo{display:block;width:58px;height:58px;border-radius:10px;background-image:url('/assets/spirit-categories.jpg');background-size:400% 200%;background-repeat:no-repeat;background-color:#f0e4cf;}
+.ash-personal-best{margin:14px 0!important;}.ash-feature .form-input{width:100%;box-sizing:border-box;margin-bottom:12px;}
+.guide-topic-toolbar{scroll-margin-top:12px;}
+@media(max-width:600px){.guide-topic-intro h2{font-size:26px;}.guide-topic-intro{margin-bottom:14px;}.guide-topic-home{padding-top:14px;}.compact-timer .timer-cigar{max-width:220px;overflow-wrap:anywhere;}}

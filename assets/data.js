@@ -71,6 +71,7 @@
     }
     if(kind==='selector'){if(!r.name.trim())throw new Error('No cigar recommendation returned.');r.flavor_tags=list(value.flavor_tags);}
     if((kind==='pairing'||kind==='occasion')&&!r.cigar_name.trim())throw new Error('No cigar recommendation returned.');
+    if(kind==='ash'){r.is_cigar=value.is_cigar===true;r.scale_reliable=value.scale_reliable===true&&r.is_cigar;r.length_value=typeof value.length_value==='number'&&Number.isFinite(value.length_value)&&value.length_value>0?value.length_value:null;r.length_unit=['in','cm','mm'].includes(value.length_unit)?value.length_unit:'';if(r.length_value===null||!r.length_unit)r.scale_reliable=false;if(value.is_cigar===false){r.estimated_length=r.estimated_length||'Unmeasured';r.quality_verdict=r.quality_verdict||'Uncertain';}}
     if(kind==='ash'&&(!r.estimated_length||!r.quality_verdict))throw new Error('The photo analysis was incomplete. Please try again.');
     if(kind==='recipes'&&!r.drink_name&&!r.cocktail_name)throw new Error('No pairing recipe returned. Please try again.');
     if(kind==='quiz'){
@@ -82,3 +83,4 @@
   var api={validateCollection:validateCollection,normalizeAI:normalizeAI,parseAI:parseAI,list:list};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.TorcidaData=api;
 })(typeof window!=='undefined'?window:globalThis);
+

@@ -477,7 +477,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
 <div class="app">
   <header class="header">
-    <button class="header-settings" aria-label="Settings and About" aria-pressed="false" onclick="showPage('about',this)"></button>
+    <button class="header-settings" aria-label="Settings and About" onclick="showPage('about',this)"></button>
     <div class="header-top" style="justify-content:center;">
       <span class="brand-title" style="letter-spacing:3px;">Torcida</span>
     </div>
@@ -497,23 +497,23 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   <!-- SCANNER PAGE                                    -->
   <!-- ═══════════════════════════════════════════════ -->
   <div id="page-scanner" class="page active">
-    <div class="scanner-box">
+    <div class="storage-explainer"><strong>Saved on this device.</strong> Back up your collection in Settings.</div><div class="scanner-box">
       <div class="scanner-hero-icon" aria-hidden="true"></div>
       <div class="scanner-line"></div>
-      <div class="scanner-text">Take a photo of a cigar or spirit label to instantly identify it and get pairing suggestions</div>
+      <div class="scanner-text">Identify a label and explore pairings.</div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="document.getElementById('cam-input-camera').click()" style="flex:1;min-width:130px;">📷 Take Photo</button>
         <button class="btn btn-ghost" onclick="document.getElementById('cam-input-gallery').click()" style="flex:1;min-width:130px;">🖼️ From Gallery</button>
       </div>
       <input type="file" id="cam-input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleScan(this)">
-      <input type="file" id="cam-input-gallery" accept="image/*" style="display:none" onchange="handleScan(this)">
+      <input type="file" id="cam-input-gallery" accept="image/*" style="display:none" onchange="handleScan(this)"><p class="privacy-note">AI lookup sends selected photos or text to Anthropic. <button type="button" class="text-link" onclick="showPage('about',this)">Data &amp; privacy</button></p>
     </div>
     <div class="sec-title">Search by Name</div>
     <div class="input-row">
-      <input class="search-input" id="cigar-search" placeholder="e.g. Padron 1964 Anniversary..." onkeydown="if(event.key==='Enter')searchCigar()">
+      <input class="search-input" id="cigar-search" aria-label="Search cigars or spirits by name" placeholder="e.g. Padron 1964 Anniversary..." onkeydown="if(event.key==='Enter')searchCigar()">
       <button class="btn btn-primary" id="search-btn" onclick="searchCigar()">Search</button>
     </div>
-    <div class="cigar-result" id="cigar-result">
+    <div class="cigar-result" id="cigar-result"><p class="privacy-note">AI-generated identification and pairing suggestions. Confirm the exact size, expression, specifications, and rating against the label or maker.</p>
       <div class="cigar-name" id="res-name"></div>
       <div class="cigar-brand" id="res-brand"></div>
       <div class="cigar-grid" id="res-grid"></div>
@@ -582,15 +582,13 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     </div>
 
     <!-- CIGAR SELECTOR -->
-    <div id="cigar-selector-wrap">
-      <div class="sec-title" style="margin-top:24px;">✦ Cigar Selector</div>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Not sure what to smoke? Tell us your preferences and we'll find the perfect cigar for you.</div>
-      <div style="margin-bottom:16px;"><div class="selector-label">Preferred Shape</div><div class="selector-chips" id="chips-shape"><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Robusto</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Toro</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Churchill</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Corona</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Lancero</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Belicoso</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Torpedo</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Figurado</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">No Preference</button></div></div>
-      <div style="margin-bottom:16px;"><div class="selector-label">Preferred Size</div><div class="selector-chips" id="chips-size"><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Short (under 5&quot;)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Medium (5&quot;–6&quot;)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Long (over 6&quot;)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Thin (under 50 RG)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Fat (50+ RG)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">No Preference</button></div></div>
+    <div class="find-choice"><button type="button" class="btn btn-full" id="help-choose-button" aria-expanded="false" aria-controls="cigar-selector-wrap" onclick="toggleSelector()">Help Me Choose</button></div><div id="cigar-selector-wrap" hidden>
+      <div class="sec-title" style="margin-top:24px;">Help Me Choose</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Not sure what to smoke? Tell us your preferences and start with strength. Add other preferences if you like.</div>
       <div style="margin-bottom:16px;"><div class="selector-label">Preferred Strength</div><div class="selector-chips" id="chips-strength"><button type="button" class="sel-chip" onclick="toggleChip(this,'strength')">Mild</button><button type="button" class="sel-chip" onclick="toggleChip(this,'strength')">Mild-Medium</button><button type="button" class="sel-chip" onclick="toggleChip(this,'strength')">Medium</button><button type="button" class="sel-chip" onclick="toggleChip(this,'strength')">Medium-Full</button><button type="button" class="sel-chip" onclick="toggleChip(this,'strength')">Full</button></div></div>
-      <div style="margin-bottom:6px;"><div class="selector-label">Flavor Notes You Enjoy</div><div class="selector-hint">Pick up to 5 notes that appeal to you</div><div class="notes-chips" id="chips-notes"><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Cedar</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Leather</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Coffee</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Dark Chocolate</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Espresso</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Cream</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Vanilla</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Caramel</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Honey</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Earth</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Pepper</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Spice</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Nuts</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Almonds</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Toast</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Bread</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Hay</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Grass</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Floral</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Citrus</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Dried Fruit</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Raisin</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Barnyard</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Mineral</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Sweet</button></div></div>
+      <details class="optional-preferences"><summary>Add flavors, size, or shape (optional)</summary><div style="margin-bottom:6px;"><div class="selector-label">Flavor Notes You Enjoy</div><div class="selector-hint">Optional: pick up to 5 notes. <span id="selector-note-count" role="status" aria-live="polite">0 of 5 selected</span></div><div class="notes-chips" id="chips-notes"><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Cedar</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Leather</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Coffee</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Dark Chocolate</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Espresso</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Cream</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Vanilla</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Caramel</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Honey</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Earth</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Pepper</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Spice</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Nuts</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Almonds</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Toast</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Bread</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Hay</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Grass</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Floral</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Citrus</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Dried Fruit</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Raisin</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Barnyard</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Mineral</button><button type="button" class="note-chip" onclick="toggleNoteChip(this)">Sweet</button></div></div><div style="margin-bottom:16px;"><div class="selector-label">Preferred Size</div><div class="selector-chips" id="chips-size"><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Short (under 5&quot;)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Medium (5&quot;–6&quot;)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Long (over 6&quot;)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Thin (under 50 RG)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">Fat (50+ RG)</button><button type="button" class="sel-chip" onclick="toggleChip(this,'size')">No Preference</button></div></div><div style="margin-bottom:16px;"><div class="selector-label">Preferred Shape</div><div class="selector-chips" id="chips-shape"><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Robusto</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Toro</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Churchill</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Corona</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Lancero</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Belicoso</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Torpedo</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">Figurado</button><button type="button" class="sel-chip" onclick="toggleChip(this,'shape')">No Preference</button></div></div></details>
       <button class="btn btn-primary btn-full" onclick="findCigar()" style="margin-bottom:16px;">✦ Find My Cigar</button>
-      <div class="sel-loading" id="sel-loading"><span class="loader"></span><div style="margin-top:8px;font-size:14px;color:var(--muted);font-style:italic;">Consulting the galera...</div></div>
+      <div class="sel-loading" id="sel-loading"><span class="loader"></span><div style="margin-top:8px;font-size:14px;color:var(--muted);font-style:italic;">Finding a suggestion...</div></div>
       <div class="selector-result" id="selector-result">
         <div class="sel-res-name" id="sel-name"></div>
         <div class="sel-res-brand" id="sel-brand"></div>
@@ -634,7 +632,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="value-summary"><div class="value-num" id="h-value">$0</div><div class="value-lbl">Value</div></div>
       </div>
       <div class="humidor-search-row" style="margin-bottom:14px;">
-        <input class="humidor-search-input" id="h-search" placeholder="Search by name, brand, wrapper..." oninput="renderHumidor()">
+        <input class="humidor-search-input" id="h-search" aria-label="Search your humidor" placeholder="Search by name, brand, wrapper..." oninput="renderHumidor()">
         <select class="sort-select" id="h-sort" onchange="renderHumidor()">
           <option value="added">Recently Added</option>
           <option value="name">Name A–Z</option>
@@ -735,8 +733,8 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     <div id="bar-mybar-mode">
       <!-- Dashboard -->
       <div class="summary-bar" style="margin-bottom:10px;">
-        <div class="summary-item"><div class="summary-num" id="bar-count">0</div><div class="summary-lbl">Bottles</div></div>
-        <div class="summary-item"><div class="summary-num" id="bar-total-bottles">0</div><div class="summary-lbl">Total Stock</div></div>
+        <div class="summary-item"><div class="summary-num" id="bar-count">0</div><div class="summary-lbl">Spirits</div></div>
+        <div class="summary-item"><div class="summary-num" id="bar-total-bottles">0</div><div class="summary-lbl">Total Bottles</div></div>
         <div class="value-summary"><div class="value-num" id="bar-value">$0</div><div class="value-lbl">Bar Value</div></div>
       </div>
       <!-- Type breakdown -->
@@ -753,7 +751,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           <div class="form-group"><label class="form-label">Age / Expression</label><input class="form-input" id="bar-age" placeholder="12 Year, Single Barrel..."></div>
           <div class="form-group"><label class="form-label">Proof / ABV</label><input class="form-input" id="bar-proof" placeholder="90 proof / 45%"></div>
           <div class="form-group"><label class="form-label">Bottle Size</label><select class="form-input" id="bar-size"><option value="">Select...</option><option>50ml (Miniature)</option><option>200ml</option><option>375ml (Half)</option><option>750ml (Standard)</option><option>1L</option><option>1.75L (Handle)</option></select></div>
-          <div class="form-group"><label class="form-label">Number of Bottles</label><input class="form-input" id="bar-bottles" type="number" placeholder="1" min="1" value="1"></div>
+          <div class="form-group"><label class="form-label">Number of Bottles</label><input class="form-input" id="bar-bottles" type="number" placeholder="1" min="0" value="1"></div>
           <div class="form-group"><label class="form-label">Price Per Bottle ($)</label><input class="form-input" id="bar-price" type="number" placeholder="0.00" step="0.01" min="0"></div>
           <div class="form-group full"><label class="form-label">Tasting Notes</label><textarea class="form-input" id="bar-notes" placeholder="Honey, vanilla, oak finish..." rows="2" style="resize:none;"></textarea></div>
           <div class="form-group full"><label class="form-label">Low Stock Alert (bottles)</label><input class="form-input" id="bar-lowstock" type="number" placeholder="1" min="0" value="1"></div>
@@ -799,57 +797,12 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Smoked</div></div>
       <div class="summary-item"><div class="summary-num" id="s-avg">—</div><div class="summary-lbl">Avg Rating</div></div>
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openTasteProfile()">✦ Taste Profile</button>
-      <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openOccasionMatcher()">🎯 Occasion Match</button>
-    </div>
-
-    <!-- SMOKE TIMER (fixed) -->
-    <div class="timer-bar" style="flex-wrap:wrap;gap:10px;">
-      <div style="flex:1;min-width:120px;">
-        <div class="timer-label">Smoke Timer</div>
-        <div class="timer-display" id="timer-display">00:00</div>
-        <div class="timer-cigar" id="timer-cigar-name">No cigar active</div>
-      </div>
-      <div id="timer-input-wrap" style="display:flex;gap:7px;align-items:center;flex:1;min-width:180px;">
-        <div class="autocomplete-wrap" style="flex:1;"><input class="humidor-search-input" id="timer-cigar-input" placeholder="Cigar name..." style="width:100%;" autocomplete="off" oninput="humidorAutocomplete(this.value,'timer-cigar-drop')" onfocus="humidorAutocomplete(this.value,'timer-cigar-drop')" onkeydown="autocompleteKeydown(event,'timer-cigar-drop');if(event.key==='Enter'&&!document.getElementById('timer-cigar-drop').classList.contains('show'))confirmStartTimer()"><div class="autocomplete-drop" id="timer-cigar-drop"></div></div>
-        <button class="timer-btn" id="timer-start-btn" onclick="confirmStartTimer()">▶ Start</button>
-      </div>
-      <div id="timer-running-wrap" style="display:none;align-items:center;gap:7px;">
-        <button class="timer-btn stop" onclick="stopTimer()">■ Stop &amp; Log</button>
-      </div>
-    </div>
-
-    <!-- LONG ASH CHALLENGE -->
-    <div class="ash-challenge-box">
-      <div class="ash-eyebrow">THE ART OF TAKING YOUR TIME</div>
-      <div class="ash-challenge-heading"><div><h3 class="ash-title">Long Ash Challenge</h3><p class="ash-tagline">A little patience. A little bragging rights.</p></div><span class="ash-emblem" aria-hidden="true">✦</span></div>
-      <p class="ash-subtitle">Celebrate the craft behind the cigar and the patience behind the puff. Show us the ash that held on.</p>
-      <div class="ash-craft-note"><span class="ash-craft-label">More than a measurement</span>A lasting ash can hint at cohesive construction and a steady burn. Every cigar is different. Enjoy the smoke, then see how yours stacks up.</div>
-      <button type="button" class="ash-upload-area" onclick="document.getElementById('ash-input').click()" aria-describedby="ash-photo-tip">
-        <span class="ash-upload-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none"><path d="M5 10h6l2-4h6l2 4h6v16H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="16" cy="18" r="5" stroke="currentColor" stroke-width="1.7"/><path d="M24 13h1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span class="ash-upload-text">Show off your long ash</span>
-        <span class="ash-upload-sub">Take a photo or choose from your gallery</span>
-        <span class="ash-upload-cta">Upload your photo <span aria-hidden="true">↑</span></span>
-      </button>
-      <p class="ash-photo-tip" id="ash-photo-tip">Get the full cigar and ash in frame, in good light. Torcida will estimate the length and share observations about the burn.</p>
-      <input type="file" id="ash-input" accept="image/*" style="display:none" onchange="analyzeAsh(this)">
-      <div class="ash-loading" id="ash-loading"><span class="loader"></span><div style="font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;">Taking a closer look at your ash...</div></div>
-      <div class="ash-result" id="ash-result">
-        <div class="ash-photo-wrap"><img id="ash-photo" class="ash-photo" src="" alt="Long ash photo"><div class="ash-badge" id="ash-length-badge">—</div></div>
-        <div class="ash-analysis"><div class="ash-analysis-title">What your ash reveals</div><div class="ash-analysis-text" id="ash-analysis-text"></div></div>
-        <div class="ash-edu-box"><div class="ash-edu-title">The craft behind the challenge</div><div class="ash-edu-text" id="ash-edu-text"></div></div>
-        <div class="ash-personal-best" id="ash-best-wrap"><div><div class="ash-best-label">Your Personal Best</div><div class="ash-best-val" id="ash-best-val">—</div><div class="ash-best-sub" id="ash-best-sub">No entries yet</div></div></div>
-        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%;" onclick="resetAsh()">Upload another photo</button>
-      </div>
-    </div>
-
-    <button class="btn btn-full" onclick="toggleAddForm('smoked-form')">+ Log to Smoked</button>
+<div id="session-draft-banner" class="session-draft" hidden><span>A completed smoke session is ready to log.</span><button type="button" class="btn btn-sm" onclick="resumeSessionDraft()">Resume session draft</button></div>    <button class="btn btn-full" onclick="toggleAddForm('smoked-form')">+ Log a Smoke</button>
     <div class="add-form" id="smoked-form">
-      <div class="sec-title" style="font-size:16px;">Log to Smoked</div>
+      <div class="sec-title" style="font-size:16px;">Log a Smoke</div><div id="journal-stock-choice" class="draft-stock" hidden><label><input type="checkbox" id="s-decrement-stock" checked> Remove one cigar from the source humidor when this entry saves</label></div>
       <div class="form-grid">
         <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="s-brand" placeholder="Rocky Patel"></div>
-        <div class="form-group"><label class="form-label">Name / Vitola</label><div class="autocomplete-wrap"><input class="form-input" id="s-name" placeholder="Type to search your humidor..." autocomplete="off" oninput="humidorAutocomplete(this.value)" onkeydown="autocompleteKeydown(event)" onfocus="humidorAutocomplete(this.value)"><div class="autocomplete-drop" id="s-name-drop"></div></div></div>
+        <div class="form-group"><label class="form-label">Name / Vitola</label><div class="autocomplete-wrap"><input class="form-input" id="s-name" placeholder="Type to search your humidor..." autocomplete="off" oninput="clearJournalSource();humidorAutocomplete(this.value)" onkeydown="autocompleteKeydown(event)" onfocus="humidorAutocomplete(this.value)"><div class="autocomplete-drop" id="s-name-drop"></div></div></div>
         <div class="form-group"><label class="form-label">Date Smoked</label><input class="form-input" id="s-date" type="date"></div>
         <div class="form-group"><label class="form-label">Location / Occasion</label><input class="form-input" id="s-location" placeholder="Backyard, evening"></div>
         <div class="form-group full">
@@ -886,28 +839,75 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       </div>
     </div>
 
-    <div class="sec-title">Your Smokes</div>
+    <div class="sec-title">Recent Smokes</div>
     <div class="smoked-filter-row">
-      <input class="smoked-search-input" id="s-search" placeholder="Search your smokes..." oninput="renderSmoked()">
+      <input class="smoked-search-input" id="s-search" aria-label="Search your journal" placeholder="Search your smokes..." oninput="renderSmoked()">
       <button type="button" class="filter-pill active" onclick="setSmokedFilter('all',this)">All</button>
       <button type="button" class="filter-pill" onclick="setSmokedFilter('5',this)">★★★★★</button>
       <button type="button" class="filter-pill" onclick="setSmokedFilter('4',this)">★★★★+</button>
       <button type="button" class="filter-pill" onclick="setSmokedFilter('3',this)">★★★+</button>
     </div>
     <div id="smoked-list"><div class="empty-state"><span class="empty-icon">💨</span><div class="empty-text">Nothing smoked yet</div><div class="empty-sub">Start logging your smokes, ratings, and tasting notes</div></div></div>
+    <!-- SMOKE TIMER (fixed) -->
+    <div class="timer-bar compact-timer" style="flex-wrap:wrap;gap:10px;">
+      <div style="flex:1;min-width:120px;">
+        <div class="timer-label">Smoke Timer</div>
+        <div class="timer-display" id="timer-display">00:00</div>
+        <div class="timer-cigar" id="timer-cigar-name">No cigar active</div>
+      </div>
+      <div id="timer-input-wrap" style="display:flex;gap:7px;align-items:center;flex:1;min-width:180px;">
+        <div class="autocomplete-wrap" style="flex:1;"><input class="humidor-search-input" id="timer-cigar-input" aria-label="Cigar for this smoke session" placeholder="Cigar name..." style="width:100%;" autocomplete="off" oninput="humidorAutocomplete(this.value,'timer-cigar-drop')" onfocus="humidorAutocomplete(this.value,'timer-cigar-drop')" onkeydown="autocompleteKeydown(event,'timer-cigar-drop');if(event.key==='Enter'&&!document.getElementById('timer-cigar-drop').classList.contains('show'))confirmStartTimer()"><div class="autocomplete-drop" id="timer-cigar-drop"></div></div>
+        <button class="timer-btn" id="timer-start-btn" onclick="confirmStartTimer()">▶ Start</button>
+      </div>
+      <div id="timer-running-wrap" style="display:none;align-items:center;gap:7px;">
+        <button class="timer-btn stop" onclick="stopTimer()">■ Finish Session</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openTasteProfile()">✦ Taste Profile</button>
+      <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openOccasionMatcher()">🎯 Occasion Match</button>
+    </div>
+
+    <!-- LONG ASH CHALLENGE -->
+    <details class="ash-feature"><summary><span>Long Ash Challenge</span><span class="feature-summary-sub">Show off your ash and explore the craft</span></summary><div class="ash-challenge-box">
+      <div class="ash-eyebrow">THE ART OF TAKING YOUR TIME</div>
+      <div class="ash-challenge-heading"><div><h3 class="ash-title">Long Ash Challenge</h3><p class="ash-tagline">A little patience. A little bragging rights.</p></div><span class="ash-emblem" aria-hidden="true">✦</span></div>
+      <p class="ash-subtitle">Celebrate the craft behind the cigar and the patience behind the puff. Show us the ash that held on.</p>
+      <div class="ash-craft-note"><span class="ash-craft-label">More than a measurement</span>A lasting ash can hint at cohesive construction and a steady burn. Every cigar is different. Enjoy the smoke, then see how yours stacks up.</div>
+      <button type="button" class="ash-upload-area" onclick="document.getElementById('ash-input').click()" aria-describedby="ash-photo-tip">
+        <span class="ash-upload-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none"><path d="M5 10h6l2-4h6l2 4h6v16H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="16" cy="18" r="5" stroke="currentColor" stroke-width="1.7"/><path d="M24 13h1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span class="ash-upload-text">Show off your long ash</span>
+        <span class="ash-upload-sub">Take a photo or choose from your gallery</span>
+        <span class="ash-upload-cta">Upload your photo <span aria-hidden="true">↑</span></span>
+      </button>
+      <p class="ash-photo-tip" id="ash-photo-tip">Get the full cigar and ash in frame, in good light. Torcida will estimate the length and share observations about the burn.</p>
+        <div class="ash-personal-best" id="ash-best-wrap"><div><div class="ash-best-label">Your Personal Best</div><div class="ash-best-val" id="ash-best-val">—</div><div class="ash-best-sub" id="ash-best-sub">No entries yet</div></div></div><p class="privacy-note">Challenge photos are analyzed but are not saved in your personal-best record.</p>
+      <label class="form-label" for="ash-reference">Known cigar length in inches (optional, improves the estimate)</label><input class="form-input" id="ash-reference" type="number" min="1" max="12" step="0.1" placeholder="e.g. 6"><p class="privacy-note">Photo estimates are approximate. Without a usable scale, no measured personal best is recorded. Your selected photo is sent to Anthropic for analysis.</p><input type="file" id="ash-input" accept="image/*" style="display:none" onchange="analyzeAsh(this)">
+      <div class="ash-loading" id="ash-loading"><span class="loader"></span><div style="font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;">Taking a closer look at your ash...</div></div>
+      <div class="ash-result" id="ash-result">
+        <div class="ash-photo-wrap"><img id="ash-photo" class="ash-photo" src="" alt="Long ash photo"><div class="ash-badge" id="ash-length-badge">—</div></div>
+        <div class="ash-analysis"><div class="ash-analysis-title">What your ash reveals</div><div class="ash-analysis-text" id="ash-analysis-text"></div></div>
+        <div class="ash-edu-box"><div class="ash-edu-title">The craft behind the challenge</div><div class="ash-edu-text" id="ash-edu-text"></div></div>
+
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%;" onclick="resetAsh()">Upload another photo</button>
+      </div>
+    </div>
+    </details>
+
   </div>
 
   <!-- ═══════════════════════════════════════════════ -->
   <!-- GUIDE PAGE                                      -->
   <!-- ═══════════════════════════════════════════════ -->
   <div id="page-guide" class="page" style="padding:0;">
-    <div class="quote-banner">
+
+    <section id="guide-topic-home" class="guide-topic-home" aria-labelledby="guide-topic-title"><div class="guide-topic-intro"><span class="guide-topic-eyebrow">THE TORCIDA GUIDE</span><h2 id="guide-topic-title">Know your cigar.</h2><p>Explore the craft, from the first cut to the last puff.</p></div><div class="guide-topic-grid"><button type="button" id="guide-card-shapes" class="guide-topic-card" onclick="showInfo('shapes',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="24" height="6" rx="3"/><path d="M11 9v6M4 22h24M8 20v4m6-4v4m6-4v4m6-4v4"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Shapes &amp; Sizes</span><span class="guide-topic-desc">Find your format. Compare lengths and ring gauges.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-strength" class="guide-topic-card" onclick="showInfo('strength',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 25v-5m7 5V15m7 10V10m7 15V5"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Strength Guide</span><span class="guide-topic-desc">Understand body and nicotine strength.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-cuts" class="guide-topic-card" onclick="showInfo('cuts',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="23" r="4"/><circle cx="23" cy="23" r="4"/><path d="M12 20 25 5M20 20 7 5"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Cuts</span><span class="guide-topic-desc">Choose a straight cut, V-cut, or punch.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-lighting" class="guide-topic-card" onclick="showInfo('lighting',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4c2 8 10 10 8 18-2 8-16 8-16-1 0-5 5-8 8-17Z"/><path d="M16 16c-6 7-3 11 1 10s6-5-1-10Z"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">How to Light</span><span class="guide-topic-desc">Toast, light, and settle into an even burn.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-humidorcare" class="guide-topic-card" onclick="showInfo('humidorcare',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="24" height="20" rx="3"/><path d="M4 15h24m-15 5h6M9 8V4h14v4"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Humidor Care</span><span class="guide-topic-desc">Keep your cigars stored in the right conditions.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-origins" class="guide-topic-card" onclick="showInfo('origins',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><ellipse cx="16" cy="16" rx="6" ry="12"/><path d="M4 16h24M7 9h18M7 23h18"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Origins</span><span class="guide-topic-desc">Explore the regions behind your cigar.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-quizpill" class="guide-topic-card guide-topic-featured" onclick="showInfo('quizpill',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 3.5 8 8.5 1-6.5 6 2 9-7.5-4.5L8.5 27l2-9L4 12l8.5-1Z"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Strength Finder</span><span class="guide-topic-desc">Answer a few questions to find your comfort zone.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button></div></section><details class="guide-wisdom"><summary>Daily Cigar Wisdom (optional)</summary>    <div class="quote-banner">
       <div class="quote-label">Daily Cigar Wisdom</div>
       <span class="quote-ornament">"</span>
       <div class="quote-text" id="daily-quote"></div>
       <div class="quote-attr" id="daily-attr"></div>
-    </div>
-    <section id="guide-topic-home" class="guide-topic-home" aria-labelledby="guide-topic-title"><div class="guide-topic-intro"><span class="guide-topic-eyebrow">THE TORCIDA GUIDE</span><h2 id="guide-topic-title">Know your cigar.</h2><p>Explore the craft, from the first cut to the last puff.</p></div><div class="guide-topic-grid"><button type="button" id="guide-card-shapes" class="guide-topic-card" onclick="showInfo('shapes',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="24" height="6" rx="3"/><path d="M11 9v6M4 22h24M8 20v4m6-4v4m6-4v4m6-4v4"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Shapes &amp; Sizes</span><span class="guide-topic-desc">Find your format. Compare lengths and ring gauges.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-strength" class="guide-topic-card" onclick="showInfo('strength',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 25v-5m7 5V15m7 10V10m7 15V5"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Strength Guide</span><span class="guide-topic-desc">Understand body and nicotine strength.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-cuts" class="guide-topic-card" onclick="showInfo('cuts',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="23" r="4"/><circle cx="23" cy="23" r="4"/><path d="M12 20 25 5M20 20 7 5"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Cuts</span><span class="guide-topic-desc">Choose a straight cut, V-cut, or punch.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-lighting" class="guide-topic-card" onclick="showInfo('lighting',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4c2 8 10 10 8 18-2 8-16 8-16-1 0-5 5-8 8-17Z"/><path d="M16 16c-6 7-3 11 1 10s6-5-1-10Z"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">How to Light</span><span class="guide-topic-desc">Toast, light, and settle into an even burn.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-humidorcare" class="guide-topic-card" onclick="showInfo('humidorcare',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="24" height="20" rx="3"/><path d="M4 15h24m-15 5h6M9 8V4h14v4"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Humidor Care</span><span class="guide-topic-desc">Keep your cigars stored in the right conditions.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-origins" class="guide-topic-card" onclick="showInfo('origins',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><ellipse cx="16" cy="16" rx="6" ry="12"/><path d="M4 16h24M7 9h18M7 23h18"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Origins</span><span class="guide-topic-desc">Explore the regions behind your cigar.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button><button type="button" id="guide-card-quizpill" class="guide-topic-card guide-topic-featured" onclick="showInfo('quizpill',this)"><span class="guide-topic-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 3.5 8 8.5 1-6.5 6 2 9-7.5-4.5L8.5 27l2-9L4 12l8.5-1Z"/></svg></span><span class="guide-topic-copy"><span class="guide-topic-name">Strength Finder</span><span class="guide-topic-desc">Answer a few questions to find your comfort zone.</span></span><span class="guide-topic-arrow" aria-hidden="true">↗</span></button></div></section><div id="guide-topic-toolbar" class="guide-topic-toolbar" hidden><button type="button" class="guide-topic-back" onclick="showGuideTopics()">← All Guide Topics</button></div>
+    </div></details><div id="guide-topic-toolbar" class="guide-topic-toolbar" hidden><button type="button" class="guide-topic-back" onclick="showGuideTopics()">← All Guide Topics</button></div>
 
     <div id="info-shapes" class="info-sec">
       <div class="info-title">Shapes &amp; Sizes</div>
@@ -1157,7 +1157,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <span class="about-ornament">— ✦ —</span>
       <div class="about-intro">"Every great cigar begins with hands we never see and names we rarely know. Torcida exists to honor that journey — and to welcome everyone who wants to be part of it."</div>
     </div>
-    <div class="about-section"><div class="about-section-title">What is Torcida</div><div class="about-body"><p>Torcida is your <strong>AI-powered cigar companion</strong> — built for everyone from the first-time smoker to the seasoned collector. Search any cigar for rich tasting notes and pairing recommendations, track your humidor, log every smoke, and explore the craft through a beautifully designed reference guide.</p><p><strong>One app. Every part of the ritual.</strong></p></div></div>
+    <div class="about-section"><h2 class="about-section-title">Data &amp; privacy</h2><p>Your humidors, bar, journal, and journal photos are saved in this browser on this device. There is no automatic account sync. Clearing site data or losing the device can remove the collection. Download backups regularly.</p><p>AI features send your chosen image or entered request through Torcida’s server to Anthropic. Pairing and occasion requests may include relevant cigar names, bottle names, and preference information from your collection. Journal photo attachments stay local unless you explicitly select an image for an AI feature or share it.</p><p>AI answers are suggestions, not verified product records. Avoid including private information in photos or requests. Provider handling is governed by the service configuration and provider policies; Torcida does not promise zero retention.</p></div><div class="about-section"><div class="about-section-title">What is Torcida</div><div class="about-body"><p>Torcida is your <strong>AI-powered cigar companion</strong> — built for everyone from the first-time smoker to the seasoned collector. Search any cigar for rich tasting notes and pairing recommendations, track your humidor, log every smoke, and explore the craft through a beautifully designed reference guide.</p><p><strong>One app. Every part of the ritual.</strong></p></div></div>
     <div class="about-section"><div class="about-section-title">Why We Are Called Torcida</div><div class="about-body"><p><strong>Torcida</strong> is the feminine past participle of "to roll" in Spanish and Portuguese — a deliberate tribute to the women whose skilled hands have built the premium cigar industry for generations. Their names are rarely on the bands, but <strong>without them, there is no cigar.</strong></p></div>
     <div class="roles-grid"><div class="role-card"><span class="role-icon">🌱</span><div class="role-name">Veguero</div><div class="role-desc">The tobacco farmer who tends the fields from seed to harvest</div></div><div class="role-card"><span class="role-icon">🍃</span><div class="role-name">Escogedora</div><div class="role-desc">Selects and grades leaves by color, texture, and quality</div></div><div class="role-card"><span class="role-icon">✋</span><div class="role-name">Rezagadora</div><div class="role-desc">Sorts wrapper leaves by shade for visual consistency</div></div><div class="role-card"><span class="role-icon">🎋</span><div class="role-name">Torcedor/a</div><div class="role-desc">The master roller who hand-rolls each cigar to perfection</div></div><div class="role-card"><span class="role-icon">📖</span><div class="role-name">Lectora</div><div class="role-desc">Reads aloud to the rolling room — a 150-year-old Cuban tradition</div></div><div class="role-card"><span class="role-icon">🎯</span><div class="role-name">Ligador</div><div class="role-desc">Creates the blend — the recipe of leaves that defines the cigar's character</div></div></div></div>
     <div class="about-section"><div class="about-section-title">Our Values</div><div class="about-values"><div class="value-item"><div class="value-title">Inclusivity</div><div class="value-text">The cigar is for everyone. Novice and aficionado sit at the same table here.</div></div><div class="value-item"><div class="value-title">Craft First</div><div class="value-text">We honor the hands, the fields, and the generations of skill behind every cigar.</div></div><div class="value-item"><div class="value-title">Patience</div><div class="value-text">Great cigars cannot be rushed. Neither can great experiences.</div></div><div class="value-item"><div class="value-title">Memory</div><div class="value-text">Every smoke is a moment worth keeping. Torcida is your record of those moments.</div></div></div></div>
@@ -1386,14 +1386,17 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
  <button class="btn" onclick="confirmCollectionRestore()">Download current backup and restore</button>
  <button class="btn btn-ghost" onclick="restoreCandidate=null;closeModal('modal-restore')">Cancel</button></div>
 </div>
+<div id="removal-undo" class="removal-undo" hidden role="status"><span id="removal-undo-text"></span><button type="button" class="btn btn-sm" onclick="undoLastRemoval()">Undo removal</button></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="/assets/reliability.js"></script>
 <script src="/assets/mobile.js"></script>
 <script src="/assets/guide.js"></script>
 <script src="/assets/data.js"></script>
 <script src="/assets/storage.js"></script>
 <script src="/assets/collection.js"></script>
 <script src="/assets/ai-client.js"></script>
+<script src="/assets/workflows.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════
 // STATE
@@ -1494,17 +1497,17 @@ function pickHumidor(action,data){
 }
 async function executeHumidorAction(action,data,humidorId){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var h=humidors.find(function(x){return x.id===humidorId;});if(!h)return;
-  if(action==='fromResult'){if(!currentResult)return;h.cigars.push({id:Date.now(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1,price:0});await save();renderHumidor();showToast('Added to '+h.name+' ✓');}
-  else if(action==='fromWishlist'){var wid=data.wid;var c=wishlist.find(function(w){return w.id===wid;});if(!c)return;h.cigars.push({id:Date.now(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(function(w){return w.id!==wid;});await save();renderWishlist();renderHumidor();showToast('Moved to '+h.name+' ✓');}
-  else if(action==='fromSelector'){var rec=data;h.cigars.push({id:Date.now(),brand:rec.brand||'',name:rec.name||'',size:rec.vitola||'',wrapper:'',strength:rec.strength||'',notes:'Recommended by Cigar Selector',qty:1});await save();renderHumidor();showToast(rec.name+' added to '+h.name+' ✓');}
+  if(action==='fromResult'){if(!currentResult)return;h.cigars.push({id:TorcidaReliability.nextId(),brand:currentResult.brand,name:currentResult.name,size:currentResult.size||'',wrapper:currentResult.wrapper||'',strength:currentResult.strength||'',notes:'',qty:1,price:0});await save();renderHumidor();showToast('Added to '+h.name+' ✓');}
+  else if(action==='fromWishlist'){var wid=data.wid;var c=wishlist.find(function(w){return w.id===wid;});if(!c)return;h.cigars.push({id:TorcidaReliability.nextId(),brand:c.brand,name:c.name,size:c.size||'',wrapper:'',strength:'',notes:'',qty:1});wishlist=wishlist.filter(function(w){return w.id!==wid;});await save();renderWishlist();renderHumidor();showToast('Moved to '+h.name+' ✓');}
+  else if(action==='fromSelector'){var rec=data;h.cigars.push({id:TorcidaReliability.nextId(),brand:rec.brand||'',name:rec.name||'',size:rec.vitola||'',wrapper:'',strength:rec.strength||'',notes:'Recommended by Cigar Selector',qty:1});await save();renderHumidor();showToast(rec.name+' added to '+h.name+' ✓');}
 }
 
 // ── MY BAR ────────────────────────────────────────────────────
 function saveBar(){return persistCollection();}
 
 function renderBar(){
-  var totalBottles=myBar.reduce(function(a,s){return a+(parseInt(s.bottles)||1);},0);
-  var value=myBar.reduce(function(a,s){return a+((parseFloat(s.price)||0)*(parseInt(s.bottles)||1));},0);
+  var totalBottles=myBar.reduce(function(a,s){return a+TorcidaReliability.stock(s.bottles);},0);
+  var value=myBar.reduce(function(a,s){return a+((parseFloat(s.price)||0)*TorcidaReliability.stock(s.bottles));},0);
   document.getElementById('bar-count').textContent=myBar.length;
   document.getElementById('bar-total-bottles').textContent=totalBottles;
   document.getElementById('bar-value').textContent='$'+value.toFixed(0);
@@ -1525,8 +1528,8 @@ function renderBar(){
   list.innerHTML='';
   myBar.forEach(function(s){
     var icon=icons[s.type]||'🍶';
-    var bottles=parseInt(s.bottles)||1;
-    var lowstock=parseInt(s.lowstock)||1;
+    var bottles=TorcidaReliability.stock(s.bottles);
+    var lowstock=TorcidaReliability.stock(s.lowstock);
     var isLow=bottles<=lowstock;
     var card=document.createElement('div');
     card.className='cigar-card';
@@ -1534,7 +1537,7 @@ function renderBar(){
 
     // Top row: icon + body
     var topRow=document.createElement('div');topRow.style.cssText='display:flex;gap:12px;align-items:flex-start;';
-    var iconEl=document.createElement('div');iconEl.className='spirit-icon';iconEl.innerHTML=TorcidaGuide.spiritSVG(s.type);
+    var iconEl=document.createElement('div');iconEl.className='spirit-icon';iconEl.innerHTML=spiritThumbnail(s.type);
     var body=document.createElement('div');body.className='spirit-body';body.style.flex='1';
 
     var nameEl=document.createElement('div');nameEl.className='spirit-name';nameEl.textContent=s.name||'';
@@ -1574,7 +1577,7 @@ function renderBar(){
     if(isLow){
       var lowBadge=document.createElement('span');
       lowBadge.style.cssText='font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(196,80,58,0.12);border:0.5px solid #C4503A;color:#C4503A;font-weight:600;';
-      lowBadge.textContent='Low Stock';
+      lowBadge.textContent=bottles===0?'Out of stock':'Low Stock';
       bottleCtrl.appendChild(lowBadge);
     }
     bottleRow.appendChild(bottleCtrl);
@@ -1617,24 +1620,24 @@ function renderBar(){
 
 async function changeBarBottles(id,delta){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var s=myBar.find(function(x){return x.id===id;});if(!s)return;
-  s.bottles=Math.max(0,(parseInt(s.bottles)||1)+delta);
+  s.bottles=Math.max(0,TorcidaReliability.stock(s.bottles)+delta);
   await saveBar();renderBar();
 }
 
 async function addToBarManually(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('bar-name').value.trim();if(!name){showToast('Please enter a spirit name');return;}
   myBar.push({
-    id:'bar_'+Date.now(),
+    id:'bar_'+TorcidaReliability.nextId(),
     name:name,
     brand:document.getElementById('bar-brand').value,
     type:document.getElementById('bar-type').value,
     age:document.getElementById('bar-age').value,
     proof:document.getElementById('bar-proof').value,
     size:document.getElementById('bar-size').value,
-    bottles:parseInt(document.getElementById('bar-bottles').value)||1,
+    bottles:TorcidaReliability.stock(document.getElementById('bar-bottles').value),
     price:parseFloat(document.getElementById('bar-price').value)||0,
     notes:document.getElementById('bar-notes').value,
-    lowstock:parseInt(document.getElementById('bar-lowstock').value)||1
+    lowstock:TorcidaReliability.stock(document.getElementById('bar-lowstock').value)
   });
   await saveBar();
   ['bar-name','bar-brand','bar-age','bar-proof','bar-notes'].forEach(function(id){document.getElementById(id).value='';});
@@ -1651,10 +1654,10 @@ function openEditBar(id){
   document.getElementById('edit-bar-age').value=s.age||'';
   document.getElementById('edit-bar-proof').value=s.proof||'';
   document.getElementById('edit-bar-size').value=s.size||'';
-  document.getElementById('edit-bar-bottles').value=s.bottles||1;
+  document.getElementById('edit-bar-bottles').value=TorcidaReliability.stock(s.bottles);
   document.getElementById('edit-bar-price').value=s.price||'';
   document.getElementById('edit-bar-notes').value=s.notes||'';
-  document.getElementById('edit-bar-lowstock').value=s.lowstock||1;
+  document.getElementById('edit-bar-lowstock').value=TorcidaReliability.stock(s.lowstock);
   openModal('modal-edit-bar');
 }
 
@@ -1667,22 +1670,22 @@ async function saveEditBar(){if(!collectionLoaded){showToast('Your collection is
   s.age=document.getElementById('edit-bar-age').value;
   s.proof=document.getElementById('edit-bar-proof').value;
   s.size=document.getElementById('edit-bar-size').value;
-  s.bottles=parseInt(document.getElementById('edit-bar-bottles').value)||1;
+  s.bottles=TorcidaReliability.stock(document.getElementById('edit-bar-bottles').value);
   s.price=parseFloat(document.getElementById('edit-bar-price').value)||0;
   s.notes=document.getElementById('edit-bar-notes').value;
-  s.lowstock=parseInt(document.getElementById('edit-bar-lowstock').value)||1;
+  s.lowstock=TorcidaReliability.stock(document.getElementById('edit-bar-lowstock').value);
   await saveBar();renderBar();closeModal('modal-edit-bar');showToast('Bar updated ✓');
 }
 
 async function restockToWishlist(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var s=myBar.find(function(x){return x.id===id;});if(!s)return;
-  wishlist.push({id:Date.now(),itemType:'spirit',brand:s.brand||'',name:s.name||'',spiritType:s.type||'',price:'',reason:'Restock — running low'});
+  wishlist.push({id:TorcidaReliability.nextId(),itemType:'spirit',brand:s.brand||'',name:s.name||'',spiritType:s.type||'',price:'',reason:'Restock — running low'});
   await save();renderBarWishList();showToast((s.name||'Spirit')+' added to Bar Wish List ✓');
 }
 async function removeFromBar(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}myBar=myBar.filter(function(s){return s.id!==id;});await saveBar();renderBar();}
 async function addToBarFromResult(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(!currentResult)return;
-  myBar.push({id:'bar_'+Date.now(),name:currentResult.name||'',brand:currentResult.brand||'',type:currentResult.spirit_type||'Other',age:currentResult.age||'',proof:currentResult.proof||'',price:0,notes:currentResult.tasting_notes||''});
+  myBar.push({id:'bar_'+TorcidaReliability.nextId(),name:currentResult.name||'',brand:currentResult.brand||'',type:currentResult.spirit_type||'Other',age:currentResult.age||'',proof:currentResult.proof||'',price:0,notes:currentResult.tasting_notes||''});
   await saveBar();renderBar();showToast((currentResult.name||'Spirit')+' added to My Bar ✓');
 }
 // ── FETCH WITH TIMEOUT ────────────────────────────────────────
@@ -1713,7 +1716,7 @@ function openBarWishForm(){
 }
 async function addToBarWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('bw-name').value.trim();if(!name){showToast('Please enter a spirit name');return;}
-  wishlist.push({id:Date.now(),itemType:'spirit',brand:document.getElementById('bw-brand').value,name:name,spiritType:document.getElementById('bw-spirit-type').value||'',price:document.getElementById('bw-price').value,reason:document.getElementById('bw-reason').value});
+  wishlist.push({id:TorcidaReliability.nextId(),itemType:'spirit',brand:document.getElementById('bw-brand').value,name:name,spiritType:document.getElementById('bw-spirit-type').value||'',price:document.getElementById('bw-price').value,reason:document.getElementById('bw-reason').value});
   await save();
   ['bw-brand','bw-name','bw-price','bw-reason'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('bw-spirit-type').value='';
   renderBarWishList();toggleAddForm('bar-wish-form');showToast(name+' added to Bar Wish List ✓');
@@ -1753,7 +1756,7 @@ function renderBarWishList(){
 }
 async function moveWishSpiritToBar(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var c=wishlist.find(function(w){return w.id===id;});if(!c)return;
-  myBar.push({id:'bar_'+Date.now(),name:c.name,brand:c.brand||'',type:c.spiritType||'Other',age:'',proof:'',price:0,notes:''});
+  myBar.push({id:'bar_'+TorcidaReliability.nextId(),name:c.name,brand:c.brand||'',type:c.spiritType||'Other',age:'',proof:'',price:0,notes:''});
   wishlist=wishlist.filter(function(w){return w.id!==id;});
   await save();renderBar();renderBarWishList();showToast(c.name+' moved to My Bar ✓');
 }
@@ -1765,7 +1768,7 @@ function openWishForm(type){
 async function addToWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('w-name').value.trim();if(!name){showToast('Please enter a name');return;}
   var brand=document.getElementById('w-brand').value;var size=document.getElementById('w-size').value;var price=document.getElementById('w-price').value;var reason=document.getElementById('w-reason').value;
-  wishlist.push({id:Date.now(),itemType:'cigar',brand:brand,name:name,size:size,price:price,reason:reason});
+  wishlist.push({id:TorcidaReliability.nextId(),itemType:'cigar',brand:brand,name:name,size:size,price:price,reason:reason});
   await save();
   ['w-brand','w-name','w-size','w-price','w-reason'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   renderWishlist();toggleAddForm('wish-form');showToast(name+' added to Cigar Wish List ✓');
@@ -1773,8 +1776,8 @@ async function addToWishlist(){if(!collectionLoaded){showToast('Your collection 
 async function addToWishlistFromResult(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(!currentResult)return;
   var isSpirit=currentResult.type==='spirit';
-  if(isSpirit){wishlist.push({id:Date.now(),itemType:'spirit',brand:currentResult.brand||'',name:currentResult.name||'',spiritType:currentResult.spirit_type||'',price:'',reason:''});}
-  else{wishlist.push({id:Date.now(),itemType:'cigar',brand:currentResult.brand||'',name:currentResult.name||'',size:currentResult.size||'',price:'',reason:''});}
+  if(isSpirit){wishlist.push({id:TorcidaReliability.nextId(),itemType:'spirit',brand:currentResult.brand||'',name:currentResult.name||'',spiritType:currentResult.spirit_type||'',price:'',reason:''});}
+  else{wishlist.push({id:TorcidaReliability.nextId(),itemType:'cigar',brand:currentResult.brand||'',name:currentResult.name||'',size:currentResult.size||'',price:'',reason:''});}
   await save();renderWishlist();renderBarWishList();showToast((currentResult.name||'Item')+' added to wish list ✓');
 }
 function renderWishlist(){
@@ -1834,19 +1837,21 @@ function showPage(id,tab,fromHistory){
   var page=document.getElementById('page-'+id);if(!page)return;
   page.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(function(button){if(button.dataset.page===id){button.classList.add('active');button.setAttribute('aria-current','page');}else button.removeAttribute('aria-current');});
-  document.querySelector('.header-settings').setAttribute('aria-pressed',String(id==='about'));
+  document.querySelector('.header-settings').toggleAttribute('data-current',id==='about');
   if(!fromHistory&&window.location.hash!=='#'+id)history.pushState({page:id},'', '#'+id);
   window.scrollTo({top:0,behavior:'instant'});
-  var sel=document.getElementById('cigar-selector-wrap');if(sel)sel.style.display=(id==='scanner')?'block':'none';
+  var sel=document.getElementById('cigar-selector-wrap');if(sel&&id!=='scanner')sel.hidden=true;
   // Refresh sub-page content when navigating to Cigar or Bar
   if(id==='cigar'){renderHumidorTabs();renderHumidorInfoBar();renderHumidor();}
   if(id==='bar'){renderBar();}
-  if(id==='smoked'){refreshTimerUI();}
+  if(id==='smoked'){refreshTimerUI();renderSessionDraft();}
+  if(id==='guide'&&!fromHistory)showGuideTopics(true);
 }
 var lastGuideTopic='shapes';
-function showInfo(id,pill){
+function showInfo(id,pill,fromHistory){
   var panel=document.getElementById('info-'+id);if(!panel)return;
   lastGuideTopic=id;
+  if(!fromHistory&&location.hash!=='#guide/'+id)history.pushState({page:'guide',topic:id},'', '#guide/'+id);
   document.querySelectorAll('.info-sec').forEach(function(s){s.classList.remove('active');});
   document.getElementById('guide-topic-home').hidden=true;
   document.getElementById('guide-topic-toolbar').hidden=false;
@@ -1856,7 +1861,8 @@ function showInfo(id,pill){
   if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
   document.getElementById('guide-topic-toolbar').scrollIntoView({block:'start'});
 }
-function showGuideTopics(){
+function showGuideTopics(fromHistory){
+  if(!fromHistory&&location.hash!=='#guide')history.pushState({page:'guide'},'', '#guide');
   document.querySelectorAll('.info-sec').forEach(function(s){s.classList.remove('active');});
   document.getElementById('guide-topic-toolbar').hidden=true;
   document.getElementById('guide-topic-home').hidden=false;
@@ -1880,7 +1886,7 @@ function closeModal(id){
   document.documentElement.style.overflow='';
   TorcidaMobile.modalClose(id);
 }
-function renderAll(){renderHumidorTabs();renderHumidorInfoBar();renderHumidor();renderBar();renderWishlist();renderBarWishList();renderSmoked();}
+function renderAll(){loadAshBest();renderHumidorTabs();renderHumidorInfoBar();renderHumidor();renderBar();renderWishlist();renderBarWishList();renderSmoked();}
 
 // ── SCANNER ───────────────────────────────────────────────────
 async function handleScan(input){
@@ -2038,6 +2044,7 @@ function toggleSpiritRecipe(type){
 function searchSpiritPairing(){if(!currentResult||currentResult.type!=='spirit')return;var q=(currentResult.cigar_pairing_brand||'')+' '+(currentResult.cigar_pairing_name||'');document.getElementById('cigar-search').value=q.trim();var tab=document.querySelectorAll('.nav-tab')[0];if(tab)showPage('scanner',tab);searchCigar();}
 function addToHumidorFromResult(){if(!currentResult)return;pickHumidor('fromResult',{});}
 function addToSmokedFromResult(){
+  if(!confirmReplaceJournalDraft())return;clearJournalSource();
   if(!currentResult)return;document.getElementById('s-name').value=currentResult.name||'';document.getElementById('s-brand').value=currentResult.brand||'';document.getElementById('s-date').value=TorcidaMobile.localDate();
   var tab=document.querySelectorAll('.nav-tab')[3];if(tab)showPage('smoked',tab);var f=document.getElementById('smoked-form');if(f){if(!f.classList.contains('show'))f.classList.add('show');setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'start'});},200);}
   showToast('Pre-filled in Smoked — add your notes!');
@@ -2047,7 +2054,7 @@ function addToSmokedFromResult(){
 async function addToHumidor(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   var name=document.getElementById('h-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}
   var ah=getActiveHumidor();if(!ah)return;
-  ah.cigars.push({id:Date.now(),brand:document.getElementById('h-brand').value,name:name,size:document.getElementById('h-size').value,wrapper:document.getElementById('h-wrapper').value,strength:document.getElementById('h-strength').value,qty:parseInt(document.getElementById('h-qty').value)||1,purchaseDate:document.getElementById('h-date').value||null,price:parseFloat(document.getElementById('h-price').value)||0,notes:document.getElementById('h-notes').value});
+  ah.cigars.push({id:TorcidaReliability.nextId(),brand:document.getElementById('h-brand').value,name:name,size:document.getElementById('h-size').value,wrapper:document.getElementById('h-wrapper').value,strength:document.getElementById('h-strength').value,qty:parseInt(document.getElementById('h-qty').value)||1,purchaseDate:document.getElementById('h-date').value||null,price:parseFloat(document.getElementById('h-price').value)||0,notes:document.getElementById('h-notes').value});
   await saveHumidors();
   ['h-brand','h-name','h-size','h-wrapper','h-notes'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('h-qty').value='1';document.getElementById('h-date').value='';document.getElementById('h-price').value='';
   renderHumidor();toggleAddForm('humidor-form');showToast('Added to '+ah.name+' ✓');
@@ -2073,7 +2080,7 @@ function renderHumidor(){
   else if(sort==='strength'){var o=['Mild','Mild-Medium','Medium','Medium-Full','Full'];hList.sort(function(a,b){return o.indexOf(a.strength)-o.indexOf(b.strength);});}
   else if(sort==='aging')hList.sort(function(a,b){return (a.purchaseDate||'9999')>(b.purchaseDate||'9999')?1:-1;});
   var el=document.getElementById('humidor-list');
-  if(!hList.length){el.innerHTML=q?'<div class="empty-state"><div class="empty-text">No cigars match your search</div></div>':'<div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or from the Scanner</div></div>';return;}
+  if(!hList.length){el.innerHTML=q?'<div class="empty-state"><div class="empty-text">No cigars match your search</div></div>':'<div class="empty-state"><span class="empty-icon">📦</span><div class="empty-text">Your humidor is empty</div><div class="empty-sub">Add cigars above or use Find to identify a label.</div></div>';return;}
   var today=new Date();
   el.innerHTML=hList.map(function(c){
     var agingHtml='';
@@ -2084,29 +2091,15 @@ function renderHumidor(){
 }
 
 // ── JOURNAL / SMOKED ─────────────────────────────────────────
-async function logSmokeFromHumidor(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
-  // Find cigar across all humidors
-  var found=null,foundH=null;
-  humidors.forEach(function(h){var c=h.cigars.find(function(x){return x.id===id;});if(c){found=c;foundH=h;}});
-  if(!found)return;
-  // Pre-fill the smoked form
-  document.getElementById('s-name').value=found.name;
-  document.getElementById('s-brand').value=found.brand||'';
-  document.getElementById('s-date').value=TorcidaMobile.localDate();
-  // Navigate to Smoked tab
-  var smokedNav=document.querySelector('.nav-tab[onclick*="smoked"]');
-  if(smokedNav)showPage('smoked',smokedNav);
-  var f=document.getElementById('smoked-form');
-  if(f&&!f.classList.contains('show')){f.classList.add('show');setTimeout(async function(){f.scrollIntoView({behavior:'smooth',block:'nearest'});},250);}
-  // Ask to decrement humidor count
-  setTimeout(async function(){
-    if(confirm('Remove one '+found.name+' from '+foundH.name+'?')){
-      found.qty=Math.max(0,(found.qty||1)-1);
-      if(found.qty===0)foundH.cigars=foundH.cigars.filter(function(x){return x.id!==id;});
-      await saveHumidors();renderHumidor();
-    }
-  },400);
-  showToast('Pre-filled from '+foundH.name+' — add your notes!');
+async function logSmokeFromHumidor(id){
+  if(!collectionLoaded)return;
+  var found=null,foundH=null;humidors.forEach(function(h){var c=h.cigars.find(function(x){return x.id===id;});if(c){found=c;foundH=h;}});if(!found)return;
+  if(!confirmReplaceJournalDraft())return;
+  journalSource={id:id,humidorId:foundH.id};
+  document.getElementById('s-name').value=found.name;document.getElementById('s-brand').value=found.brand||'';document.getElementById('s-date').value=TorcidaMobile.localDate();
+  document.getElementById('journal-stock-choice').hidden=false;document.getElementById('s-decrement-stock').checked=true;
+  showPage('smoked',document.querySelector('.nav-tab[data-page="smoked"]'));document.getElementById('smoked-form').classList.add('show');document.getElementById('smoked-form').scrollIntoView({block:'start'});
+  showToast('Ready to log. Stock changes only when you save.');
 }
 function setRating(n){newRatingVal=n;document.querySelectorAll('#new-stars .star').forEach(function(s,i){s.classList.toggle('lit',i<n);});}
 function setAttrRating(attr,n){attrRatings[attr]=n;document.querySelectorAll('#stars-'+attr+' .star').forEach(function(s,i){s.classList.toggle('lit',i<n);});}
@@ -2125,11 +2118,18 @@ async function handlePhotoUpload(input){
 async function logSmoke(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(TorcidaMobile.photoBusy()){showToast('Please wait for your photos to finish preparing.');return;}
   var name=document.getElementById('s-name').value.trim();if(!name){showToast('Please enter a cigar name');return;}
-  smoked.push({id:Date.now(),brand:document.getElementById('s-brand').value,name:name,date:document.getElementById('s-date').value,location:document.getElementById('s-location').value,rating:newRatingVal,ratings:{draw:attrRatings.draw,burn:attrRatings.burn,flavor:attrRatings.flavor,construction:attrRatings.construction},notes:document.getElementById('s-notes').value,drink:{type:document.getElementById('s-drink-type').value,name:document.getElementById('s-drink-name').value,rating:pairingRatingVal},photos:[...pendingPhotos]});
+  var source=typeof journalSource!=='undefined'&&journalSource?humidors.find(function(h){return h.id===journalSource.humidorId;}):null;
+  var sourceCigar=source?source.cigars.find(function(c){return c.id===journalSource.id;}):null;
+  var decrement=sourceCigar&&document.getElementById('s-decrement-stock').checked;
+  if(decrement&&TorcidaReliability.stock(sourceCigar.qty)<1){showToast('This cigar is out of stock. Uncheck stock removal to save a journal-only entry.');return;}
+  var recordId=typeof TorcidaReliability!=='undefined'?TorcidaReliability.nextId():Date.now();
+  smoked.push({id:recordId,brand:document.getElementById('s-brand').value,name:name,date:document.getElementById('s-date').value,location:document.getElementById('s-location').value,rating:newRatingVal,ratings:{draw:attrRatings.draw,burn:attrRatings.burn,flavor:attrRatings.flavor,construction:attrRatings.construction},notes:document.getElementById('s-notes').value,drink:{type:document.getElementById('s-drink-type').value,name:document.getElementById('s-drink-name').value,rating:pairingRatingVal},photos:[...pendingPhotos],strength:sourceCigar?sourceCigar.strength||'':'',size:sourceCigar?sourceCigar.size||'':'',wrapper:sourceCigar?sourceCigar.wrapper||'':''});
+  if(decrement){sourceCigar.qty=TorcidaReliability.stock(sourceCigar.qty)-1;if(sourceCigar.qty===0)source.cigars=source.cigars.filter(function(c){return c.id!==sourceCigar.id;});}
   await save();
   ['s-brand','s-name','s-location','s-notes','s-drink-name'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('s-drink-type').value='';document.getElementById('s-date').value='';document.getElementById('s-photo-preview').innerHTML='';document.getElementById('s-photo-input').value='';
   pendingPhotos=[];newRatingVal=0;pairingRatingVal=0;attrRatings={draw:0,burn:0,flavor:0,construction:0};
   document.querySelectorAll('#new-stars .star, .mini-stars .star').forEach(function(s){s.classList.remove('lit');});
+  if(typeof journalSource!=='undefined'){journalSource=null;document.getElementById('journal-stock-choice').hidden=true;renderHumidor();completeSessionDraft();}
   renderSmoked();toggleAddForm('smoked-form');showToast('Smoke logged ✓');
 }
 async function removeSmoked(id){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}smoked=smoked.filter(function(s){return s.id!==id;});await save();renderSmoked();}
@@ -2179,6 +2179,7 @@ function timerIsRunning(){
 }
 
 function confirmStartTimer(){
+  if(readSessionDraft()){showToast('Log the saved session draft before starting a new timer.');return;}
   var cigarName=document.getElementById('timer-cigar-input').value.trim();
   if(!cigarName){showToast('Enter a cigar name first');return;}
   if(timerIsRunning()){showToast('Timer already running');return;}
@@ -2249,7 +2250,7 @@ function updateCheckinCountdown(secs){
 
 function closeCheckinPopup(){
   var overlay=document.getElementById('modal-checkin');
-  if(overlay)overlay.style.display='none';
+  if(overlay){overlay.style.display='';closeModal(overlay.id);}
   if(checkinCountdownInterval){clearInterval(checkinCountdownInterval);checkinCountdownInterval=null;}
 }
 
@@ -2271,7 +2272,6 @@ function checkinNo(){
 function autoLogTimer(){
   if(!timerIsRunning())return;
   stopTimer();
-  showToast('Auto-logged after 2+ hours — check your entry below.');
 }
 
 function stopTimer(){
@@ -2280,6 +2280,8 @@ function stopTimer(){
   var cigar=timerCigarName();
   var m=Math.floor(sec/60);var s=sec%60;
   var duration=m+'m '+s+'s';
+  var draft={name:cigar,date:TorcidaMobile.localDate(),duration:duration};
+  try{localStorage.setItem('tc_session_draft_v1',JSON.stringify(draft));}catch(e){showToast('Session could not be saved as a draft. Timer remains running. Download a collection backup and free device space.');return;}
   // Clear persisted state
   localStorage.removeItem('tc_timer_start');
   localStorage.removeItem('tc_timer_cigar');
@@ -2288,16 +2290,8 @@ function stopTimer(){
   if(checkinTimeout){clearTimeout(checkinTimeout);checkinTimeout=null;}
   closeCheckinPopup();
   refreshTimerUI();
-  // Pre-fill the smoked form
-  document.getElementById('s-name').value=cigar;
-  document.getElementById('s-date').value=TorcidaMobile.localDate();
-  document.getElementById('s-notes').value='Smoke duration: '+duration;
-  // Navigate to Smoked tab and open form
-  var smokedNav=document.querySelector('.nav-tab[onclick*="smoked"]');
-  if(smokedNav&&!smokedNav.classList.contains('active'))showPage('smoked',smokedNav);
-  var f=document.getElementById('smoked-form');
-  if(f&&!f.classList.contains('show')){f.classList.add('show');setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
-  showToast('Smoke time: '+duration+' — add your notes below!');
+  renderSessionDraft();
+  showToast('Session saved as a draft. Open Resume session draft to log it.');
 }
 
 function refreshTimerUI(){
@@ -2359,7 +2353,7 @@ async function selectHumidorCigar(id,hid,dropId){if(!collectionLoaded){showToast
     document.getElementById('s-name').value=c.name;document.getElementById('s-brand').value=c.brand||'';
   }
   document.getElementById(dropId).classList.remove('show');
-  if(!isTimer&&(c.qty||1)>0&&confirm('Remove one '+c.name+' from '+targetH.name+'?')){c.qty=Math.max(0,(c.qty||1)-1);if(c.qty===0)targetH.cigars=targetH.cigars.filter(function(h){return h.id!==id;});await saveHumidors();renderHumidor();showToast('Removed from '+targetH.name+' ✓');}
+  if(!isTimer){journalSource={id:c.id,humidorId:targetH.id};document.getElementById('journal-stock-choice').hidden=false;document.getElementById('s-decrement-stock').checked=true;showToast('Stock changes only when you save this entry.');}
 }
 function autocompleteKeydown(e,dropId){
   dropId=dropId||'s-name-drop';
@@ -2391,7 +2385,7 @@ async function findCigar(){
   document.getElementById('sel-loading').classList.remove('show');
 }
 function searchSelectorCigar(){var rec=document.getElementById('selector-result')._rec;if(!rec)return;var q=(rec.brand?rec.brand+' ':'')+rec.name;document.getElementById('cigar-search').value=q.trim();var tab=document.querySelectorAll('.nav-tab')[0];if(tab)showPage('scanner',tab);searchCigar();}
-async function addSelectorToWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}var rec=document.getElementById('selector-result')._rec;if(!rec)return;wishlist.push({id:Date.now(),itemType:'cigar',name:rec.name,brand:rec.brand||'',size:rec.vitola||'',reason:'Recommended by Cigar Selector'});await save();renderWishlist();showToast(rec.name+' added to Wish List ✓');}
+async function addSelectorToWishlist(){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}var rec=document.getElementById('selector-result')._rec;if(!rec)return;wishlist.push({id:TorcidaReliability.nextId(),itemType:'cigar',name:rec.name,brand:rec.brand||'',size:rec.vitola||'',reason:'Recommended by Cigar Selector'});await save();renderWishlist();showToast(rec.name+' added to Wish List ✓');}
 function addSelectorToHumidor(){var rec=document.getElementById('selector-result')._rec;if(!rec)return;pickHumidor('fromSelector',rec);}
 
 // ── STRENGTH FINDER QUIZ ───────────────────────────────────────
@@ -2416,25 +2410,31 @@ function searchFromQuizIdx(idx){var cigars=window._quizCigars||[];var c=cigars[i
 
 // ── LONG ASH CHALLENGE ─────────────────────────────────────────
 var ashPersonalBest=null;
-function loadAshBest(){}
+function loadAshBest(){
+  var best=ashPersonalBest,el=document.getElementById('ash-best-val');if(!el)return;el.textContent=best?(best.length||'Unmeasured'):'No record yet';document.getElementById('ash-best-sub').textContent=best?(best.verdict||'')+' · '+(best.date||''):'Upload a photo with a usable scale to set an estimated personal best.';
+}
 function saveAshBest(){return persistCollection();}
+var ashRequestSequence=0;
 async function analyzeAsh(input){if(!collectionLoaded){showToast('Your collection is still opening. Please try again in a moment.');return;}
   if(!input.files[0])return;
-  var file=input.files[0];input.value='';
+  var file=input.files[0];input.value='';var ashRequest=++ashRequestSequence;
   try{
-    var photo=await TorcidaMobile.preparePhoto(file);var b64=photo.base64;
+    var photo=await TorcidaMobile.preparePhoto(file);if(ashRequest!==ashRequestSequence)return;var b64=photo.base64;
     document.getElementById('ash-photo').src=photo.dataURL;document.getElementById('ash-result').classList.remove('show');document.getElementById('ash-loading').classList.add('show');
     try{
-      var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'ash',system:'You are an expert cigar sommelier and judge. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Analyze this cigar ash photo. Return ONLY JSON with keys: estimated_length (e.g. 1.5 inches), construction_analysis (2-3 sentences), why_contests_exist (2-3 sentences), quality_verdict (Excellent, Very Good, Good, or Fair).'}]}]})});
-      var result=await readAIResponse(res,'ash');
+      var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'ash',system:'You are an expert cigar sommelier and judge. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Analyze this cigar ash photo. Return ONLY JSON with keys: is_cigar (boolean), scale_reliable (boolean), length_value (number or null), length_unit (in, cm, or mm), estimated_length (text), construction_analysis (2-3 sentences acknowledging uncertainty), why_contests_exist (2-3 sentences), quality_verdict (Excellent, Very Good, Good, Fair, or Uncertain). Known full cigar length in inches: '+(document.getElementById('ash-reference').value||'unknown')+'. Set scale_reliable=false and length_value=null if a physical scale cannot be established. Do not invent a measurement for a non-cigar or unclear photo.'}]}]})});
+      var result=await readAIResponse(res,'ash');if(ashRequest!==ashRequestSequence)return;
+      if(result.is_cigar!==true){showToast('No clear cigar ash was identified. Try a well-lit photo of the full cigar and ash.');return;}
       document.getElementById('ash-loading').classList.remove('show');document.getElementById('ash-length-badge').textContent=result.estimated_length||'Measured';document.getElementById('ash-analysis-text').textContent=result.construction_analysis||'';document.getElementById('ash-edu-text').textContent=result.why_contests_exist||'';
-      loadAshBest();var entry={length:result.estimated_length,verdict:result.quality_verdict,date:new Date().toLocaleDateString()};
-      if(!ashPersonalBest){ashPersonalBest=entry;}else{var oldLen=parseFloat(ashPersonalBest.length)||0;var newLen=parseFloat(result.estimated_length)||0;if(newLen>oldLen)ashPersonalBest=entry;}
-      await saveAshBest();document.getElementById('ash-best-val').textContent=ashPersonalBest.length;document.getElementById('ash-best-sub').textContent=ashPersonalBest.verdict+' · '+ashPersonalBest.date;document.getElementById('ash-result').classList.add('show');
-    }catch(err){document.getElementById('ash-loading').classList.remove('show');showToast(err.message||'Could not analyze. Try a clearer photo.');}
+      var inches=result.scale_reliable?TorcidaReliability.ashInches(result.length_value,result.length_unit):null;
+      document.getElementById('ash-length-badge').textContent=inches?'Approx. '+inches.toFixed(2)+' in':'Unmeasured';
+      if(inches){var old=ashPersonalBest?(ashPersonalBest.lengthInches||TorcidaReliability.ashInches(ashPersonalBest.length)):null;
+        if(!old||inches>old){ashPersonalBest={length:'Approx. '+inches.toFixed(2)+' in',lengthInches:inches,verdict:result.quality_verdict,date:TorcidaMobile.localDate()};await saveAshBest();}}
+      loadAshBest();document.getElementById('ash-result').classList.add('show');
+    }catch(err){if(ashRequest===ashRequestSequence)showToast(err.message||'Could not analyze. Try a clearer photo.');}finally{if(ashRequest===ashRequestSequence)document.getElementById('ash-loading').classList.remove('show');}
   }catch(e){showToast(e.message||'This photo could not be opened.');}
 }
-function resetAsh(){document.getElementById('ash-result').classList.remove('show');document.getElementById('ash-input').value='';}
+function resetAsh(){ashRequestSequence++;document.getElementById('ash-loading').classList.remove('show');document.getElementById('ash-result').classList.remove('show');document.getElementById('ash-input').value='';}
 
 // ── EDIT MODALS ────────────────────────────────────────────────
 function openEditHumidor(id){
@@ -2607,52 +2607,11 @@ function shareSmokCard(){
 
 // ── FEATURE 2: TASTE PROFILE ──────────────────────────────────
 function openTasteProfile(){
-  var content=document.getElementById('taste-content');
-  if(smoked.length<3){
-    content.innerHTML='<div style="text-align:center;padding:24px 0;"><div style="font-size:36px;margin-bottom:12px;">✦</div><div style="color:var(--muted);font-size:14px;line-height:1.6;">Log at least 3 smokes with ratings to unlock your personal taste profile.<br><br>The more you log, the smarter it gets.</div></div>';
-    openModal('modal-taste');return;
-  }
-  // Build taste fingerprint from logged smokes
-  var rated=smoked.filter(function(s){return s.rating>0;});
-  var dims={strength:0,spice:0,sweetness:0,earth:0,complexity:0,smoke:0};
-  var dimCounts={strength:0,spice:0,sweetness:0,earth:0,complexity:0,smoke:0};
-  // Infer preferences from notes and ratings
-  rated.forEach(function(s){
-    var n=(s.notes||'').toLowerCase();var r=s.rating;
-    if(n.match(/pepper|spice|bold|full|strong/)){dims.spice+=r;dimCounts.spice++;}
-    if(n.match(/sweet|chocolate|honey|caramel|vanilla/)){dims.sweetness+=r;dimCounts.sweetness++;}
-    if(n.match(/earth|leather|wood|cedar|soil/)){dims.earth+=r;dimCounts.earth++;}
-    if(n.match(/complex|evolv|change|develop|layer/)){dims.complexity+=r;dimCounts.complexity++;}
-    if(n.match(/smoke|smoky|campfire|char/)){dims.smoke+=r;dimCounts.smoke++;}
-    // Use draw/burn ratings as proxies
-    if(s.ratings){
-      if(s.ratings.flavor){dims.complexity+=s.ratings.flavor;dimCounts.complexity++;}
-    }
-  });
-  // Normalize to 10
-  var scores={};
-  Object.keys(dims).forEach(function(k){
-    scores[k]=dimCounts[k]>0?Math.min(10,Math.round((dims[k]/dimCounts[k])*2)):Math.round(3+Math.random()*3);
-  });
-  // Top flavors from notes
-  var flavorMap={};
-  var flavorWords=['cedar','leather','chocolate','coffee','pepper','cream','vanilla','earth','spice','nuts','fruit','floral','honey','caramel','toast'];
-  rated.forEach(function(s){var n=(s.notes||'').toLowerCase();flavorWords.forEach(function(w){if(n.includes(w))flavorMap[w]=(flavorMap[w]||0)+1;});});
-  var topFlavors=Object.keys(flavorMap).sort(function(a,b){return flavorMap[b]-flavorMap[a];}).slice(0,5);
-  // Top rated cigars
-  var topSmokes=[...rated].sort(function(a,b){return b.rating-a.rating;}).slice(0,3);
-  // Build HTML
-  var barsHtml=['Strength','Spice','Sweetness','Earth','Complexity','Smoke'].map(function(dim){
-    var k=dim.toLowerCase();var sc=scores[k]||5;
-    return '<div class="taste-row"><div class="taste-label">'+dim+'</div><div class="taste-bar-bg"><div class="taste-bar-fill" style="width:'+sc*10+'%;"></div></div><div class="taste-score">'+sc+'/10</div></div>';
-  }).join('');
-  var topFlavorHtml=topFlavors.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">'+topFlavors.map(function(f){return '<span class="orig-tag">'+f.charAt(0).toUpperCase()+f.slice(1)+'</span>';}).join('')+'</div>':'';
-  var topSmokesHtml=topSmokes.length?'<div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Your Top Smokes</div>'+topSmokes.map(function(s){return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);"><div style="font-size:14px;color:var(--text);">'+s.name+'</div><div style="color:#C9A84C;">'+'★'.repeat(s.rating)+'</div></div>';}).join(''):'';
-  content.innerHTML='<div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Flavor Fingerprint</div>'
-    +barsHtml
-    +(topFlavors.length?'<div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 8px;">Notes You Love</div>'+topFlavorHtml:'')
-    +topSmokesHtml
-    +'<div style="font-size:11px;color:var(--dim);margin-top:14px;line-height:1.5;">Based on '+rated.length+' rated smoke'+(rated.length===1?'':'s')+'. Log more for a richer profile.</div>';
+  var profile=TorcidaReliability.tasteProfile(smoked),content=document.getElementById('taste-content'),esc=TorcidaReliability.escaped;
+  if(profile.ratedCount<3){content.textContent='Rate at least 3 smokes to build your taste profile. You have '+profile.ratedCount+' rated entries.';openModal('modal-taste');return;}
+  var flavors=profile.flavors.slice(0,5).map(function(f){return '<li>'+esc(f.name)+' · mentioned in '+f.count+' rated entries</li>';}).join('');
+  var strengths=profile.strengths.map(function(f){return '<li>'+esc(f.name)+' · '+f.count+' rated entries</li>';}).join('');
+  content.innerHTML='<h3>Patterns in your journal</h3><p>Based on '+profile.ratedCount+' rated smokes. Counts describe what you recorded, not measured flavor intensity.</p><h4>Frequently mentioned notes</h4>'+(flavors?'<ul>'+flavors+'</ul>':'<p>Not enough information. Add tasting notes to your rated entries.</p>')+'<h4>Recorded strengths</h4>'+(strengths?'<ul>'+strengths+'</ul>':'<p>Not enough information. Log a cigar from your humidor to carry its strength into the journal.</p>')+'<h4>Your highest-rated smokes</h4><ul>'+profile.top.map(function(c){return '<li>'+esc(c.name)+' · '+c.rating+'/5</li>';}).join('')+'</ul>';
   openModal('modal-taste');
 }
 
@@ -2805,8 +2764,8 @@ document.getElementById('s-date').value=TorcidaMobile.localDate();
 loadAshBest();
 loadData().then(function(){
 TorcidaMobile.initialize();
-(function(){var pages=['scanner','cigar','bar','smoked','guide','about'];function restorePage(){var page=location.hash.slice(1);showPage(pages.includes(page)?page:'scanner',null,true);}window.addEventListener('popstate',restorePage);restorePage();})();
-var selWrap=document.getElementById('cigar-selector-wrap');if(selWrap)selWrap.style.display=document.getElementById('page-scanner').classList.contains('active')?'block':'none';
+(function(){var pages=['scanner','cigar','bar','smoked','guide','about'];function restorePage(){var parts=location.hash.slice(1).split('/'),page=parts[0];showPage(pages.includes(page)?page:'scanner',null,true);if(page==='guide'){if(parts[1]&&document.getElementById('info-'+parts[1]))showInfo(parts[1],null,true);else showGuideTopics(true);}}window.addEventListener('popstate',restorePage);restorePage();})();
+initializeReliabilityUI();
 // Restore timer state if one was running before page reload/navigation
 (function initTimer(){
   refreshTimerUI();
@@ -2823,6 +2782,7 @@ var selWrap=document.getElementById('cigar-selector-wrap');if(selWrap)selWrap.st
 </script>
 </body>
 </html>
+
 
 
 
