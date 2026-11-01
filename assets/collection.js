@@ -90,18 +90,19 @@ async function retryCollectionSave(){
   finally{button.disabled=false;button.textContent='Retry save';}
 }
 var backupObjectURL=null;
-function downloadJSON(data,name){
+async function downloadJSON(data,name){
+  if(typeof TorcidaNative!=='undefined'&&TorcidaNative.isNative){await TorcidaNative.shareBlob(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),name,'Torcida backup');return;}
   if(backupObjectURL)URL.revokeObjectURL(backupObjectURL);
   backupObjectURL=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
   var link=document.getElementById('backup-download-link');link.href=backupObjectURL;link.download=name;
   // A real link stays available for Safari if the automatic download is blocked.
   openModal('modal-backup-download');link.click();
 }
-function exportCollection(unsaved){var data=unsaved&&pendingCollection?JSON.parse(pendingCollection):collectionSnapshot();downloadJSON({app:'Torcida',backupVersion:1,exportedAt:new Date().toISOString(),collection:data},'Torcida-'+(unsaved?'unsaved-':'backup-')+new Date().toISOString().replace(/[:.]/g,'-')+'.json');}
+async function exportCollection(unsaved){var data=unsaved&&pendingCollection?JSON.parse(pendingCollection):collectionSnapshot();return downloadJSON({app:'Torcida',backupVersion:1,exportedAt:new Date().toISOString(),collection:data},'Torcida-'+(unsaved?'unsaved-':'backup-')+new Date().toISOString().replace(/[:.]/g,'-')+'.json');}
 async function exportRecoveryData(){
   try{
     var values=CollectionStore.readLegacy(localStorage),archived=collectionStore?await collectionStore.archive():null,record=collectionStore?await collectionStore.read():null;
-    downloadJSON({app:'Torcida recovery',storage:values,archivedStorage:archived,current:record,pending:pendingCollection?JSON.parse(pendingCollection):null},'Torcida-recovery.json');
+    await downloadJSON({app:'Torcida recovery',storage:values,archivedStorage:archived,current:record,pending:pendingCollection?JSON.parse(pendingCollection):null},'Torcida-recovery.json');
   }catch(e){collectionNotice('Recovery data could not be read. Your existing storage has not been changed.');throw e;}
 }
 var restoreCandidate=null;
@@ -119,10 +120,11 @@ async function confirmCollectionRestore(){
   if(pendingCollection){showToast('Save your pending changes in Storage recovery before restoring.');return;}
   var previous=JSON.stringify(collectionSnapshot()),wasBlocked=collectionReadBlocked;
   try{
-    if(wasBlocked)await exportRecoveryData();else exportCollection(false);
+    if(wasBlocked)await exportRecoveryData();else await exportCollection(false);
     var existing=await collectionStore.read();lastSavedRevision=existing?existing.revision:null;collectionReadBlocked=false;
     applyCollection(restoreCandidate);await persistCollection();restoreCandidate=null;closeModal('modal-restore');renderAll();showToast('Backup restored and saved on this device.');
   }catch(e){applyCollection(JSON.parse(previous));collectionReadBlocked=wasBlocked;collectionNotice('Restore was not completed. The selected backup file is still available.');}
 }
 window.addEventListener('beforeunload',function(e){if(pendingCollection||collectionSaving){e.preventDefault();e.returnValue='';}});
 window.addEventListener('storage',function(e){if(collectionStore&&collectionStore.mode==='local'&&e.key===collectionKey&&e.newValue!==lastSavedRevision)collectionNotice('Your collection changed in another tab. Download any pending changes, then reload.');});
+

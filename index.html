@@ -1151,6 +1151,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   <!-- ═══════════════════════════════════════════════ -->
   <div id="page-about" class="page">
     <h1 class="sec-title">Settings &amp; About</h1>
+    <section class="about-section"><h2 class="about-section-title">Privacy and AI sharing</h2><p id="ai-permission-status" role="status">AI sharing is off.</p><button type="button" class="btn btn-ghost" onclick="TorcidaPrivacy.revoke();showToast('AI sharing turned off. You will be asked before the next AI request.')">Turn off AI sharing</button><p><a href="/privacy.html">Privacy policy</a> · <a href="/support.html">Help and beta support</a></p></section>
     <section class="about-section" aria-labelledby="appearance-title"><h2 class="about-section-title" id="appearance-title">Set the mood</h2><p>Choose warm daylight or settle into Torcida After Hours.</p><fieldset style="border:0;padding:0;margin:0"><legend class="form-label">Appearance</legend><div class="appearance-options">
       <label class="appearance-option"><input type="radio" name="tc-appearance" value="light"><span><span class="appearance-swatch" aria-hidden="true"></span>Light<small>Ivory and warm walnut</small></span></label>
       <label class="appearance-option appearance-dark"><input type="radio" name="tc-appearance" value="dark"><span><span class="appearance-swatch" aria-hidden="true"></span>After Hours<small>Espresso and muted brass</small></span></label>
@@ -1388,6 +1389,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
  <button class="btn btn-ghost" onclick="restoreCandidate=null;closeModal('modal-restore')">Cancel</button></div>
 </div>
 <div id="removal-undo" class="removal-undo" hidden role="status"><span id="removal-undo-text"></span><button type="button" class="btn btn-sm" onclick="undoLastRemoval()">Undo removal</button></div>
+<div class="modal-overlay" id="modal-ai-permission"><div class="modal-box" role="document"><h2 class="modal-title">Allow AI sharing?</h2><p>AI lookup sends your selected photo or entered text to Torcida’s server on Vercel and then to Anthropic for processing.</p><p>Recommendations can also include relevant cigar names, bottle names and preferences from your collection. Journal photos are not uploaded unless you choose them for an AI lookup. Keep faces and other private information out of photos.</p><p>AI requests need internet access and may be retained by service providers under their policies. Answers can be inaccurate. Your collection and manual journal work without AI.</p><p>Allowing enables future AI requests on this device. Turn it off at any time in Settings → Privacy and AI sharing.</p><p><a href="/privacy.html" target="_blank" rel="noopener">Read the privacy policy</a></p><div class="form-actions"><button type="button" class="btn btn-primary" id="ai-permission-allow">Allow AI sharing</button><button type="button" class="btn btn-ghost" id="ai-permission-decline">Keep AI off</button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="/assets/reliability.js"></script>
@@ -1397,13 +1399,14 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <script src="/assets/storage.js"></script>
 <script src="/assets/collection.js"></script>
 <script src="/assets/ai-client.js"></script>
+<script src="/assets/privacy.js"></script>
 <script src="/assets/workflows.js"></script>
 <script src="/assets/atelier.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-var torcidaApiUrl=window.location.hostname==='torcida-orcin.vercel.app'?'https://torcida-proxy.vercel.app/api/chat':'/api/chat';
+var torcidaApiUrl=(typeof TorcidaNative!=='undefined'&&TorcidaNative.isNative)?TorcidaNative.apiUrl:window.location.hostname==='torcida-orcin.vercel.app'?'https://torcida-proxy.vercel.app/api/chat':'/api/chat';
 var humidor=[], wishlist=[], smoked=[], currentResult=null, currentResultPhoto=null;
 var newRatingVal=0, pendingPhotos=[], pairingRatingVal=0;
 var attrRatings={draw:0,burn:0,flavor:0,construction:0};
@@ -1692,7 +1695,8 @@ async function addToBarFromResult(){if(!collectionLoaded){showToast('Your collec
 }
 // ── FETCH WITH TIMEOUT ────────────────────────────────────────
 // Prevents the app locking up when the proxy is slow or unresponsive
-function fetchWithTimeout(url, options, timeoutMs) {
+async function fetchWithTimeout(url, options, timeoutMs) {
+  if(url.indexOf('/api/chat')!==-1)await TorcidaPrivacy.authorizeAI();
   timeoutMs = timeoutMs || 18000;
   var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var timer = setTimeout(function() { if(controller) controller.abort(); }, timeoutMs);

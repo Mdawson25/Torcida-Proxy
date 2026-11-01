@@ -122,3 +122,11 @@ test('journal fields and success messages wait for durable completion',async()=>
 test('downloads leave a real save link available for mobile browsers',()=>{
  const t=storageContext();t.nodes.set('backup-download-link',{click(){}});t.nativeDownload({safe:true},'Torcida-backup.json');assert.equal(t.nodes.get('backup-download-link').href,'blob:test');assert.equal(t.nodes.get('backup-download-link').download,'Torcida-backup.json');
 });
+
+test('restore waits for the native backup share and cancellation leaves saved records untouched',async()=>{
+ const raw=JSON.stringify(empty()),t=storageContext({tc_collection_v1:raw});await t.c.initializeCollection();t.c.downloadJSON=t.nativeDownload;
+ let rejectShare;t.c.TorcidaNative={isNative:true,shareBlob:()=>new Promise((resolve,reject)=>{rejectShare=reject})};
+ t.c.restoreCandidate=empty();t.c.restoreCandidate.wishlist.push({id:1,name:'Replacement'});
+ const restore=t.c.confirmCollectionRestore();assert.equal(t.values.get('tc_collection_v1'),raw);assert.equal(t.c.wishlist.length,0);
+ rejectShare(Error('Share canceled'));await restore;assert.equal(t.values.get('tc_collection_v1'),raw);assert.equal(t.c.wishlist.length,0);assert.ok(t.c.restoreCandidate);
+});

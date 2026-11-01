@@ -1,0 +1,8 @@
+{
+  "appId":"com.torcida.journal",
+  "appName":"Torcida",
+  "webDir":"native-dist",
+  "ios":{"contentInset":"automatic","preferredContentMode":"mobile"},
+  "server":{"hostname":"localhost","iosScheme":"capacitor","cleartext":false},
+  "plugins":{"CapacitorHttp":{"enabled":false}}
+}

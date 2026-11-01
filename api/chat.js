@@ -1,7 +1,7 @@
 const { createHash, timingSafeEqual } = require('node:crypto');
 const { parseAI, normalizeAI } = require('../assets/data.js');
 
-const ORIGINS = new Set(['https://torcida-orcin.vercel.app', 'https://torcida-proxy.vercel.app']);
+const ORIGINS = new Set(['https://torcida-orcin.vercel.app', 'https://torcida-proxy.vercel.app', 'capacitor://localhost']);
 for (const host of [process.env.VERCEL_URL,process.env.VERCEL_BRANCH_URL,process.env.VERCEL_PROJECT_PRODUCTION_URL]) if(host) ORIGINS.add('https://'+host);
 const CAPS = { identify: 1400, selector: 800, pairing: 500, recipes: 1400, quiz: 1000, ash: 800, occasion: 1000, alternatives: 1400 };
 const memory = new Map();
@@ -127,3 +127,4 @@ async function handler(req,res) {
 module.exports = handler;
 module.exports.validateRequest = validateRequest;
 module.exports.reserveUsage = reserveUsage;
+

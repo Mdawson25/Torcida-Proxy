@@ -60,3 +60,5 @@ test('Vercel Marketplace KV REST variables work without copying secrets',async()
  process.env.VERCEL='1';process.env.KV_REST_API_URL='https://marketplace.example.test';process.env.KV_REST_API_TOKEN='marketplace-secret';
  await api.reserveUsage('marketplace',100,async(url,options)=>{assert.equal(url,'https://marketplace.example.test');assert.equal(options.headers.Authorization,'Bearer marketplace-secret');return {ok:true,json:async()=>({result:0})};});
 });
+
+test('native iOS origin is narrowly allowed without allowing null or other app schemes',async()=>{let r=response();await api.default(request(undefined,{method:'OPTIONS',headers:{origin:'capacitor://localhost'}}),r);assert.equal(r.statusCode,204);assert.equal(r.headers['Access-Control-Allow-Origin'],'capacitor://localhost');for(const origin of ['null','capacitor://unapproved','http://localhost']){r=response();await api.default(request(undefined,{method:'OPTIONS',headers:{origin}}),r);assert.equal(r.statusCode,403);}});
