@@ -1,0 +1,17 @@
+node_modules/
+dist/
+native-dist/
+.DS_Store
+*.ipa
+*.xcarchive
+*.p12
+*.mobileprovision
+.env*
+!.env.example
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/App/Pods/
+ios/App/DerivedData/
+ios/**/xcuserdata/
+submission/release-signoff.local.json

@@ -5,5 +5,7 @@
       "maxDuration": 30,
       "includeFiles": "assets/data.js"
     }
-  }
+  },
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
 }

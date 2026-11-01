@@ -86,6 +86,7 @@
   function setExportEnabled(enabled){document.getElementById('card-share-button').disabled=!enabled;var link=document.getElementById('card-download-link');link.setAttribute('aria-disabled',String(!enabled));link.tabIndex=enabled?0:-1;link.style.pointerEvents=enabled?'auto':'none';if(!enabled)link.removeAttribute('href');}
   function shareCard(){
     if(!cardBlob||!cardEntry)return;var m=model(cardEntry,options()),file=new File([cardBlob],filename(m),{type:'image/png'});
+    if(typeof TorcidaNative!=='undefined'&&TorcidaNative.isNative){TorcidaNative.shareBlob(cardBlob,filename(m),'Torcida tasting card').catch(function(e){root.showToast(e.message||'Sharing was cancelled.');});return;}
     if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:'Torcida tasting card'}).catch(function(e){if(e.name!=='AbortError')root.showToast('Sharing was unavailable. Use Download PNG to save the card.');});}
     else document.getElementById('card-download-link').click();
   }
