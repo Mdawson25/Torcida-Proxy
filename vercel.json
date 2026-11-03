@@ -1,9 +1,12 @@
 {
   "version": 2,
+  "buildCommand":"npm run build",
+  "outputDirectory":"public",
   "functions": {
-    "api/chat.js": {
+    "api/*.js": {
       "maxDuration": 30,
-      "includeFiles": "assets/data.js"
+      "includeFiles": "{assets/data.js,lib/**}"
     }
-  }
+  },
+  "headers":[{"source":"/(.*)","headers":[{"key":"X-Content-Type-Options","value":"nosniff"},{"key":"Referrer-Policy","value":"no-referrer"},{"key":"X-Frame-Options","value":"DENY"}]}]
 }

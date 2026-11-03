@@ -1,0 +1,1 @@
+module.exports=async(req,res)=>{res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:{message:'Use GET.'}});const email=process.env.SUPPORT_EMAIL||'';return res.json({email:/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?email:null});};

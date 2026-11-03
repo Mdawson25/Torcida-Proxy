@@ -1,0 +1,32 @@
+{
+  "name": "torcida",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:native && node scripts/build-web.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "build:native": "node scripts/build-native.cjs",
+    "mobile:sync": "npm run build:native && cap sync",
+    "mobile:ios": "cap open ios",
+    "mobile:android": "cap open android",
+    "release:check": "node scripts/release-check.cjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/camera": "^8.2.6",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/ios": "^8.6.0",
+    "@capacitor/share": "^8.0.3",
+    "@revenuecat/purchases-capacitor": "^14.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@electric-sql/pglite": "^0.5.15",
+    "esbuild": "^0.25.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

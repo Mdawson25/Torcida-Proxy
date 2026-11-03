@@ -1,0 +1,9 @@
+{
+  "appId":"com.torcida.journal",
+  "appName":"Torcida",
+  "webDir":"mobile/www",
+  "server":{"hostname":"localhost","iosScheme":"capacitor","cleartext":false},
+  "plugins":{"CapacitorHttp":{"enabled":false}},
+  "ios":{"contentInset":"automatic","preferredContentMode":"mobile"},
+  "android":{"allowMixedContent":false}
+}

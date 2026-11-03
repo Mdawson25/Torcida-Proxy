@@ -30,7 +30,7 @@ function confirmReplaceJournalDraft(){
   document.querySelectorAll('#smoked-form .star').forEach(function(el){el.classList.remove('lit');});
   document.getElementById('s-drink-type').value='';sessionDraftInForm=false;sessionDraftToken=null;return true;
 }
-function readSessionDraft(){try{return JSON.parse(localStorage.getItem('tc_session_draft_v1')||'null');}catch(e){return null;}}
+function readSessionDraft(){try{return JSON.parse(localStorage.getItem(TorcidaReliability.privateKey('tc_session_draft_v1'))||'null');}catch(e){return null;}}
 function renderSessionDraft(){var el=document.getElementById('session-draft-banner');if(el)el.hidden=!readSessionDraft();}
 function resumeSessionDraft(){
   var draft=readSessionDraft();if(!draft)return;if(!confirmReplaceJournalDraft())return;
@@ -38,11 +38,11 @@ function resumeSessionDraft(){
   sessionDraftInForm=true;sessionDraftToken=JSON.stringify(draft);showPage('smoked',null);document.getElementById('smoked-form').classList.add('show');document.getElementById('s-name').focus();
 }
 function completeSessionDraft(){
-  if(sessionDraftInForm){try{if(localStorage.getItem('tc_session_draft_v1')===sessionDraftToken)localStorage.removeItem('tc_session_draft_v1');}catch(e){}sessionDraftInForm=false;sessionDraftToken=null;}
+  if(sessionDraftInForm){try{if(localStorage.getItem(TorcidaReliability.privateKey('tc_session_draft_v1'))===sessionDraftToken)localStorage.removeItem(TorcidaReliability.privateKey('tc_session_draft_v1'));}catch(e){}sessionDraftInForm=false;sessionDraftToken=null;}
   renderSessionDraft();
 }
 function renderRemovalUndo(){
-  var undo;try{undo=JSON.parse(localStorage.getItem('tc_removal_undo_v1')||'null');}catch(e){}
+  var undo;try{undo=JSON.parse(localStorage.getItem(TorcidaReliability.privateKey('tc_removal_undo_v1'))||'null');}catch(e){}
   var box=document.getElementById('removal-undo');if(!box)return;box.hidden=!undo;
   if(undo)document.getElementById('removal-undo-text').textContent='Removed '+undo.item.name+'.';
 }
@@ -51,16 +51,16 @@ async function removeWithUndo(kind,id){
   var list=kind==='journal'?smoked:kind==='wishlist'?wishlist:myBar,index=list.findIndex(function(x){return x.id===id;});if(index<0)return;
   var undo={kind:kind,item:JSON.parse(JSON.stringify(list[index])),index:index};
   // Keep a recoverable copy before touching the live collection.
-  try{localStorage.setItem('tc_removal_undo_v1',JSON.stringify(undo));}catch(e){showToast('A recoverable removal could not be prepared. Download a backup and free device space before removing this entry.');return;}
+  try{localStorage.setItem(TorcidaReliability.privateKey('tc_removal_undo_v1'),JSON.stringify(undo));}catch(e){showToast('A recoverable removal could not be prepared. Download a backup and free device space before removing this entry.');return;}
   if(kind==='journal')smoked=smoked.filter(function(x){return x.id!==id;});else if(kind==='wishlist')wishlist=wishlist.filter(function(x){return x.id!==id;});else myBar=myBar.filter(function(x){return x.id!==id;});
   try{await save();renderAll();renderRemovalUndo();showToast('Entry removed. Undo removal is available.');}catch(e){renderAll();renderRemovalUndo();throw e;}
 }
 async function undoLastRemoval(){
   if(pendingCollection||collectionSaving){showToast('Recover your pending changes before undoing a removal.');return;}
-  var undo;try{undo=JSON.parse(localStorage.getItem('tc_removal_undo_v1')||'null');}catch(e){}if(!undo)return;
+  var undo;try{undo=JSON.parse(localStorage.getItem(TorcidaReliability.privateKey('tc_removal_undo_v1'))||'null');}catch(e){}if(!undo)return;
   var list=undo.kind==='journal'?smoked:undo.kind==='wishlist'?wishlist:myBar;
   if(!list.some(function(x){return x.id===undo.item.id;})){list.splice(Math.min(undo.index,list.length),0,undo.item);await save();}
-  localStorage.removeItem('tc_removal_undo_v1');renderAll();renderRemovalUndo();showToast('Entry restored.');
+  localStorage.removeItem(TorcidaReliability.privateKey('tc_removal_undo_v1'));renderAll();renderRemovalUndo();showToast('Entry restored.');
 }
 function guardAction(name){
   var original=window[name];if(typeof original!=='function')return;
@@ -74,7 +74,7 @@ function guardAction(name){
 }
 function initializeReliabilityUI(){
   renderSessionDraft();renderRemovalUndo();loadAshBest();
-  var originalNote=toggleNoteChip;window.toggleNoteChip=function(el){originalNote(el);updateNoteCount();};updateNoteCount();
+
   window.removeSmoked=function(id){return removeWithUndo('journal',id);};window.removeWish=function(id){return removeWithUndo('wishlist',id);};window.removeFromBar=function(id){return removeWithUndo('bar',id);};
   window.deleteFromWishlist=async function(){var id=parseInt(document.getElementById('edit-w-id').value,10);await removeWithUndo('wishlist',id);if(!wishlist.some(function(x){return x.id===id;}))closeModal('modal-wishlist');};
   window.deleteFromSmoked=async function(){var id=parseInt(document.getElementById('edit-s-id').value,10);await removeWithUndo('journal',id);closeModal('modal-smoked');};

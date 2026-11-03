@@ -17,6 +17,7 @@
     return n<=12?n:null;
   }
   function escaped(value){return String(value||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-  var api={stock:stock,nextId:nextId,tasteProfile:tasteProfile,ashInches:ashInches,escaped:escaped};
+  function privateKey(key){var scope=typeof window!=='undefined'&&window.TorcidaAccount?window.TorcidaAccount.scope():null;return scope?'tc_private_'+scope+'_'+key:key;}
+  var api={stock:stock,nextId:nextId,tasteProfile:tasteProfile,ashInches:ashInches,escaped:escaped,privateKey:privateKey};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.TorcidaReliability=api;
 })(typeof window!=='undefined'?window:globalThis);

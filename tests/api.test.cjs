@@ -5,7 +5,10 @@ const valid=(extra={})=>({operation:'identify',max_tokens:999999,model:'untruste
 const originalEnv={...process.env};
 function resetEnv(){for(const k of Object.keys(process.env))if(/^(AI_|UPSTASH_|KV_|TORCIDA_|ANTHROPIC_|VERCEL|NODE_ENV|CLAUDE_MODEL)/.test(k))delete process.env[k];}
 function response(){return {headers:{},statusCode:200,body:null,setHeader(k,v){this.headers[k]=v;},status(n){this.statusCode=n;return this;},json(v){this.body=v;return this;},end(){return this;}};}
-function request(body=valid(),extra={}){return {method:'POST',headers:{origin:'https://torcida-proxy.vercel.app'},socket:{remoteAddress:'127.0.0.1'},body,...extra};}
+function request(body=valid(),extra={}){return {method:'POST',headers:{origin:'https://torcida-proxy.vercel.app','content-type':'application/json',cookie:'tc_access=verified','x-torcida-consent':'yes','x-torcida-owner':'11111111-1111-1111-1111-111111111111'},socket:{remoteAddress:'127.0.0.1'},body,...extra};}
+function accountFetch(provider){process.env.SUPABASE_URL='https://supabase.test';process.env.SUPABASE_ANON_KEY='anon';process.env.SUPABASE_SERVICE_ROLE_KEY='service';return async(url,options)=>{
+ if(url.startsWith('https://supabase.test')){const id='11111111-1111-1111-1111-111111111111';const data=url.endsWith('/auth/v1/user')?{id,email:'test@example.test',email_confirmed_at:'2026-01-01'}:url.includes('/profiles?')?[{id,email:'test@example.test',suspended:false}]:null;return {ok:true,json:async()=>data};}return provider(url,options);
+};}
 test.before(async()=>{api=await import('../api/chat.js');});
 test.beforeEach(()=>resetEnv());
 test.after(()=>{resetEnv();Object.assign(process.env,originalEnv);});
@@ -46,14 +49,14 @@ test('CORS, method and access code checks stop unauthorized requests',async()=>{
 test('proxy normalizes responses and hides upstream failures and secrets',async()=>{
  const saved=global.fetch;process.env.ANTHROPIC_KEY='test-key';
  try{
-  global.fetch=async(url,opts)=>{assert.equal(JSON.parse(opts.body).max_tokens,1400);return {ok:true,json:async()=>({content:[{type:'text',text:JSON.stringify({type:'cigar',name:'Padron',brand:1964,flavor_tags:'cedar,coffee'})}],stop_reason:'end_turn'})};};
+  global.fetch=accountFetch(async(url,opts)=>{assert.equal(JSON.parse(opts.body).max_tokens,1400);return {ok:true,json:async()=>({content:[{type:'text',text:JSON.stringify({type:'cigar',name:'Padron',brand:1964,flavor_tags:'cedar,coffee'})}],stop_reason:'end_turn'})};});
   let r=response();await api.default(request(),r);assert.equal(r.statusCode,200);const data=JSON.parse(r.body.content[0].text);assert.deepEqual(data.flavor_tags,['cedar','coffee']);assert.equal(data.brand,'1964');
-  global.fetch=async()=>({ok:false,status:401,json:async()=>({error:{message:'test-key private details'}})});r=response();await api.default(request(),r);assert.equal(r.statusCode,502);assert.ok(!JSON.stringify(r.body).includes('test-key'));
+  global.fetch=accountFetch(async()=>({ok:false,status:401,json:async()=>({error:{message:'test-key private details'}})}));r=response();await api.default(request(),r);assert.equal(r.statusCode,502);assert.ok(!JSON.stringify(r.body).includes('test-key'));
  }finally{global.fetch=saved;}
 });
 test('truncated, malformed, and missing content results fail safely',async()=>{
  const saved=global.fetch;process.env.ANTHROPIC_KEY='test-key';
- try{for(const data of [{stop_reason:'max_tokens',content:[]},{content:'bad'},{content:[{type:'text',text:'{"name":'}]},{content:[{type:'text',text:'{"type":"cigar"}'}]}]){global.fetch=async()=>({ok:true,json:async()=>data});let r=response();await api.default(request(),r);assert.ok([422,502].includes(r.statusCode));assert.ok(r.body.error.message);}}finally{global.fetch=saved;}
+ try{for(const data of [{stop_reason:'max_tokens',content:[]},{content:'bad'},{content:[{type:'text',text:'{"name":'}]},{content:[{type:'text',text:'{"type":"cigar"}'}]}]){global.fetch=accountFetch(async()=>({ok:true,json:async()=>data}));let r=response();await api.default(request(),r);assert.ok([422,502].includes(r.statusCode));assert.ok(r.body.error.message);}}finally{global.fetch=saved;}
 });
 
 test('Vercel Marketplace KV REST variables work without copying secrets',async()=>{
