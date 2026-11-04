@@ -32,7 +32,7 @@ On a Mac with Xcode 26 or newer, open `ios/App/App.xcodeproj` and resolve its Sw
 | Cigar records | 25 | 5,000 |
 | Humidors | 1 | 100 |
 | Cloud photo allowance | 10 MB | 100 MB |
-| AI identification | 3 introductory requests total | 30 per UTC calendar month |
+| AI identification | 5 introductory requests total | 30 per UTC calendar month |
 | Manual journal, export and deletion | Included | Included |
 
 Quantities do not create extra records. Photo allowances count encoded storage bytes. Initial device import can preserve an over-limit collection once per account, up to the hard maximum. Later growth above the plan cap is blocked. Existing records stay readable, editable and exportable after downgrade. Local legacy records are never deleted by migration. Imported photos must fit the published storage cap; excess photos remain in the local copy and backup.
@@ -55,3 +55,5 @@ Automated tests cover database role restrictions, revisions, plan limits, deleti
 - https://support.google.com/googleplay/android-developer/answer/9878810
 
 Public-store policies and SDK deadlines must be rechecked when submitting.
+
+For an existing database, run `database/002_free_ai_allowance.sql` in Supabase SQL Editor to raise Free to five lifetime AI requests without resetting usage.
