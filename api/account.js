@@ -6,14 +6,16 @@ module.exports=async(req,res)=>{try{
   if(!c.cookie(req,'tc_access')&&!c.cookie(req,'tc_refresh'))return res.json({configured:true,user:null});
   const id=await c.identity(req,res,{allowSuspended:true});return res.json({configured:true,user:c.safeProfile(id.profile)});
  }
+ // secure() already checked this origin against the app and deployment allowlist.
+ const returnOrigin=req.headers.origin||c.origin();
  const b=req.body||{},action=b.action;
  if(['signup','login','recover'].includes(action)){
   if(typeof b.email!=='string'||b.email.length>254||!/^\S+@\S+\.\S+$/.test(b.email))throw c.problem(400,'EMAIL','Enter a valid email address.');
   if(action!=='recover'&&(typeof b.password!=='string'||b.password.length<12||b.password.length>128))throw c.problem(400,'PASSWORD','Use a password between 12 and 128 characters.');
-  if(action==='recover'){await c.supa('/auth/v1/recover?redirect_to='+encodeURIComponent(c.origin()+'/#account-recovery'),{method:'POST',body:{email:b.email}});return res.json({message:'If this email has an account, a reset link will arrive shortly.'});}
+  if(action==='recover'){await c.supa('/auth/v1/recover?redirect_to='+encodeURIComponent(returnOrigin+'/'),{method:'POST',body:{email:b.email}});return res.json({message:'If this email has an account, a reset link will arrive shortly.'});}
   if(action==='signup'){
    if(b.adult!==true)throw c.problem(400,'AGE','Confirm that you are at least 21 years old.');
-   await c.supa('/auth/v1/signup?redirect_to='+encodeURIComponent(c.origin()),{method:'POST',body:{email:b.email,password:b.password,data:{adult_confirmed_at:new Date().toISOString()}}});
+   await c.supa('/auth/v1/signup?redirect_to='+encodeURIComponent(returnOrigin),{method:'POST',body:{email:b.email,password:b.password,data:{adult_confirmed_at:new Date().toISOString()}}});
    return res.json({message:'Check your email to verify your account, then sign in.'});
   }
   const session=await c.supa('/auth/v1/token?grant_type=password',{method:'POST',body:{email:b.email,password:b.password}});

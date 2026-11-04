@@ -39,3 +39,13 @@ test('sign-in explains provider failures without setting cookies or exposing pro
   assert.equal(r.headers['Set-Cookie'],undefined);assert.ok(!JSON.stringify(r.body).includes('private provider detail'));
  }
 });
+
+test('recovery returns to the trusted preview that requested it',async()=>{
+ process.env.VERCEL_URL='preview.example.test';
+ try{
+  const r=res();await account(req({action:'recover',email:'a@example.test'},{headers:{origin:'https://preview.example.test','content-type':'application/json'}}),r);
+  assert.equal(r.statusCode,200);
+  const request=calls.find(x=>x.url.includes('/recover?'));
+  assert.equal(new URL(request.url).searchParams.get('redirect_to'),'https://preview.example.test/');
+ }finally{delete process.env.VERCEL_URL;}
+});

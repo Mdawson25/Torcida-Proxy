@@ -26,7 +26,12 @@ var TorcidaAccount=(function(){
    if(owner)localStorage.setItem('tc_owner',owner);else localStorage.removeItem('tc_owner');
    status(config?(user?(user.suspended?'Account suspended. You can export device data or delete your account.':'Signed in. Opening your device copy.'):'Use a free account to sync. Manual logging also works on this device.'):'Accounts are being connected. Manual logging and backups remain available.');
   }catch(e){status('Offline or account service unavailable. Opening the last device copy. Sign-in is required before cloud changes.');}
-  draw();return owner;
+  draw();
+  if(user&&sessionStorage.getItem('tc_password_reset')==='1'){
+   status('Enter a new password below, then click Change password to finish resetting it.');
+   setTimeout(function(){var input=document.getElementById('account-new-password');if(input){input.scrollIntoView({block:'center'});input.focus();}},0);
+  }
+  return owner;
  }
  async function auth(action){
   var button=document.getElementById('account-submit');button.disabled=true;
@@ -104,7 +109,7 @@ var TorcidaAccount=(function(){
    await api('account',{action:'logout'});localStorage.removeItem('tc_owner');sessionStorage.removeItem('tc_ai_consent');location.reload();
   }catch(e){status(e.message);}
  }
- async function password(){try{status((await api('account',{action:'password',password:document.getElementById('account-new-password').value})).message);document.getElementById('account-new-password').value='';}catch(e){status(e.message);}}
+ async function password(){try{status((await api('account',{action:'password',password:document.getElementById('account-new-password').value})).message);document.getElementById('account-new-password').value='';sessionStorage.removeItem('tc_password_reset');}catch(e){status(e.message);}}
  async function remove(){try{
   if(syncing||collectionSaving||pendingCollection)throw new Error('Finish saving before deleting your account.');
   var password=prompt('Enter your password to delete this account. Store billing continues until cancelled through Apple or Google.');if(!password)return;
