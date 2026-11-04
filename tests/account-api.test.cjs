@@ -24,3 +24,18 @@ test('webhooks reject invalid credentials and do not trust client Premium flags'
 test('subscription reconciliation uses server data and excludes sandbox from production',async()=>{process.env.REVENUECAT_SECRET_KEY='private-billing';delete process.env.ALLOW_SANDBOX_BILLING;global.fetch=async(url,options)=>{if(url.startsWith('https://api.revenuecat.com')){assert.equal(options.headers.Authorization,'Bearer private-billing');return result({subscriber:{entitlements:{premium:{expires_date:'2099-01-01',product_identifier:'premium_annual'}},subscriptions:{premium_annual:{is_sandbox:true,store:'app_store'}}}});}return baseline(url,options);};await subscription.reconcile(A);const patch=calls.find(x=>x.options.method==='PATCH');assert.equal(JSON.parse(patch.options.body).premium_until,null);});
 test('processor deletion failure leaves the account intact and reports a retry',async()=>{process.env.REVENUECAT_SECRET_KEY='private-billing';global.fetch=async(url,options)=>url.startsWith('https://api.revenuecat.com')?result({},503):baseline(url,options);const r=res();await account(req({action:'delete',password:'a strong password',confirmation:'DELETE'}),r);assert.equal(r.statusCode,503);assert.ok(!calls.some(x=>x.url.includes('/admin/users/')));});
 test('expired access tokens refresh through a secure cookie and reverify the user',async()=>{let requests=0;global.fetch=async(url,options)=>{if(url.endsWith('/auth/v1/user')&&++requests===1)return result({},401);return baseline(url,options);};const r=res();await account(req(null,{headers:{cookie:'tc_access=expired; tc_refresh=refresh'}}),r);assert.equal(r.statusCode,200);assert.ok(r.headers['Set-Cookie']);assert.equal(requests,1);assert.ok(calls.some(x=>x.url.includes('refresh_token')));});
+
+test('sign-in explains provider failures without setting cookies or exposing provider details',async()=>{
+ const cases=[
+  {code:'email_not_confirmed',status:400,expected:'VERIFY',http:401},
+  {code:'invalid_credentials',status:400,expected:'INVALID_CREDENTIALS',http:401},
+  {code:'PGRST202',status:404,expected:'CLOUD_SCHEMA',http:503,database:true},
+  {code:'PGRST301',status:401,expected:'CLOUD_CREDENTIALS',http:503,database:true}
+ ];
+ for(const c of cases){
+  global.fetch=async(url,options)=>!c.database||url.includes('/rest/')?result({code:c.code,message:'private provider detail'},c.status):baseline(url,options);
+  const r=res();await account(req({action:'login',email:'a@example.test',password:'a strong password'}),r);
+  assert.equal(r.statusCode,c.http);assert.equal(r.body.error.code,c.expected);
+  assert.equal(r.headers['Set-Cookie'],undefined);assert.ok(!JSON.stringify(r.body).includes('private provider detail'));
+ }
+});
