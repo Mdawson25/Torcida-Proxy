@@ -32,3 +32,24 @@ test('allowance upgrade preserves usage and permits only the two additional Free
  assert.equal(Cloud.plan({}).ai,5);
  await db.exec('set role authenticated');try{await assert.rejects(db.query('select consume_ai($1)',[A]),/permission denied/);}finally{await db.exec('reset role');}
 });
+test('promo redemption grants once, preserves usage, enforces expiry and restricts access',async()=>{
+ await db.exec(fs.readFileSync('database/003_promo_codes.sql','utf8'));
+ const premium='b'.repeat(64),lookups='c'.repeat(64),expired='d'.repeat(64);
+ for(const [hash,kind,amount,expiry] of [[premium,'premium',30,'2099-01-01'],[lookups,'lookups',10,'2099-01-01'],[expired,'lookups',10,'2000-01-01']])await db.query('insert into promo_codes(code_hash,kind,amount,expires_at,max_redemptions) values($1,$2,$3,$4,1)',[hash,kind,amount,expiry]);
+ const redeem=async(user,hash)=>(await db.query('select redeem_promo($1,$2) as result',[user,hash])).rows[0].result;
+ assert.equal((await redeem(A,premium)).ok,true);
+ const p=(await db.query('select * from profiles where id=$1',[A])).rows[0];assert.ok(Cloud.isPremium(p));assert.ok(Date.parse(p.complimentary_until)>Date.now()+29*86400000);
+ assert.equal((await redeem(A,premium)).ok,false);assert.equal((await redeem(B,premium)).ok,false);
+ assert.equal((await redeem(B,expired)).ok,false);assert.equal((await redeem(B,lookups)).ok,true);
+ await db.query("insert into ai_usage(user_id,period,used) values($1,'intro',5)",[B]);
+ for(let i=0;i<10;i++)await db.query('select consume_ai($1)',[B]);
+ await assert.rejects(db.query('select consume_ai($1)',[B]),/AI_LIMIT/);
+ assert.equal((await db.query("select used from ai_usage where user_id=$1 and period='intro'",[B])).rows[0].used,5);
+ await db.exec('set role authenticated');try{await assert.rejects(db.query('select redeem_promo($1,$2)',[A,premium]),/permission denied/);await assert.rejects(db.query('select * from promo_codes'),/permission denied/);}finally{await db.exec('reset role');}
+});
+test('owner code creation returns two private codes without saving their plaintext',async()=>{
+ await db.exec(fs.readFileSync('database/003_promo_codes.sql','utf8'));
+ const rows=(await db.query(fs.readFileSync('database/create_promo_codes.sql','utf8'))).rows;
+ assert.equal(rows.length,2);assert.deepEqual(rows.map(x=>x.kind).sort(),['lookups','premium']);
+ for(const r of rows){assert.match(r.code,/^TORCIDA-[A-F0-9]{32}$/);const hash=Cloud.photoHash(r.code);assert.equal((await db.query('select max_redemptions from promo_codes where code_hash=$1',[hash])).rows[0].max_redemptions,100);}
+});

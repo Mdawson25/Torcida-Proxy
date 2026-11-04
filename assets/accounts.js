@@ -8,7 +8,7 @@ var TorcidaAccount=(function(){
   document.getElementById('account-auth').hidden=!!user;
   document.getElementById('account-tools').hidden=!user;
   document.getElementById('account-name').textContent=user?user.email+' • '+user.plan.name:'Device collection';
-  document.getElementById('account-plan').textContent=user?'AI: '+user.plan.ai+' requests per '+user.plan.aiPeriod+'. Photo storage: '+Math.round(user.plan.photoBytes/1048576)+' MB.':'';
+  document.getElementById('account-plan').textContent=user?'AI: '+user.plan.ai+' requests per '+user.plan.aiPeriod+'. Extra AI lookups remaining: '+(user.bonusAI||0)+'. Photo storage: '+Math.round(user.plan.photoBytes/1048576)+' MB.':'';
   document.getElementById('account-conflict').hidden=!conflict;
  }
  async function boot(){
@@ -119,6 +119,12 @@ var TorcidaAccount=(function(){
   if(collectionStore.close)collectionStore.close();indexedDB.deleteDatabase('torcida-collection-v2-'+owner);localStorage.removeItem('tc_collection_'+owner);localStorage.removeItem('tc_collection_'+owner+'_sync');Object.keys(localStorage).filter(k=>k.startsWith('tc_private_'+owner+'_')).forEach(k=>localStorage.removeItem(k));localStorage.removeItem('tc_owner');alert(result.message);location.reload();
  }catch(e){status(e.message);}}
  async function report(){try{var reason=prompt('Describe the problem with this AI result. The result and your description will be sent to Torcida support.');if(!reason)return;await api('feedback',{reason:reason,result:JSON.stringify(currentResult||{})});status('AI result reported.');showToast('Report sent.');}catch(e){showToast(e.message);}}
+ async function promo(){
+  var button=document.getElementById('promo-submit');button.disabled=true;
+  try{if(!verified)throw new Error('Sign in or create an account first, then redeem your code here.');
+   var result=await api('promo',{code:document.getElementById('account-promo').value});user=result.user;draw();document.getElementById('account-promo').value='';status(result.message);
+  }catch(e){status(e.message);}finally{button.disabled=false;}
+ }
  async function premium(){try{if(!user)throw new Error('Sign in first.');if(!window.TorcidaNative)throw new Error('Subscriptions will be available in the iOS and Android apps after store setup.');await TorcidaNative.purchase(user.id);await refreshPlan();}catch(e){status(e.message);}}
  async function refreshPlan(){var result=await api('subscription',{});user=result.user;draw();return user;}
  async function restore(){try{if(!user||!window.TorcidaNative)throw new Error('Sign in through the store app to restore purchases.');await TorcidaNative.restore(user.id);await refreshPlan();status('Store purchases checked.');}catch(e){status(e.message);}}
@@ -135,5 +141,5 @@ var TorcidaAccount=(function(){
  document.addEventListener('visibilitychange',refreshWhenVisible);
  setInterval(refreshWhenVisible,30000);
  window.addEventListener('online',sync);window.addEventListener('storage',function(e){if(e.key==='tc_owner'&&cachedOwner()!==owner){verified=false;status('Account changed in another tab. Reload before continuing.');}});
- return {boot:boot,scope:function(){return owner;},api:api,auth:auth,sync:sync,changed:changed,importDevice:importDevice,resolveConflict:resolveConflict,logout:logout,password:password,remove:remove,report:report,premium:premium,restore:restore,beforeAI:beforeAI,validateGrowth:validateGrowth,status:status,refreshPlan:refreshPlan,revokeAI:function(){sessionStorage.removeItem('tc_ai_consent');status('AI transfer permission revoked. Manual entry remains available.');}};
+ return {boot:boot,scope:function(){return owner;},api:api,auth:auth,sync:sync,changed:changed,importDevice:importDevice,resolveConflict:resolveConflict,logout:logout,password:password,remove:remove,report:report,promo:promo,premium:premium,restore:restore,beforeAI:beforeAI,validateGrowth:validateGrowth,status:status,refreshPlan:refreshPlan,revokeAI:function(){sessionStorage.removeItem('tc_ai_consent');status('AI transfer permission revoked. Manual entry remains available.');}};
 })();

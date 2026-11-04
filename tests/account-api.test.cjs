@@ -49,3 +49,8 @@ test('recovery returns to the trusted preview that requested it',async()=>{
   assert.equal(new URL(request.url).searchParams.get('redirect_to'),'https://preview.example.test/');
  }finally{delete process.env.VERCEL_URL;}
 });
+test('promo endpoint hashes codes and derives ownership from the session',async()=>{
+ const promo=require('../api/promo');let payload;
+ global.fetch=async(url,options)=>{if(url.includes('/rpc/redeem_promo')){payload=JSON.parse(options.body);return result({ok:true,message:'10 extra AI lookups added.'});}return baseline(url,options);};
+ const r=res();await promo(req({code:'  test-code-12345 ',userId:B}),r);assert.equal(r.statusCode,200);assert.equal(payload.p_user,A);assert.match(payload.p_hash,/^[a-f0-9]{64}$/);assert.ok(!JSON.stringify(payload).includes('TEST-CODE'));
+});
