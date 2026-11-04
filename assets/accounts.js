@@ -39,7 +39,7 @@ var TorcidaAccount=(function(){
    if(pendingCollection||collectionSaving)throw new Error('Finish Storage recovery before switching accounts.');
    var result=await api('account',{action:action,email:document.getElementById('account-email').value.trim(),password:document.getElementById('account-password').value,adult:document.getElementById('account-adult').checked});
    document.getElementById('account-password').value='';status(result.message);
-   if(action==='login'){sessionStorage.removeItem('tc_ai_consent');location.reload();}
+   if(action==='login'){sessionStorage.removeItem('tc_ai_consent');location.replace(location.pathname+location.search+'#scanner');location.reload();}
   }catch(e){status(e.message);}finally{button.disabled=false;}
  }
  async function encode(data){
@@ -58,7 +58,7 @@ var TorcidaAccount=(function(){
  }
  function empty(){return {version:1,humidors:[],activeHumidorId:null,humidor:[],wishlist:[],smoked:[],myBar:[],ashPersonalBest:null};}
  async function sync(){
-  if(!owner||!verified||syncing||conflict||!collectionLoaded||pendingCollection)return;
+  if(!owner||!verified||syncing||conflict||!collectionLoaded||pendingCollection||navigator.onLine===false)return;
   if(cachedOwner()!==owner){status('Account changed in another tab. Reload to continue.');return;}
   if(collectionSaving){changed();return;}
   syncing=true;dirty=false;status('Syncing your collection…');
@@ -130,6 +130,10 @@ var TorcidaAccount=(function(){
   }
  }
  function validateGrowth(data,previous){if(importing)return;var limits=user?.plan||{cigars:25,humidors:1},count=x=>x.humidor.length+x.humidors.reduce((n,h)=>n+h.cigars.length,0);if(previous&&(count(data)>limits.cigars&&count(data)>count(previous)||data.humidors.length>limits.humidors&&data.humidors.length>previous.humidors.length))throw new Error('Your plan limit is reached. Existing records, editing and exports remain available.');}
+ function refreshWhenVisible(){if(document.visibilityState!=='hidden')sync();}
+ window.addEventListener('focus',refreshWhenVisible);
+ document.addEventListener('visibilitychange',refreshWhenVisible);
+ setInterval(refreshWhenVisible,30000);
  window.addEventListener('online',sync);window.addEventListener('storage',function(e){if(e.key==='tc_owner'&&cachedOwner()!==owner){verified=false;status('Account changed in another tab. Reload before continuing.');}});
  return {boot:boot,scope:function(){return owner;},api:api,auth:auth,sync:sync,changed:changed,importDevice:importDevice,resolveConflict:resolveConflict,logout:logout,password:password,remove:remove,report:report,premium:premium,restore:restore,beforeAI:beforeAI,validateGrowth:validateGrowth,status:status,refreshPlan:refreshPlan,revokeAI:function(){sessionStorage.removeItem('tc_ai_consent');status('AI transfer permission revoked. Manual entry remains available.');}};
 })();
