@@ -8,7 +8,7 @@ var TorcidaAccount=(function(){
   document.getElementById('account-auth').hidden=!!user;
   document.getElementById('account-tools').hidden=!user;
   document.getElementById('account-name').textContent=user?user.email+' • '+user.plan.name:'Device collection';
-  document.getElementById('account-plan').textContent=user?'AI: '+user.plan.ai+' requests per '+user.plan.aiPeriod+'. Extra AI lookups remaining: '+(user.bonusAI||0)+'. Photo storage: '+Math.round(user.plan.photoBytes/1048576)+' MB.':'';
+  document.getElementById('account-plan').textContent=user?'AI: '+(user.plan.aiUnlimited?'Unlimited lookups':user.plan.ai+' requests per '+user.plan.aiPeriod)+'. Extra AI lookups remaining: '+(user.bonusAI||0)+'. Photo storage: '+Math.round(user.plan.photoBytes/1048576)+' MB.':'';
   document.getElementById('account-conflict').hidden=!conflict;
  }
  async function boot(){

@@ -53,3 +53,16 @@ test('owner code creation returns two private codes without saving their plainte
  assert.equal(rows.length,2);assert.deepEqual(rows.map(x=>x.kind).sort(),['lookups','premium']);
  for(const r of rows){assert.match(r.code,/^TORCIDA-[A-F0-9]{32}$/);const hash=Cloud.photoHash(r.code);assert.equal((await db.query('select max_redemptions from promo_codes where code_hash=$1',[hash])).rows[0].max_redemptions,100);}
 });
+test('family access has unlimited AI, is revocable and respects suspension, Premium stops at 50',async()=>{
+ await db.exec(fs.readFileSync('database/004_family_and_premium.sql','utf8'));
+ await db.query("select admin_account_action($1,$2,'grant-family',null,'Family account')",[B,A]);
+ let p=(await db.query('select * from profiles where id=$1',[A])).rows[0];assert.equal(Cloud.plan(p).aiUnlimited,true);assert.equal(Cloud.isPremium(p),true);
+ for(let i=0;i<55;i++)await db.query('select consume_ai($1)',[A]);
+ await db.query('update profiles set suspended=true where id=$1',[A]);await assert.rejects(db.query('select consume_ai($1)',[A]),/SUSPENDED/);
+ await db.query('update profiles set suspended=false where id=$1',[A]);
+ await db.query("select admin_account_action($1,$2,'revoke-family',null,'Remove family')",[B,A]);
+ p=(await db.query('select * from profiles where id=$1',[A])).rows[0];assert.equal(Cloud.isPremium(p),false);
+ await db.query("update profiles set complimentary_until=now()+interval '1 day' where id=$1",[B]);
+ for(let i=0;i<50;i++)await db.query('select consume_ai($1)',[B]);await assert.rejects(db.query('select consume_ai($1)',[B]),/AI_LIMIT/);
+ assert.equal(Cloud.plan({complimentary_until:'2099-01-01'}).ai,50);
+});

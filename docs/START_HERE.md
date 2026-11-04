@@ -32,7 +32,7 @@ On a Mac with Xcode 26 or newer, open `ios/App/App.xcodeproj` and resolve its Sw
 | Cigar records | 25 | 5,000 |
 | Humidors | 1 | 100 |
 | Cloud photo allowance | 10 MB | 100 MB |
-| AI identification | 5 introductory requests total | 30 per UTC calendar month |
+| AI identification | 5 introductory requests total | 50 per UTC calendar month |
 | Manual journal, export and deletion | Included | Included |
 
 Quantities do not create extra records. Photo allowances count encoded storage bytes. Initial device import can preserve an over-limit collection once per account, up to the hard maximum. Later growth above the plan cap is blocked. Existing records stay readable, editable and exportable after downgrade. Local legacy records are never deleted by migration. Imported photos must fit the published storage cap; excess photos remain in the local copy and backup.
@@ -57,3 +57,6 @@ Automated tests cover database role restrictions, revisions, plan limits, deleti
 Public-store policies and SDK deadlines must be rechecked when submitting.
 
 For an existing database, run `database/002_free_ai_allowance.sql` in Supabase SQL Editor to raise Free to five lifetime AI requests without resetting usage.
+
+## Friends and family
+Run database/004_family_and_premium.sql after migration 003. In /admin.html, search for a registered account and select Grant friends and family. Administrator allowlisting and MFA are required. Access has no expiration and includes unlimited AI lookups. Remove friends and family revokes this grant without changing any paid or timed entitlement. Suspensions, infrastructure request limits and collection/storage limits still apply. This does not cancel store billing. Premium now includes 50 AI requests per UTC calendar month. No existing usage is reset.
