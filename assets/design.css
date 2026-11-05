@@ -190,3 +190,9 @@ input[type="file"]::file-selector-button{min-height:48px;font:14px var(--sans);b
  .header-top{padding-inline:52px;}
  .header .brand-title{max-width:100%;overflow-wrap:anywhere;}
 }
+
+#tasting-tools-panel,#humidor-timeline{overflow-wrap:anywhere;}
+#tasting-tools-panel details{margin:12px 0;padding:12px;border:1px solid var(--border);border-radius:12px;}
+#tasting-tools-panel summary{cursor:pointer;font-weight:600;}
+#tasting-tools-panel .btn,#humidor-timeline .btn{margin:8px 8px 8px 0;white-space:normal;}
+#tasting-tools-panel textarea{min-height:96px;resize:vertical;}

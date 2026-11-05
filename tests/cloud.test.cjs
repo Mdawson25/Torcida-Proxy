@@ -66,3 +66,27 @@ test('family access has unlimited AI, is revocable and respects suspension, Prem
  for(let i=0;i<50;i++)await db.query('select consume_ai($1)',[B]);await assert.rejects(db.query('select consume_ai($1)',[B]),/AI_LIMIT/);
  assert.equal(Cloud.plan({complimentary_until:'2099-01-01'}).ai,50);
 });
+test('private groups hide other notes until host reveal and reject outsiders and cross-group actions',async()=>{
+ await db.exec(fs.readFileSync('database/005_tasting_groups.sql','utf8'));
+ const rpc=async(user,action,group=null,session=null,data={})=>(await db.query('select tasting_group_action($1,$2,$3,$4,$5) as r',[user,action,group,session,data])).rows[0].r;
+ const hash='a'.repeat(64);let r=await rpc(A,'create',null,null,{name:'Friends',displayName:'Host',hash});const id=r.group.id;
+ await assert.rejects(rpc(B,'get',id),/GROUP_ACCESS/);
+ await rpc(B,'join',null,null,{displayName:'Guest',hash});
+ r=await rpc(A,'session',id,null,{title:'Two samples',lineup:'Sample A\nSample B'});const sid=r.group.sessions[0].id;
+ await rpc(B,'rate',id,sid,{rating:4,notes:'Private guest note'});
+ r=await rpc(A,'get',id);assert.deepEqual(r.group.sessions[0].entries,[]);assert.equal(r.group.sessions[0].mine,null);assert.ok(!JSON.stringify(r).includes('Private guest note'));
+ await assert.rejects(rpc(B,'reveal',id,sid),/GROUP_ACCESS/);
+ r=await rpc(A,'reveal',id,sid);assert.equal(r.group.sessions[0].entries[0].notes,'Private guest note');
+ await assert.rejects(rpc(B,'rate',id,sid,{rating:5,notes:'Change'}),/GROUP_REVEALED/);
+ const second=(await rpc(A,'create',null,null,{name:'Other',displayName:'Host',hash:'b'.repeat(64)})).group.id;
+ await assert.rejects(rpc(A,'reveal',second,sid),/GROUP_ACCESS/);
+ await rpc(A,'rotate',id,null,{hash:'c'.repeat(64)});assert.ok((await rpc(B,'join',null,null,{displayName:'Guest',hash})).error);
+ await db.exec('set role authenticated');try{await assert.rejects(db.query('select * from tasting_entries'),/permission denied/);await assert.rejects(rpc(A,'get',id),/permission denied/);}finally{await db.exec('reset role');}
+ await db.query('delete from auth.users where id=$1',[A]);assert.equal((await db.query('select count(*)::int n from tasting_groups')).rows[0].n,0);
+});
+test('comparison records survive validation and merge independent device additions',()=>{
+ const a={id:'t1',type:'cigar',date:'2026-11-04',items:[{name:'A',rating:4,notes:'Cedar'},{name:'B',rating:3,notes:'Spice'}]},b={...a,id:'t2'};
+ const base=collection(),left={...collection(),tastings:[a]},right={...collection(),tastings:[b]};const merged=Sync.merge(base,left,right);assert.equal(merged.tastings.length,2);require('../assets/data').validateCollection(merged);
+ assert.throws(()=>require('../assets/data').validateCollection({...collection(),tastings:[{...a,items:[{name:'A',rating:7,notes:''},a.items[1]]}]}),/comparison/);
+});
+test('comparison imports preserve data and skip exact repeats',()=>{const t={id:'t1',type:'drink',date:'2026-11-04',items:[{name:'A',rating:4,notes:'Oak'},{name:'B',rating:3,notes:'Fruit'}]};const target={...collection(),tastings:[t]},source={...collection(),tastings:[{...t,items:[{...t.items[0],notes:'New note'},t.items[1]]}]};const result=Port.importCollection(target,source);assert.equal(result.tastings.length,2);assert.equal(typeof result.tastings[1].id,'string');require('../assets/data').validateCollection(result);assert.equal(Port.importCollection(result,source).tastings.length,2);});

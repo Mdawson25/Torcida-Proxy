@@ -7,6 +7,7 @@
   function append(dst,src){src.forEach(function(item){if(dst.some(x=>JSON.stringify(x)===JSON.stringify(item)||signature(x)===signature(item)&&JSON.stringify({...x,id:null})===JSON.stringify({...item,id:null})))return;var next=copy(item);if(dst.some(x=>String(x.id)===String(next.id)))next.id=Date.now()+Math.floor(Math.random()*1000000);dst.push(next);});}
   source.humidors.forEach(function(h){var existing=out.humidors.find(x=>x.id===h.id&&x.name===h.name);if(existing)append(existing.cigars,h.cigars);else{var next=copy(h);if(out.humidors.some(x=>x.id===next.id))next.id='import_'+Date.now()+'_'+out.humidors.length;out.humidors.push(next);}});
   ['humidor','wishlist','smoked','myBar'].forEach(k=>append(out[k],source[k]));
+  if(source.tastings&&source.tastings.length){out.tastings=out.tastings||[];source.tastings.forEach(function(item){if(out.tastings.some(function(x){return JSON.stringify({...x,id:null})===JSON.stringify({...item,id:null});}))return;var next=copy(item);if(out.tastings.some(function(x){return x.id===next.id;}))next.id='comparison_import_'+Date.now()+'_'+out.tastings.length;out.tastings.push(next);});}
   if(!out.activeHumidorId&&out.humidors.length)out.activeHumidorId=out.humidors[0].id;
   return out;
  }

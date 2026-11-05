@@ -1,8 +1,9 @@
+var tastingComparisons=[];
 var collectionKey='tc_collection_v1';
 var lastSavedCollection=null,lastSavedRevision=null,pendingCollection=null,collectionReadBlocked=false,collectionLoaded=false;
 var collectionStore=null,legacyArchive=null,collectionQueue=Promise.resolve(),collectionSaving=0,collectionEpoch=0,latestRequestedCollection=null;
-function collectionSnapshot(){return {version:1,humidors:humidors,activeHumidorId:activeHumidorId,humidor:humidor,wishlist:wishlist,smoked:smoked,myBar:myBar,ashPersonalBest:ashPersonalBest||null};}
-function applyCollection(data){humidors=data.humidors;activeHumidorId=data.activeHumidorId;humidor=data.humidor;wishlist=data.wishlist;smoked=data.smoked;myBar=data.myBar;ashPersonalBest=data.ashPersonalBest;}
+function collectionSnapshot(){var snapshot={version:1,humidors:humidors,activeHumidorId:activeHumidorId,humidor:humidor,wishlist:wishlist,smoked:smoked,myBar:myBar,ashPersonalBest:ashPersonalBest||null};if(tastingComparisons.length)snapshot.tastings=tastingComparisons;return snapshot;}
+function applyCollection(data){humidors=data.humidors;activeHumidorId=data.activeHumidorId;humidor=data.humidor;wishlist=data.wishlist;smoked=data.smoked;myBar=data.myBar;ashPersonalBest=data.ashPersonalBest;tastingComparisons=data.tastings||[];}
 function setCollectionStatus(message){var el=document.getElementById('backup-status');if(el)el.textContent=message;}
 function collectionNotice(message){
   var box=document.getElementById('collection-alert');document.getElementById('collection-alert-text').textContent=message;box.hidden=false;

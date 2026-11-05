@@ -15,6 +15,13 @@
       if(v.drink!==undefined&&(!object(v.drink)||typeof v.drink.name!=='string'||typeof v.drink.type!=='string'||!Number.isInteger(v.drink.rating)||v.drink.rating<0||v.drink.rating>5))throw new Error('Invalid drink entry.');
       if(v.photos!==undefined&&(!Array.isArray(v.photos)||v.photos.length>100||v.photos.some(function(p){return typeof p!=='string'||!/^data:image\/(?:jpeg|png|webp|gif);base64,[a-zA-Z0-9+/]+=*$/.test(p);})))throw new Error('Invalid saved photo.');
     });}
+    if(data.tastings!==undefined){
+      if(!Array.isArray(data.tastings)||data.tastings.length>1000)throw new Error('Invalid comparison history.');
+      var comparisonIds=new Set();data.tastings.forEach(function(t){
+       if(!object(t)||typeof t.id!=='string'||!/^[a-zA-Z0-9_-]{1,100}$/.test(t.id)||comparisonIds.has(t.id)||!['cigar','drink'].includes(t.type)||typeof t.date!=='string'||!Array.isArray(t.items)||t.items.length!==2)throw new Error('Invalid comparison.');
+       comparisonIds.add(t.id);t.items.forEach(function(x){if(!object(x)||typeof x.name!=='string'||!x.name.trim()||x.name.length>180||typeof x.notes!=='string'||x.notes.length>2000||!Number.isInteger(x.rating)||x.rating<1||x.rating>5)throw new Error('Invalid comparison score.');});
+      });
+    }
     records(data.humidors);records(data.humidor);records(data.wishlist,true);records(data.smoked);records(data.myBar);
     var ids=new Set();
     data.humidors.forEach(function(h){if(ids.has(h.id)||!Array.isArray(h.cigars))throw new Error('Invalid humidor.');ids.add(h.id);records(h.cigars);});

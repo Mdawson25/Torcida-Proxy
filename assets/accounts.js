@@ -66,7 +66,7 @@ var TorcidaAccount=(function(){
    var localText=JSON.stringify(collectionSnapshot()),local=await encode(JSON.parse(localText));
    var checkpoint=await collectionStore.readSync(),remote=(await api('collection')).record;
    var merged;
-   try{merged=remote?(checkpoint?.base?TorcidaSync.merge(checkpoint.base,local,remote.data):TorcidaSync.same(local,empty())?remote.data:!local.humidors.some(h=>h.cigars.length)&&!local.smoked.length&&!local.myBar.length&&!local.wishlist.length?remote.data:TorcidaSync.merge(empty(),local,remote.data)):local;}
+   try{merged=remote?(checkpoint?.base?TorcidaSync.merge(checkpoint.base,local,remote.data):TorcidaSync.same(local,empty())?remote.data:!local.humidors.some(h=>h.cigars.length)&&!local.smoked.length&&!local.myBar.length&&!local.wishlist.length&&!(local.tastings&&local.tastings.length)?remote.data:TorcidaSync.merge(empty(),local,remote.data)):local;}
    catch(e){conflict={remote:remote,local:local};draw();throw e;}
    // If the user edited while photos uploaded, restart rather than replacing newer device data.
    if(localText!==JSON.stringify(collectionSnapshot())){dirty=true;queued=true;return;}

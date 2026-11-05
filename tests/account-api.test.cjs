@@ -54,3 +54,9 @@ test('promo endpoint hashes codes and derives ownership from the session',async(
  global.fetch=async(url,options)=>{if(url.includes('/rpc/redeem_promo')){payload=JSON.parse(options.body);return result({ok:true,message:'10 extra AI lookups added.'});}return baseline(url,options);};
  const r=res();await promo(req({code:'  test-code-12345 ',userId:B}),r);assert.equal(r.statusCode,200);assert.equal(payload.p_user,A);assert.match(payload.p_hash,/^[a-f0-9]{64}$/);assert.ok(!JSON.stringify(payload).includes('TEST-CODE'));
 });
+test('group endpoint derives member identity from session and hashes private invites',async()=>{
+ const handler=require('../api/tasting-groups');let payload;
+ global.fetch=async(url,options)=>{if(url.includes('/rpc/tasting_group_action')){payload=JSON.parse(options.body);return result({group:{id:B,name:'Friends',members:[],sessions:[]}});}return baseline(url,options);};
+ const r=res();await handler(req({action:'create',userId:B,name:'Friends',displayName:'Matt'}),r);assert.equal(r.statusCode,200);assert.equal(payload.p_user,A);assert.match(r.body.invite,/^[A-F0-9]{48}$/);assert.match(payload.p_data.hash,/^[a-f0-9]{64}$/);assert.ok(!JSON.stringify(payload).includes(r.body.invite));
+ const invalid=res();await handler(req({action:'rate',groupId:B,sessionId:B,rating:99,notes:'x'}),invalid);assert.equal(invalid.statusCode,400);
+});

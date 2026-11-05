@@ -610,7 +610,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
     </div>
 
     <!-- ── HUMIDOR MODE ── -->
-    <div id="cigar-humidor-mode">
+    <div id="cigar-humidor-mode"><section class="about-section"><button class="btn" onclick="TorcidaTasting.openTimeline()">Humidor timeline</button><div id="humidor-timeline"></div></section>
       <div class="humidor-tabs" id="humidor-tabs" style="margin-bottom:14px;"></div>
       <div class="humidor-info-bar" id="humidor-info-bar" style="display:none;margin-bottom:14px;">
         <div class="humidor-info-col"><div class="humidor-info-label">Type</div><div class="humidor-info-val" id="hib-type">—</div><div class="humi-type-badge" id="hib-target"></div></div>
@@ -789,6 +789,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   <!-- JOURNAL PAGE                                    -->
   <!-- ═══════════════════════════════════════════════ -->
   <div id="page-smoked" class="page">
+    <section class="about-section"><h2>Your tasting tools</h2><div class="account-buttons"><button class="btn" onclick="TorcidaTasting.open('insights')">Explain my taste</button><button class="btn" onclick="TorcidaTasting.open('compare')">Side-by-side tasting</button><button class="btn" onclick="TorcidaTasting.open('groups')">Private tasting groups</button></div><div id="tasting-tools-panel"></div></section>
     <div class="summary-bar">
       <div class="summary-item"><div class="summary-num" id="s-count">0</div><div class="summary-lbl">Smoked</div></div>
       <div class="summary-item"><div class="summary-num" id="s-avg">—</div><div class="summary-lbl">Avg Rating</div></div>
@@ -1304,6 +1305,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <script src="/assets/collection.js"></script>
 <script src="/assets/ai-client.js"></script>
 <script src="/assets/pairings.js"></script>
+<script src="/assets/tasting-tools.js"></script>
 <script src="/assets/sync.js"></script>
 <script src="/assets/portability.js"></script>
 <script src="/assets/accounts.js"></script>
@@ -1790,7 +1792,7 @@ function closeModal(id){
   document.documentElement.style.overflow='';
   TorcidaMobile.modalClose(id);
 }
-function renderAll(){loadAshBest();renderHumidorTabs();renderHumidorInfoBar();renderHumidor();renderBar();renderWishlist();renderBarWishList();renderSmoked();}
+function renderAll(){if(window.TorcidaTasting)TorcidaTasting.render();loadAshBest();renderHumidorTabs();renderHumidorInfoBar();renderHumidor();renderBar();renderWishlist();renderBarWishList();renderSmoked();}
 
 // ── SCANNER ───────────────────────────────────────────────────
 async function handleScan(input){
