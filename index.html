@@ -511,6 +511,16 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <input type="file" id="cam-input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleScan(this)">
       <input type="file" id="cam-input-gallery" accept="image/*" style="display:none" onchange="handleScan(this)"><p class="privacy-note">AI lookup sends selected photos or text to Anthropic. <button type="button" class="text-link" onclick="showPage('about',this)">Data &amp; privacy</button></p>
     </div>
+    <section class="about-section" aria-labelledby="pairings-title">
+      <h2 id="pairings-title">Pairings</h2>
+      <p>Compare flavor profiles from your collection or explore new suggestions. AI suggestions are subjective. Each search uses one AI request.</p>
+      <label class="form-label" for="pairing-type">Start with</label><select class="form-input" id="pairing-type" onchange="TorcidaPairings.refresh()"><option value="cigar">A cigar</option><option value="drink">A drink</option></select>
+      <label class="form-label" for="pairing-item">Cigar or drink name</label><input class="form-input" id="pairing-item" list="pairing-owned-items" maxlength="180" placeholder="Choose a saved item or enter a name" onfocus="TorcidaPairings.refresh()"><datalist id="pairing-owned-items"></datalist>
+      <label class="form-label" for="pairing-notes">Flavor notes, optional</label><input class="form-input" id="pairing-notes" maxlength="300" placeholder="e.g. cherry, cedar, dark chocolate">
+      <label class="form-label" for="pairing-mode">Show matches from</label><select class="form-input" id="pairing-mode"><option value="both">My collection and new suggestions</option><option value="owned">My collection only</option><option value="discover">New suggestions only</option></select>
+      <p>Collection matches compare up to 80 in-stock items. Item names and flavor notes are sent to Anthropic for this search.</p>
+      <button class="btn btn-primary" id="pairing-submit" onclick="TorcidaPairings.search()">Find pairings</button><p id="pairing-status" role="status" aria-live="polite"></p><div id="pairing-results"></div>
+    </section>
     <div class="sec-title">Search by Name</div>
     <div class="input-row">
       <input class="search-input" id="cigar-search" aria-label="Search cigars or spirits by name" placeholder="e.g. Padron 1964 Anniversary..." onkeydown="if(event.key==='Enter')searchCigar()">
@@ -1293,6 +1303,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <script src="/assets/storage.js"></script>
 <script src="/assets/collection.js"></script>
 <script src="/assets/ai-client.js"></script>
+<script src="/assets/pairings.js"></script>
 <script src="/assets/sync.js"></script>
 <script src="/assets/portability.js"></script>
 <script src="/assets/accounts.js"></script>

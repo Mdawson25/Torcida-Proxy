@@ -63,3 +63,9 @@ test('Vercel Marketplace KV REST variables work without copying secrets',async()
  process.env.VERCEL='1';process.env.KV_REST_API_URL='https://marketplace.example.test';process.env.KV_REST_API_TOKEN='marketplace-secret';
  await api.reserveUsage('marketplace',100,async(url,options)=>{assert.equal(url,'https://marketplace.example.test');assert.equal(options.headers.Authorization,'Bearer marketplace-secret');return {ok:true,json:async()=>({result:0})};});
 });
+test('pairing response uses verified candidate names, deduplicates matches and charges one allowance',async()=>{
+ process.env.ANTHROPIC_KEY='test-key';let charges=0;const previous=global.fetch;
+ const mock=accountFetch(async()=>({ok:true,json:async()=>({content:[{type:'text',text:JSON.stringify({matches:[{scope:'owned',index:0,name:'Invented',brand:'Wrong',why:'Shared oak notes'},{scope:'owned',index:0,name:'Duplicate',why:'Again'},{scope:'discover',name:'Espresso',brand:'',why:'Coffee contrast'}]})}],stop_reason:'end_turn'})}));
+ global.fetch=async(url,options)=>{if(url.includes('/rpc/consume_ai'))charges++;return mock(url,options);};
+ try{const r=response();await api.default(request({operation:'pairings',messages:[{role:'user',content:JSON.stringify({type:'cigar',mode:'both',item:{name:'A'},inventory:[{name:'Owned bottle',brand:'Maker'}]})}]}),r);assert.equal(r.statusCode,200);const out=JSON.parse(r.body.content[0].text);assert.equal(out.matches.length,2);assert.equal(out.matches[0].name,'Owned bottle');assert.equal(out.matches[0].brand,'Maker');assert.equal(charges,1);}finally{global.fetch=previous;}
+});

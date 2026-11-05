@@ -131,7 +131,7 @@ var TorcidaAccount=(function(){
  async function beforeAI(){
   if(!verified)throw new Error('Sign in with a verified email to use AI identification. Manual entry is available.');
   if(sessionStorage.getItem('tc_ai_consent')!=='yes'){
-   if(!confirm('AI identification sends your selected photo or entered text through Torcida to Anthropic. Do not include personal information. Provider retention depends on its service configuration. Allow this transfer for this session?'))throw new Error('AI transfer cancelled. You can enter the record manually.');
+   if(!confirm('AI lookup sends your selected photo, item names, or flavor notes through Torcida to Anthropic. Do not include personal information. Provider retention depends on its service configuration. Allow this transfer for this session?'))throw new Error('AI transfer cancelled. You can enter the record manually.');
    sessionStorage.setItem('tc_ai_consent','yes');
   }
  }

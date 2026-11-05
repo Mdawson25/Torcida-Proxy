@@ -46,6 +46,7 @@
     try{return JSON.parse(text.slice(start,end+1));}catch(e){throw new Error('The result was incomplete. Please try again.');}
   }
   var fields={
+    pairings:['name','brand','why'],
     identify:['name','brand','size','wrapper','strength','rating','tasting_notes','pairing','about','spirit_type','age','proof','cigar_pairing_name','cigar_pairing_brand','cigar_pairing_why'],
     selector:['name','brand','vitola','strength','why'],
     pairing:['cigar_name','cigar_brand','why'],
@@ -60,6 +61,10 @@
     function row(v,keys){
       if(!object(v))throw new Error('The result has an unexpected format. Please try again.');
       var out={};keys.forEach(function(k){var x=v[k];out[k]=(typeof x==='string'?x:typeof x==='number'&&Number.isFinite(x)?String(x):Array.isArray(x)?x.filter(function(s){return typeof s==='string';}).join(', '):'').slice(0,12000);if(/<\/?[a-z][^>]*>/i.test(out[k]))throw new Error('The result contained unexpected markup. Please try again.');});return out;
+    }
+    if(kind==='pairings'){
+      if(!object(value)||!Array.isArray(value.matches)||value.matches.length>6)throw new Error('The pairing result was incomplete. Please retry.');
+      return {matches:value.matches.map(function(v){var r=row(v,fields.pairings);if(!r.name.trim()||!r.why.trim()||!['owned','discover'].includes(v.scope))throw new Error('A pairing was incomplete.');r.scope=v.scope;r.index=Number.isInteger(v.index)&&v.index>=0?v.index:null;return r;})};
     }
     if(kind==='alternatives'){
       if(!Array.isArray(value)||!value.length||value.length>8)throw new Error('No alternatives returned. Please try again.');
