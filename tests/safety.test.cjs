@@ -73,7 +73,7 @@ test('JSON extraction handles fenced or prefaced JSON but rejects truncated data
  assert.deepEqual(Data.parseAI('```json\n{"name":"Cigar"}\n```'),{name:'Cigar'});assert.deepEqual(Data.parseAI('Here it is: [{"name":"Cigar"}]'),[{name:'Cigar'}]);assert.throws(()=>Data.parseAI('{"name":'));assert.throws(()=>Data.parseAI('no result'));
 });
 test('every browser AI request uses the shared validated response reader and an operation',async()=>{
- const s=fs.readFileSync(require.resolve('../index.html'),'utf8');assert.equal((s.match(/await readAIResponse\(/g)||[]).length,9);assert.equal((s.match(/operation:'/g)||[]).length,9);assert.ok(!s.includes('data.content.map'));
+ const s=fs.readFileSync(require.resolve('../index.html'),'utf8');assert.equal((s.match(/await readAIResponse\(/g)||[]).length,2);assert.equal((s.match(/operation:'/g)||[]).length,2);assert.ok(!s.includes('data.content.map'));assert.doesNotMatch(s,/operation:'(?:selector|ash|occasion|pairing|recipes|quiz|alternatives)'/);
  for(const m of s.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
 });
 test('AI bar-match claims require an owned bottle with stock remaining',async()=>{

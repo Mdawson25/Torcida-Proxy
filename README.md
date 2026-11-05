@@ -1,5 +1,11 @@
 # Torcida
 
+Account and store launch work: read [docs/START_HERE.md](docs/START_HERE.md) before deployment. [Recommendation status](docs/RECOMMENDATION_STATUS.md) and the [release checklist](docs/RELEASE_CHECKLIST.md) distinguish implemented code from owner setup and device validation.
+
+The historical release notes below describe the earlier device-only app and are retained as context. The review branch adds optional accounts and cloud sync when configured.
+
+# Torcida
+
 ## This release
 
 - About > Download backup exports the complete collection, including saved journal photos. Restore backup previews counts and requires an explicit replacement confirmation. The current collection downloads before replacement. Files are private to the user, not uploaded to a server.

@@ -5,8 +5,9 @@
   function validateCollection(data){
     if(!object(data)||data.version!==1)throw new Error('This backup version is not supported.');
     KEYS.forEach(function(k){if(!Array.isArray(data[k])||data[k].length>20000)throw new Error('Invalid collection: '+k);});
-    function records(list,freePrice){list.forEach(function(v){
+    function records(list,freePrice){var recordIds=new Set();list.forEach(function(v){
       if(!object(v)||!(typeof v.id==='number'&&Number.isSafeInteger(v.id)||typeof v.id==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(v.id))||typeof v.name!=='string')throw new Error('A collection entry is invalid.');
+      if(recordIds.has(String(v.id)))throw new Error('Duplicate collection record ID.');recordIds.add(String(v.id));
       ['name','brand','size','wrapper','strength','notes','date','location','reason','itemType','spiritType','type','age','proof','purchaseDate'].forEach(function(k){if(v[k]!==undefined&&v[k]!==null&&typeof v[k]!=='string')throw new Error('Invalid text field: '+k);});
       ['qty','bottles','lowstock','rating'].forEach(function(k){if(v[k]!==undefined&&(!Number.isInteger(v[k])||v[k]<0||v[k]>(k==='rating'?5:1000000)))throw new Error('Invalid count or rating.');});
       if(!freePrice&&v.price!==undefined&&v.price!==''&&(!['number','string'].includes(typeof v.price)||!Number.isFinite(Number(v.price))||Number(v.price)<0))throw new Error('Invalid price.');
@@ -45,6 +46,7 @@
     try{return JSON.parse(text.slice(start,end+1));}catch(e){throw new Error('The result was incomplete. Please try again.');}
   }
   var fields={
+    pairings:['name','brand','why'],
     identify:['name','brand','size','wrapper','strength','rating','tasting_notes','pairing','about','spirit_type','age','proof','cigar_pairing_name','cigar_pairing_brand','cigar_pairing_why'],
     selector:['name','brand','vitola','strength','why'],
     pairing:['cigar_name','cigar_brand','why'],
@@ -59,6 +61,10 @@
     function row(v,keys){
       if(!object(v))throw new Error('The result has an unexpected format. Please try again.');
       var out={};keys.forEach(function(k){var x=v[k];out[k]=(typeof x==='string'?x:typeof x==='number'&&Number.isFinite(x)?String(x):Array.isArray(x)?x.filter(function(s){return typeof s==='string';}).join(', '):'').slice(0,12000);if(/<\/?[a-z][^>]*>/i.test(out[k]))throw new Error('The result contained unexpected markup. Please try again.');});return out;
+    }
+    if(kind==='pairings'){
+      if(!object(value)||!Array.isArray(value.matches)||value.matches.length>6)throw new Error('The pairing result was incomplete. Please retry.');
+      return {matches:value.matches.map(function(v){var r=row(v,fields.pairings);if(!r.name.trim()||!r.why.trim()||!['owned','discover'].includes(v.scope))throw new Error('A pairing was incomplete.');r.scope=v.scope;r.index=Number.isInteger(v.index)&&v.index>=0?v.index:null;return r;})};
     }
     if(kind==='alternatives'){
       if(!Array.isArray(value)||!value.length||value.length>8)throw new Error('No alternatives returned. Please try again.');

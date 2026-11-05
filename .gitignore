@@ -1,0 +1,12 @@
+node_modules/
+mobile/www/
+.env
+.env.*
+!.env.example
+ios/App/Pods/
+ios/App/build/
+android/.gradle/
+android/local.properties
+android/app/build/
+assets/native.js
+public/

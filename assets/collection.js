@@ -26,14 +26,15 @@ async function initializeCollection(){
   try{
     // Put the notice in normal document flow instead of covering the screen.
     if(document.querySelector){var header=document.querySelector('.header'),box=document.getElementById('collection-alert');if(header&&box)header.after(box);}
-    collectionStore=await CollectionStore.open();
+    var scope=typeof TorcidaAccount!=='undefined'?TorcidaAccount.scope():null;
+    collectionStore=await CollectionStore.open(undefined,scope);
     var record=await collectionStore.read();
     if(record){lastSavedRevision=record.revision;var data=TorcidaData.validateCollection(record.data);applyCollection(data);lastSavedCollection=JSON.stringify(data);if(collectionStore.mode==='indexeddb'){try{var archived=await collectionStore.archive();if(archived&&archived.values)CollectionStore.removeArchivedCopies(localStorage,archived.values);}catch(e){}}}
     else{
-      var values=CollectionStore.readLegacy(localStorage),data=legacyData(values);applyCollection(data);
+      var values=scope?Object.fromEntries(CollectionStore.legacyKeys.map(function(k){return [k,null];})):CollectionStore.readLegacy(localStorage),data=legacyData(values);applyCollection(data);
       // Legacy data itself is already a saved checkpoint, even if migration fails.
       lastSavedCollection=JSON.stringify(data);
-      if(collectionStore.mode==='indexeddb')legacyArchive=values;
+      if(collectionStore.mode==='indexeddb'&&!scope)legacyArchive=values;
       try{await persistCollection();}catch(e){}
     }
     collectionLoaded=true;
@@ -43,6 +44,7 @@ async function initializeCollection(){
 }
 function persistCollection(){
   var candidate=JSON.stringify(collectionSnapshot());
+  if(typeof TorcidaAccount!=='undefined'){try{TorcidaAccount.validateGrowth(JSON.parse(candidate),lastSavedCollection?JSON.parse(lastSavedCollection):null);}catch(e){if(lastSavedCollection)applyCollection(JSON.parse(lastSavedCollection));return Promise.reject(e);}}
   if(pendingCollection&&candidate!==pendingCollection){
     if(lastSavedCollection)applyCollection(JSON.parse(lastSavedCollection));
     collectionNotice('Recover or download your unsaved changes before saving another change. You can dismiss this notice and continue browsing.');
@@ -59,7 +61,7 @@ function persistCollection(){
       lastSavedRevision=record.revision;lastSavedCollection=candidate;pendingCollection=null;
       if(collectionStore.mode==='indexeddb'&&legacyArchive){CollectionStore.removeArchivedCopies(localStorage,legacyArchive);legacyArchive=null;}
       document.getElementById('collection-alert').hidden=true;
-      setCollectionStatus('Saved on this device at '+new Date().toLocaleTimeString()+'.');return true;
+      setCollectionStatus('Saved on this device at '+new Date().toLocaleTimeString()+'.');if(typeof TorcidaAccount!=='undefined')TorcidaAccount.changed();return true;
     }catch(error){
       collectionEpoch++;
       // Preserve the latest snapshot submitted before this failure, including rapid taps.
@@ -79,10 +81,10 @@ async function retryCollectionSave(){
   var button=document.getElementById('retry-collection');button.disabled=true;button.textContent='Saving…';
   try{
     if(collectionStore&&collectionStore.mode==='local'){
-      var expanded=await CollectionStore.open();
+      var expanded=await CollectionStore.open(undefined,typeof TorcidaAccount!=='undefined'?TorcidaAccount.scope():null);
       if(expanded.mode==='indexeddb'){
         var existing=await expanded.read();if(existing)throw new Error('A collection already exists in expanded storage. Download the pending backup, then reload.');
-        collectionStore=expanded;lastSavedRevision=null;legacyArchive=CollectionStore.readLegacy(localStorage);
+        collectionStore=expanded;lastSavedRevision=null;legacyArchive=typeof TorcidaAccount!=='undefined'&&TorcidaAccount.scope()?null:CollectionStore.readLegacy(localStorage);
       }
     }
     applyCollection(TorcidaData.validateCollection(JSON.parse(pendingCollection)));await persistCollection();renderAll();closeModal('modal-storage-recovery');showToast('Your pending changes are saved.');

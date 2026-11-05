@@ -1,0 +1,9 @@
+{
+  "liveAccountAndCloudTests":false,
+  "iosPhysicalDeviceTests":false,
+  "androidPhysicalDeviceTests":false,
+  "nativeCookieLifecycleTests":false,
+  "appleAndGoogleSandboxPurchases":false,
+  "privacyAndSupportApproved":false,
+  "signedReleaseBuilds":false
+}
