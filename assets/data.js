@@ -47,7 +47,7 @@
   var fields={
     identify:['name','brand','size','wrapper','strength','rating','tasting_notes','pairing','about','spirit_type','age','proof','cigar_pairing_name','cigar_pairing_brand','cigar_pairing_why'],
     selector:['name','brand','vitola','strength','why'],
-    pairing:['cigar_name','cigar_brand','why'],
+    pairing:['cigar_name','cigar_brand','drink_name','why'],
     recipes:['drink_name','drink_desc','drink_recipe','drink_recipe_search','drink_zero_proof','cocktail_name','cocktail_desc','cocktail_recipe','cocktail_recipe_search','zero_proof_recipe','bar_match','bar_match_why'],
     quiz:['recommended_strength','profile_description'],
     ash:['estimated_length','construction_analysis','why_contests_exist','quality_verdict'],
@@ -70,7 +70,8 @@
       r.type=value.type;r.flavor_tags=list(value.flavor_tags);
     }
     if(kind==='selector'){if(!r.name.trim())throw new Error('No cigar recommendation returned.');r.flavor_tags=list(value.flavor_tags);}
-    if((kind==='pairing'||kind==='occasion')&&!r.cigar_name.trim())throw new Error('No cigar recommendation returned.');
+    if(kind==='pairing'&&!r.cigar_name.trim()&&!r.drink_name.trim())throw new Error('No pairing recommendation returned.');
+    if(kind==='occasion'&&!r.cigar_name.trim())throw new Error('No cigar recommendation returned.');
     if(kind==='ash'){r.is_cigar=value.is_cigar===true;r.scale_reliable=value.scale_reliable===true&&r.is_cigar;r.length_value=typeof value.length_value==='number'&&Number.isFinite(value.length_value)&&value.length_value>0?value.length_value:null;r.length_unit=['in','cm','mm'].includes(value.length_unit)?value.length_unit:'';if(r.length_value===null||!r.length_unit)r.scale_reliable=false;if(value.is_cigar===false){r.estimated_length=r.estimated_length||'Unmeasured';r.quality_verdict=r.quality_verdict||'Uncertain';}}
     if(kind==='ash'&&(!r.estimated_length||!r.quality_verdict))throw new Error('The photo analysis was incomplete. Please try again.');
     if(kind==='recipes'&&!r.drink_name&&!r.cocktail_name)throw new Error('No pairing recipe returned. Please try again.');
