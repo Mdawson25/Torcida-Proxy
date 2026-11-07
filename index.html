@@ -1152,7 +1152,6 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <h3 id="pairing-name" hidden></h3>
       <p class="notes-text" id="pairing-description"></p>
     </div>
-    <button type="button" class="btn btn-ghost" id="pairing-lookup" hidden>Look up this cigar</button>
   </div>
 </div>
 
@@ -1633,11 +1632,8 @@ async function showPairing(item,type){
   var modal=document.getElementById('modal-pairing');
   var name=document.getElementById('pairing-name');
   var description=document.getElementById('pairing-description');
-  var lookup=document.getElementById('pairing-lookup');
   document.getElementById('pairing-title').textContent='Pair with '+label;
   name.hidden=true;
-  lookup.hidden=true;
-  lookup.onclick=null;
   description.textContent='Finding a pairing…';
   openModal(modal.id);
 
@@ -1657,15 +1653,7 @@ async function showPairing(item,type){
     name.textContent=match;
     name.hidden=false;
     description.textContent=result.why;
-    if(isSpirit){
-      lookup.hidden=false;
-      lookup.onclick=function(){
-        closeModal(modal.id);
-        document.getElementById('cigar-search').value=match;
-        showPage('scanner',document.querySelector('.nav-tab'));
-        searchCigar();
-      };
-    }
+
   }catch(error){
     if(request===pairingRequest&&modal.classList.contains('show'))description.textContent=error.message||'Could not find a pairing. Try again.';
   }
