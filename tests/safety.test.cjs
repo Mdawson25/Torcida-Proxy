@@ -73,15 +73,19 @@ test('JSON extraction handles fenced or prefaced JSON but rejects truncated data
  assert.deepEqual(Data.parseAI('```json\n{"name":"Cigar"}\n```'),{name:'Cigar'});assert.deepEqual(Data.parseAI('Here it is: [{"name":"Cigar"}]'),[{name:'Cigar'}]);assert.throws(()=>Data.parseAI('{"name":'));assert.throws(()=>Data.parseAI('no result'));
 });
 test('every browser AI request uses the shared validated response reader and an operation',async()=>{
- const s=fs.readFileSync(require.resolve('../index.html'),'utf8');assert.equal((s.match(/await readAIResponse\(/g)||[]).length,9);assert.equal((s.match(/operation:'/g)||[]).length,9);assert.ok(!s.includes('data.content.map'));
+ const s=fs.readFileSync(require.resolve('../index.html'),'utf8');assert.equal((s.match(/await readAIResponse\(/g)||[]).length,7);assert.equal((s.match(/operation:'/g)||[]).length,7);assert.ok(!s.includes('data.content.map'));
  for(const m of s.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
 });
-test('AI bar-match claims require an owned bottle with stock remaining',async()=>{
- const html=fs.readFileSync(require.resolve('../index.html'),'utf8');const start=html.indexOf('function showBarMatchBanner(');const end=html.indexOf('function renderFlavorTags(',start);
- const nodes={'bar-match-banner':{style:{}},'bar-match-name':{},'bar-match-why':{}};const ctx={document:{getElementById:id=>nodes[id]},myBar:[]};vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
- ctx.showBarMatchBanner('Death & Co','AI claim');assert.equal(nodes['bar-match-banner'].style.display,'none');
- ctx.myBar=[{name:'Reserve',brand:'Example',bottles:1}];ctx.showBarMatchBanner('Example Reserve','Match');assert.equal(nodes['bar-match-banner'].style.display,'block');
- ctx.myBar[0].bottles=0;ctx.showBarMatchBanner('Example Reserve','Match');assert.equal(nodes['bar-match-banner'].style.display,'none');
+test('bar pairings require a saved bottle with stock remaining',()=>{
+ const html=fs.readFileSync(require.resolve('../index.html'),'utf8');
+ const start=html.indexOf('function findCigarForSpirit(');
+ const end=html.indexOf('function pairLookupCigar(',start);
+ const calls=[];
+ const ctx={myBar:[{id:'empty',bottles:0},{id:'stocked',bottles:1},{id:'legacy'}],showPairing:(item,type)=>calls.push([item.id,type])};
+ vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ for(const id of ['missing','empty','stocked','legacy'])ctx.findCigarForSpirit(id);
+ assert.deepEqual(calls,[['stocked','spirit'],['legacy','spirit']]);
+ assert.equal(Data.normalizeAI({drink_name:'Espresso',why:'Complements the roast notes.'},'pairing').drink_name,'Espresso');
 });
 
 function expandedDriver(){

@@ -233,8 +233,6 @@ body{font-family:'Crimson Pro',serif,'Apple Color Emoji','Segoe UI Emoji','Noto 
 .modal-box{background:var(--surface);border:0.5px solid var(--border-s);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:780px;max-height:92vh;overflow-y:auto;animation:slideUp 0.25s ease;}
 @keyframes slideUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .modal-title{font-family:'Playfair Display',serif;font-size:21.6px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
-.occ-chip{font-size:13px;padding:6px 12px;border-radius:20px;border:0.5px solid var(--border-s);color:var(--muted);cursor:pointer;background:var(--surface);transition:all 0.15s;font-family:'Crimson Pro',serif;}
-.occ-chip.active{background:#8B5E3C;border-color:#8B5E3C;color:#FFFDF7;font-weight:600;}
 .taste-bar-bg{flex:1;height:6px;background:var(--border);border-radius:3px;}
 .taste-bar-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#8B5E3C,#C9A84C);}
 .taste-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
@@ -386,7 +384,6 @@ input,select,textarea{font-size:17px !important;}
   .card-actions{flex-direction:row !important;flex-wrap:wrap;}
   .form-actions{flex-direction:column;gap:8px;}
   .form-actions .btn{width:100%;text-align:center;}
-  .occ-chip{font-size:12px;padding:5px 10px;}
   .header{padding:10px 14px 8px !important;}
   .brand-title{font-size:26px !important;letter-spacing:1px !important;}
   .brand-sub{font-size:12px !important;letter-spacing:2px !important;}
@@ -521,58 +518,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="cigar-brand" id="res-brand"></div>
       <div class="cigar-grid" id="res-grid"></div>
       <div class="notes-block"><div class="notes-label">Tasting Notes</div><div class="notes-text" id="res-tasting"></div><div class="flavor-tags" id="res-tags"></div></div>
-      <div class="notes-block"><div class="notes-label">Pairing Recommendations</div><div class="notes-text" id="res-pairing"></div></div>
-      <div id="bar-match-banner" style="display:none;background:linear-gradient(135deg,rgba(74,106,52,0.12),rgba(201,168,76,0.10));border:1px solid rgba(74,106,52,0.4);border-radius:12px;padding:14px 16px;margin-bottom:12px;">
-        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A6A34;font-weight:700;margin-bottom:6px;">🍀 You're in luck!</div>
-        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);font-weight:600;margin-bottom:4px;" id="bar-match-name"></div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.5;" id="bar-match-why"></div>
-        <div style="font-size:12px;color:#4A6A34;margin-top:6px;">Already in your bar — pour and enjoy.</div>
-      </div>
-      <div class="notes-block" id="cocktail-block" style="display:none;">
-        <div class="notes-label">✦ Signature Cocktail Pairing</div>
-        <div id="cocktail-name" style="font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:600;margin-bottom:4px;"></div>
-        <div id="cocktail-desc" style="font-size:15px;color:var(--muted);margin-bottom:12px;line-height:1.6;"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-sm btn-primary" onclick="toggleRecipe('full')" id="full-recipe-btn" style="flex:1;">🥃 Full Recipe</button>
-          <button class="btn btn-sm btn-ghost" onclick="toggleRecipe('zero')" id="zero-recipe-btn" style="flex:1;">🍹 Zero Proof</button>
-        </div>
-        <div id="full-recipe-panel" style="display:none;margin-top:12px;background:var(--surface2);border-radius:8px;padding:14px;border-left:3px solid #8B5E3C;">
-          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B5E3C;margin-bottom:8px;font-weight:600;">Full Recipe</div>
-          <div id="full-recipe-text" style="font-size:14px;color:var(--muted);line-height:1.8;white-space:pre-line;"></div>
-          <a id="cocktail-link" href="#" target="_blank" style="display:inline-block;margin-top:10px;font-size:13px;color:#8B5E3C;text-decoration:underline;font-family:'Crimson Pro',serif;">Find more variations ↗</a>
-        </div>
-        <div id="zero-proof-panel" style="display:none;margin-top:12px;background:var(--surface2);border-radius:8px;padding:14px;border-left:3px solid #4A8A5A;">
-          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A8A5A;margin-bottom:8px;font-weight:600;">Zero Proof Version</div>
-          <div id="zero-proof-text" style="font-size:14px;color:var(--muted);line-height:1.8;white-space:pre-line;"></div>
-        </div>
-      </div>
       <div class="notes-block"><div class="notes-label">About</div><div class="notes-text" id="res-about"></div></div>
-      <div class="notes-block" id="spirit-pairing-block" style="display:none;">
-        <div class="notes-label">✦ Suggested Cigar Pairing</div>
-        <div id="spirit-cigar-name" style="font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:600;margin-bottom:3px;"></div>
-        <div id="spirit-cigar-brand" style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;"></div>
-        <div id="spirit-cigar-why" style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px;"></div>
-        <button class="btn btn-sm btn-ghost" onclick="searchSpiritPairing()">Search This Cigar</button>
-      </div>
-      <div class="notes-block" id="spirit-drink-block" style="display:none;">
-        <div class="notes-label">✦ Signature Drink Recipe</div>
-        <div id="spirit-drink-name" style="font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:600;margin-bottom:4px;"></div>
-        <div id="spirit-drink-desc" style="font-size:15px;color:var(--muted);margin-bottom:12px;line-height:1.6;"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-sm btn-primary" onclick="toggleSpiritRecipe('full')" id="spirit-full-btn" style="flex:1;">🥃 Full Recipe</button>
-          <button class="btn btn-sm btn-ghost" onclick="toggleSpiritRecipe('zero')" id="spirit-zero-btn" style="flex:1;">🍹 Zero Proof</button>
-        </div>
-        <div id="spirit-full-panel" style="display:none;margin-top:12px;background:var(--surface2);border-radius:8px;padding:14px;border-left:3px solid #8B5E3C;">
-          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B5E3C;margin-bottom:8px;font-weight:600;">Full Recipe</div>
-          <div id="spirit-full-text" style="font-size:14px;color:var(--muted);line-height:1.8;white-space:pre-line;"></div>
-          <a id="spirit-drink-link" href="#" target="_blank" style="display:inline-block;margin-top:10px;font-size:13px;color:#8B5E3C;text-decoration:underline;font-family:'Crimson Pro',serif;">Find more variations ↗</a>
-        </div>
-        <div id="spirit-zero-panel" style="display:none;margin-top:12px;background:var(--surface2);border-radius:8px;padding:14px;border-left:3px solid #4A8A5A;">
-          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A8A5A;margin-bottom:8px;font-weight:600;">Zero Proof Version</div>
-          <div id="spirit-zero-text" style="font-size:14px;color:var(--muted);line-height:1.8;white-space:pre-line;"></div>
-        </div>
-      </div>
       <div class="result-actions" id="result-actions-cigar">
+        <button type="button" class="btn btn-sm btn-ghost" onclick="pairLookupCigar()">Find a drink pairing</button>
         <button class="btn btn-sm btn-primary" onclick="addToHumidorFromResult()">+ Humidor</button>
         <button class="btn btn-sm" onclick="addToWishlistFromResult()">✨ Wish List</button>
         <button class="btn btn-sm" onclick="addToSmokedFromResult()">+ Log Smoke</button>
@@ -871,7 +819,6 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openTasteProfile()">✦ Taste Profile</button>
-      <button class="btn btn-ghost" style="flex:1;font-size:14px;" onclick="openOccasionMatcher()">🎯 Occasion Match</button>
     </div>
 
     <!-- LONG ASH CHALLENGE -->
@@ -1171,7 +1118,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <span class="about-ornament">— ✦ —</span>
       <div class="about-intro">"Every great cigar begins with hands we never see and names we rarely know. Torcida exists to honor that journey — and to welcome everyone who wants to be part of it."</div>
     </div>
-    <div class="about-section"><h2 class="about-section-title">Data &amp; privacy</h2><p>Your humidors, bar, journal, and journal photos are saved in this browser on this device. There is no automatic account sync. Clearing site data or losing the device can remove the collection. Download backups regularly.</p><p>AI features send your chosen image or entered request through Torcida’s server to Anthropic. Pairing and occasion requests may include relevant cigar names, bottle names, and preference information from your collection. Journal photo attachments stay local unless you explicitly select an image for an AI feature or share it.</p><p>AI answers are suggestions, not verified product records. Avoid including private information in photos or requests. Provider handling is governed by the service configuration and provider policies; Torcida does not promise zero retention.</p></div><div class="about-section"><div class="about-section-title">What is Torcida</div><div class="about-body"><p>Torcida is your <strong>AI-powered cigar companion</strong> — built for everyone from the first-time smoker to the seasoned collector. Search any cigar for rich tasting notes and pairing recommendations, track your humidor, log every smoke, and explore the craft through a beautifully designed reference guide.</p><p><strong>One app. Every part of the ritual.</strong></p></div></div>
+    <div class="about-section"><h2 class="about-section-title">Data &amp; privacy</h2><p>Your humidors, bar, journal, and journal photos are saved in this browser on this device. There is no automatic account sync. Clearing site data or losing the device can remove the collection. Download backups regularly.</p><p>AI features send your chosen image or entered request through Torcida’s server to Anthropic. Pairing requests include the selected cigar or bottle name and details such as cigar strength or spirit type. Journal photo attachments stay local unless you explicitly select an image for an AI feature or share it.</p><p>AI answers are suggestions, not verified product records. Avoid including private information in photos or requests. Provider handling is governed by the service configuration and provider policies; Torcida does not promise zero retention.</p></div><div class="about-section"><div class="about-section-title">What is Torcida</div><div class="about-body"><p>Torcida is your <strong>AI-powered cigar companion</strong> — built for everyone from the first-time smoker to the seasoned collector. Search any cigar for rich tasting notes and pairing recommendations, track your humidor, log every smoke, and explore the craft through a beautifully designed reference guide.</p><p><strong>One app. Every part of the ritual.</strong></p></div></div>
     <div class="about-section"><div class="about-section-title">Why We Are Called Torcida</div><div class="about-body"><p><strong>Torcida</strong> is the feminine past participle of "to roll" in Spanish and Portuguese — a deliberate tribute to the women whose skilled hands have built the premium cigar industry for generations. Their names are rarely on the bands, but <strong>without them, there is no cigar.</strong></p></div>
     <div class="roles-grid"><div class="role-card"><span class="role-icon">🌱</span><div class="role-name">Veguero</div><div class="role-desc">The tobacco farmer who tends the fields from seed to harvest</div></div><div class="role-card"><span class="role-icon">🍃</span><div class="role-name">Escogedora</div><div class="role-desc">Selects and grades leaves by color, texture, and quality</div></div><div class="role-card"><span class="role-icon">✋</span><div class="role-name">Rezagadora</div><div class="role-desc">Sorts wrapper leaves by shade for visual consistency</div></div><div class="role-card"><span class="role-icon">🎋</span><div class="role-name">Torcedor/a</div><div class="role-desc">The master roller who hand-rolls each cigar to perfection</div></div><div class="role-card"><span class="role-icon">📖</span><div class="role-name">Lectora</div><div class="role-desc">Reads aloud to the rolling room — a 150-year-old Cuban tradition</div></div><div class="role-card"><span class="role-icon">🎯</span><div class="role-name">Ligador</div><div class="role-desc">Creates the blend — the recipe of leaves that defines the cigar's character</div></div></div></div>
     <div class="about-section"><div class="about-section-title">Our Values</div><div class="about-values"><div class="value-item"><div class="value-title">Inclusivity</div><div class="value-text">The cigar is for everyone. Novice and aficionado sit at the same table here.</div></div><div class="value-item"><div class="value-title">Craft First</div><div class="value-text">We honor the hands, the fields, and the generations of skill behind every cigar.</div></div><div class="value-item"><div class="value-title">Patience</div><div class="value-text">Great cigars cannot be rushed. Neither can great experiences.</div></div><div class="value-item"><div class="value-title">Memory</div><div class="value-text">Every smoke is a moment worth keeping. Torcida is your record of those moments.</div></div></div></div>
@@ -1194,50 +1141,18 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 </div>
 <div class="modal-overlay" id="modal-cigar-detail" onclick="if(event.target===this)closeModal('modal-cigar-detail')"><div class="modal-box cigar-detail"><div class="tasting-studio-heading"><h2 class="modal-title" id="cigar-detail-title">Your cigar</h2><button type="button" class="modal-close" aria-label="Close cigar details" onclick="closeModal('modal-cigar-detail')">×</button></div><div id="cigar-detail-content"></div></div></div>
 
-<!-- ── OCCASION MATCHER MODAL ───────────────────────────── -->
-<div class="modal-overlay" id="modal-occasion" onclick="if(event.target===this)closeModal('modal-occasion')" style="z-index:1800;">
-  <div class="modal-box" style="max-width:400px;">
-    <div class="modal-title" style="font-size:20px;">🎯 Occasion Matcher<button onclick="closeModal('modal-occasion')" style="background:none;border:none;font-size:26px;color:var(--muted);cursor:pointer;line-height:1;padding:0;margin-left:auto;">×</button></div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Tell me about the moment and I'll find the perfect cigar and pairing.</div>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">
-      <div>
-        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">The Occasion</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;" id="occasion-chips">
-          <button type="button" class="occ-chip active" onclick="toggleOccChip(this)">Morning ritual</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">Celebrating</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">After dinner</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">Golf round</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">Weekend unwind</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">Business meeting</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">Night cap</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">Bonfire / outdoors</button>
-          <button type="button" class="occ-chip" onclick="toggleOccChip(this)">Special milestone</button>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Time Available</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="time-chips">
-          <button type="button" class="occ-chip active" onclick="toggleTimeChip(this)">30 min</button>
-          <button type="button" class="occ-chip" onclick="toggleTimeChip(this)">45 min</button>
-          <button type="button" class="occ-chip" onclick="toggleTimeChip(this)">60 min</button>
-          <button type="button" class="occ-chip" onclick="toggleTimeChip(this)">90 min</button>
-          <button type="button" class="occ-chip" onclick="toggleTimeChip(this)">All day</button>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Mood</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="mood-chips">
-          <button type="button" class="occ-chip active" onclick="toggleMoodChip(this)">Relaxed</button>
-          <button type="button" class="occ-chip" onclick="toggleMoodChip(this)">Focused</button>
-          <button type="button" class="occ-chip" onclick="toggleMoodChip(this)">Social</button>
-          <button type="button" class="occ-chip" onclick="toggleMoodChip(this)">Contemplative</button>
-          <button type="button" class="occ-chip" onclick="toggleMoodChip(this)">Celebratory</button>
-        </div>
-      </div>
+<div class="modal-overlay" id="modal-pairing" onclick="if(event.target===this)closeModal('modal-pairing')">
+  <div class="modal-box">
+    <div class="tasting-studio-heading">
+      <h2 class="modal-title" id="pairing-title">Pairing</h2>
+      <button type="button" class="modal-close" aria-label="Close pairing" onclick="closeModal('modal-pairing')">×</button>
     </div>
-    <button class="btn btn-primary btn-full" onclick="runOccasionMatch()" id="occ-match-btn">Find My Perfect Match</button>
-    <div id="occ-result" style="display:none;margin-top:16px;"></div>
-    <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="closeModal('modal-occasion')">Close</button>
+    <p class="privacy-note">AI-generated suggestion</p>
+    <div role="status" aria-live="polite">
+      <h3 id="pairing-name" hidden></h3>
+      <p class="notes-text" id="pairing-description"></p>
+    </div>
+    <button type="button" class="btn btn-ghost" id="pairing-lookup" hidden>Look up this cigar</button>
   </div>
 </div>
 
@@ -1612,7 +1527,7 @@ function renderBar(){
     delBtn.textContent='Remove from Bar';
     delBtn.onclick=(function(sid){return function(){if(confirm('Remove from bar?'))removeFromBar(sid);};})(s.id);
 
-    btnRow.appendChild(pairBtn);btnRow.appendChild(editBtn);
+    if(s.bottles===undefined||s.bottles>0)btnRow.appendChild(pairBtn);btnRow.appendChild(editBtn);
     btnRow.appendChild(restockBtn);btnRow.appendChild(altBtn);
     btnRow.appendChild(delBtn);
     card.appendChild(btnRow);
@@ -1701,15 +1616,59 @@ function fetchWithTimeout(url, options, timeoutMs) {
   return fetch(url, options).then(function(r){ clearTimeout(timer); return r; }, function(e){ clearTimeout(timer); throw e; });
 }
 
-async function findCigarForSpirit(id){
-  var s=myBar.find(function(x){return x.id===id;});if(!s)return;showToast('Finding the perfect cigar pairing...');
+function findCigarForSpirit(id){
+  var bottle=myBar.find(function(item){return item.id===id;});
+  if(bottle&&(bottle.bottles===undefined||bottle.bottles>0))showPairing(bottle,'spirit');
+}
+
+function pairLookupCigar(){
+  if(currentResult&&currentResult.type==='cigar')showPairing(currentResult,'cigar');
+}
+
+var pairingRequest=0;
+async function showPairing(item,type){
+  var request=++pairingRequest;
+  var isSpirit=type==='spirit';
+  var label=[item.brand,item.name].filter(Boolean).join(' ');
+  var modal=document.getElementById('modal-pairing');
+  var name=document.getElementById('pairing-name');
+  var description=document.getElementById('pairing-description');
+  var lookup=document.getElementById('pairing-lookup');
+  document.getElementById('pairing-title').textContent='Pair with '+label;
+  name.hidden=true;
+  lookup.hidden=true;
+  lookup.onclick=null;
+  description.textContent='Finding a pairing…';
+  openModal(modal.id);
+
+  var profile={name:item.name,brand:item.brand};
+  if(isSpirit){profile.type=item.type;profile.proof=item.proof;}
+  else{profile.size=item.size;profile.wrapper=item.wrapper;profile.strength=item.strength;profile.flavor_tags=item.flavor_tags;}
+  var prompt=(isSpirit
+    ?'Suggest one specific cigar to pair with this bottle. Return JSON with cigar_name, cigar_brand, and why. '
+    :'Suggest one drink to pair with this cigar. Return JSON with drink_name and why. ')
+    +'Explain the flavor match in one or two sentences. Item: '+JSON.stringify(profile);
   try{
-    var q=(s.brand||'')+' '+(s.name||'')+' '+(s.type||'spirit');
-    var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'pairing',system:'You are an expert cigar sommelier. Return ONLY valid JSON, no markdown.',messages:[{role:'user',content:'Suggest the single best cigar to pair with '+q.trim()+'. Return JSON: cigar_name, cigar_brand, why (one sentence).'}]})});
-    var rec=await readAIResponse(res,'pairing');
-    if(rec.cigar_name){var sq=((rec.cigar_brand||'')+' '+rec.cigar_name).trim();document.getElementById('cigar-search').value=sq;var tab=document.querySelectorAll('.nav-tab')[0];if(tab)showPage('scanner',tab);setTimeout(function(){showToast('Pairing: '+sq);searchCigar();},400);}
-    else{showToast('No pairing found');}
-  }catch(err){showToast('Pairing failed: '+(err.message||'try again').slice(0,40));}
+    var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'pairing',messages:[{role:'user',content:prompt}]})});
+    var result=await readAIResponse(res,'pairing');
+    if(request!==pairingRequest||!modal.classList.contains('show'))return;
+    var match=isSpirit?[result.cigar_brand,result.cigar_name].filter(Boolean).join(' '):result.drink_name;
+    if(!(isSpirit?result.cigar_name:result.drink_name).trim())throw Error('No pairing found. Try again.');
+    name.textContent=match;
+    name.hidden=false;
+    description.textContent=result.why;
+    if(isSpirit){
+      lookup.hidden=false;
+      lookup.onclick=function(){
+        closeModal(modal.id);
+        document.getElementById('cigar-search').value=match;
+        showPage('scanner',document.querySelector('.nav-tab'));
+        searchCigar();
+      };
+    }
+  }catch(error){
+    if(request===pairingRequest&&modal.classList.contains('show'))description.textContent=error.message||'Could not find a pairing. Try again.';
+  }
 }
 
 // ── BAR WISH LIST ─────────────────────────────────────────────
@@ -1901,7 +1860,7 @@ async function handleScan(input){
 }
 async function identifyCigarFromImage(b64){
   var btn=document.getElementById('search-btn');btn.innerHTML='Searching<span class="loader"></span>';btn.disabled=true;
-  try{var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'identify',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify whether this is a cigar or a spirit/liquor. Return ONLY JSON with: type (cigar or spirit), name, brand, and if cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 5),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]}]})});
+  try{var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'identify',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify whether this is a cigar or a spirit/liquor. Return ONLY JSON with: type (cigar or spirit), name, brand, and if cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 5),about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 5),about.'}]}]})});
   var cigar=await readAIResponse(res,'identify');displayResult(cigar,'data:image/jpeg;base64,'+b64);document.getElementById('cigar-search').value=cigar.name;}
   catch(e){showToast(e.message||'Could not identify. Try searching by name.');}
   btn.innerHTML='Search';btn.disabled=false;
@@ -1938,8 +1897,8 @@ async function searchCigar(){
   var q=document.getElementById('cigar-search').value.trim();if(!q)return;
   var btn=document.getElementById('search-btn');btn.disabled=true;btn.innerHTML='Searching<span class="loader"></span>';
   try{
-    var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'identify',system:'You are a cigar and spirits expert. Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:'Identify "'+q+'". Return JSON: type("cigar" or "spirit"), name, brand. If cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 6 strings),pairing,about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 6 strings),about,cigar_pairing_name,cigar_pairing_brand,cigar_pairing_why.'}]})});
-    var result=await readAIResponse(res,'identify');displayResult(result);fetchRecipes(q,result.type||'cigar');
+    var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'identify',system:'You are a cigar and spirits expert. Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:'Identify "'+q+'". Return JSON: type("cigar" or "spirit"), name, brand. If cigar: size,wrapper,strength,rating,tasting_notes,flavor_tags(array of 6 strings),about. If spirit: spirit_type,age,proof,tasting_notes,flavor_tags(array of 6 strings),about.'}]})});
+    var result=await readAIResponse(res,'identify');displayResult(result);
   }catch(e){
     var msg=e.message||'Check your connection';
     if(msg.includes('abort')||msg.includes('timeout')){msg='Request timed out — check your connection and try again.';}
@@ -1949,51 +1908,6 @@ async function searchCigar(){
     console.error('searchCigar error:',e);
   }
   btn.innerHTML='Search';btn.disabled=false;
-}
-async function fetchRecipes(q,type){
-  try{
-    // Build bar context so AI knows what the user already has
-    var barContext='';
-    if(myBar&&myBar.length){
-      var barList=myBar.map(function(s){return (s.brand?s.brand+' ':'')+s.name+(s.type?' ('+s.type+')':'');}).join(', ');
-      barContext=' The user already has these spirits in their bar: '+barList+'. If any of these is a good match for this cigar, prioritize it and set bar_match to the exact name from the list. If none match well, set bar_match to null and suggest something new.';
-    }
-    var prompt=type==='spirit'
-      ?'For the spirit "'+q+'", return JSON: drink_name,drink_desc,drink_recipe,drink_recipe_search,drink_zero_proof.'
-      :'For the cigar "'+q+'", return JSON: cocktail_name,cocktail_desc,cocktail_recipe,cocktail_recipe_search,zero_proof_recipe,bar_match(string or null),bar_match_why(string or null).'+barContext;
-    var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'recipes',system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})});
-    var r=await readAIResponse(res,'recipes');if(currentResult)Object.assign(currentResult,r);
-    if(type==='cigar'&&r.cocktail_name){
-      document.getElementById('cocktail-name').textContent=r.cocktail_name||'';
-      document.getElementById('cocktail-desc').textContent=r.cocktail_desc||'';
-      document.getElementById('full-recipe-text').textContent=r.cocktail_recipe||'';
-      document.getElementById('zero-proof-text').textContent=r.zero_proof_recipe||'';
-      if(r.cocktail_recipe_search)document.getElementById('cocktail-link').href='https://www.google.com/search?q='+encodeURIComponent(r.cocktail_recipe_search+' recipe');
-      document.getElementById('cocktail-block').style.display='block';
-      // Show bar match banner if there's a hit
-      showBarMatchBanner(r.bar_match,r.bar_match_why);
-    }
-    if(type==='spirit'&&r.drink_name){document.getElementById('spirit-drink-name').textContent=r.drink_name||'';document.getElementById('spirit-drink-desc').textContent=r.drink_desc||'';document.getElementById('spirit-full-text').textContent=r.drink_recipe||'';document.getElementById('spirit-zero-text').textContent=r.drink_zero_proof||'';if(r.drink_recipe_search)document.getElementById('spirit-drink-link').href='https://www.google.com/search?q='+encodeURIComponent(r.drink_recipe_search+' recipe');document.getElementById('spirit-drink-block').style.display='block';}
-  }catch(e){
-    console.error('fetchRecipes error:',e);
-    if(e.message&&(e.message.includes('abort')||e.message.includes('timeout'))){showToast('Pairing timed out — try again');}
-  }
-}
-function showBarMatchBanner(matchName,matchWhy){
-  var banner=document.getElementById('bar-match-banner');
-  if(!banner)return;
-  var match=typeof matchName==='string'?matchName.trim().toLowerCase():'';
-  var owned=match&&myBar.some(function(spirit){
-    return (spirit.bottles===undefined||spirit.bottles>0)&&
-      ((spirit.name||'').trim().toLowerCase()===match||((spirit.brand||'')+' '+(spirit.name||'')).trim().toLowerCase()===match);
-  });
-  if(owned){
-    document.getElementById('bar-match-name').textContent=matchName;
-    document.getElementById('bar-match-why').textContent=matchWhy||'A great match for this cigar.';
-    banner.style.display='block';
-  } else {
-    banner.style.display='none';
-  }
 }
 function renderFlavorTags(value){
   if(typeof value==='string'){
@@ -2019,31 +1933,9 @@ function displayResult(cigar,photo){
   document.getElementById('res-grid').innerHTML=gridItems.map(function(x){return '<div class="stat-box"><div class="stat-label">'+x[0]+'</div><div class="stat-val">'+x[1]+'</div></div>';}).join('');
   document.getElementById('res-tasting').textContent=cigar.tasting_notes||'';
   document.getElementById('res-tags').innerHTML=renderFlavorTags(cigar.flavor_tags);
-  document.getElementById('res-pairing').textContent=cigar.pairing||'';
   document.getElementById('res-about').textContent=cigar.about||'';
-  var spiritBlock=document.getElementById('spirit-pairing-block');var spiritDrinkBlock=document.getElementById('spirit-drink-block');
-  if(isSpirit&&cigar.cigar_pairing_name){document.getElementById('spirit-cigar-name').textContent=cigar.cigar_pairing_name||'';document.getElementById('spirit-cigar-brand').textContent=(cigar.cigar_pairing_brand||'').toUpperCase();document.getElementById('spirit-cigar-why').textContent=cigar.cigar_pairing_why||'';spiritBlock.style.display='block';}
-  else if(spiritBlock)spiritBlock.style.display='none';
-  if(isSpirit&&cigar.drink_name){document.getElementById('spirit-drink-name').textContent=cigar.drink_name||'';document.getElementById('spirit-drink-desc').textContent=cigar.drink_desc||'';document.getElementById('spirit-full-text').textContent=cigar.drink_recipe||'';document.getElementById('spirit-zero-text').textContent=cigar.drink_zero_proof||'';document.getElementById('spirit-full-panel').style.display='none';document.getElementById('spirit-zero-panel').style.display='none';if(cigar.drink_recipe_search)document.getElementById('spirit-drink-link').href='https://www.google.com/search?q='+encodeURIComponent(cigar.drink_recipe_search+' recipe');spiritDrinkBlock.style.display='block';}
-  else if(spiritDrinkBlock)spiritDrinkBlock.style.display='none';
-  if(!isSpirit&&cigar.cocktail_name){document.getElementById('cocktail-name').textContent=cigar.cocktail_name;document.getElementById('cocktail-desc').textContent=cigar.cocktail_desc||'';document.getElementById('full-recipe-text').textContent=cigar.cocktail_recipe||'';document.getElementById('zero-proof-text').textContent=cigar.zero_proof_recipe||'';document.getElementById('full-recipe-panel').style.display='none';document.getElementById('zero-proof-panel').style.display='none';if(cigar.cocktail_recipe_search)document.getElementById('cocktail-link').href='https://www.google.com/search?q='+encodeURIComponent(cigar.cocktail_recipe_search+' recipe');document.getElementById('cocktail-block').style.display='block';}
-  else if(!isSpirit)document.getElementById('cocktail-block').style.display='none';
-  if(isSpirit)document.getElementById('cocktail-block').style.display='none';
-  // Reset bar match banner for every new result
-  var bmb=document.getElementById('bar-match-banner');if(bmb)bmb.style.display='none';
   var el=document.getElementById('cigar-result');el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-function toggleRecipe(type){
-  var fp=document.getElementById('full-recipe-panel');var zp=document.getElementById('zero-proof-panel');var fb=document.getElementById('full-recipe-btn');var zb=document.getElementById('zero-recipe-btn');
-  if(type==='full'){var o=fp.style.display!=='none';fp.style.display=o?'none':'block';zp.style.display='none';fb.classList.toggle('active',!o);zb.classList.remove('active');}
-  else{var oz=zp.style.display!=='none';zp.style.display=oz?'none':'block';fp.style.display='none';zb.classList.toggle('active',!oz);fb.classList.remove('active');}
-}
-function toggleSpiritRecipe(type){
-  var fp=document.getElementById('spirit-full-panel');var zp=document.getElementById('spirit-zero-panel');var fb=document.getElementById('spirit-full-btn');var zb=document.getElementById('spirit-zero-btn');
-  if(type==='full'){var o=fp.style.display!=='none';fp.style.display=o?'none':'block';zp.style.display='none';fb.classList.toggle('active',!o);zb.classList.remove('active');}
-  else{var oz=zp.style.display!=='none';zp.style.display=oz?'none':'block';fp.style.display='none';zb.classList.toggle('active',!oz);fb.classList.remove('active');}
-}
-function searchSpiritPairing(){if(!currentResult||currentResult.type!=='spirit')return;var q=(currentResult.cigar_pairing_brand||'')+' '+(currentResult.cigar_pairing_name||'');document.getElementById('cigar-search').value=q.trim();var tab=document.querySelectorAll('.nav-tab')[0];if(tab)showPage('scanner',tab);searchCigar();}
 function addToHumidorFromResult(){if(!currentResult)return;pickHumidor('fromResult',{});}
 function addToSmokedFromResult(){
   if(!confirmReplaceJournalDraft())return;clearJournalSource();
@@ -2513,65 +2405,11 @@ function openTasteProfile(){
   openModal('modal-taste');
 }
 
-// ── FEATURE 3: OCCASION MATCHER ───────────────────────────────
-function toggleOccChip(el){document.querySelectorAll('#occasion-chips .occ-chip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');}
-function toggleTimeChip(el){document.querySelectorAll('#time-chips .occ-chip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');}
-function toggleMoodChip(el){document.querySelectorAll('#mood-chips .occ-chip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');}
-
-function openOccasionMatcher(){
-  document.getElementById('occ-result').style.display='none';
-  document.getElementById('occ-match-btn').style.display='block';
-  openModal('modal-occasion');
-}
-
-async function runOccasionMatch(){
-  var occasion=document.querySelector('#occasion-chips .occ-chip.active');
-  var time=document.querySelector('#time-chips .occ-chip.active');
-  var mood=document.querySelector('#mood-chips .occ-chip.active');
-  var btn=document.getElementById('occ-match-btn');
-  btn.textContent='Finding your match...';btn.disabled=true;
-
-  // Build bar context
-  var barCtx=myBar&&myBar.length?'The user has these spirits in their bar: '+myBar.map(function(s){return (s.brand?s.brand+' ':'')+s.name;}).join(', ')+'.':'';
-  // Build taste context from top rated smokes
-  var tasteCtx='';
-  var topRated=[...smoked].filter(function(s){return s.rating>=4;}).sort(function(a,b){return b.rating-a.rating;}).slice(0,3);
-  if(topRated.length)tasteCtx='User\'s top rated smokes: '+topRated.map(function(s){return s.name+(s.brand?' by '+s.brand:'');}).join(', ')+'.';
-
-  var prompt='I need a cigar and drink pairing recommendation for this occasion: '
-    +(occasion?occasion.textContent:'relaxing')+'. '
-    +'Time available: '+(time?time.textContent:'45 min')+'. '
-    +'Mood: '+(mood?mood.textContent:'relaxed')+'. '
-    +barCtx+' '+tasteCtx+' '
-    +'Return JSON only: {cigar_name, cigar_brand, cigar_size, cigar_strength, cigar_why, drink_name, drink_why, occasion_note}';
-
-  try{
-    var res=await fetchWithTimeout(torcidaApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'occasion',system:'Return ONLY valid compact JSON, no markdown.',messages:[{role:'user',content:prompt}]})});
-    var r=await readAIResponse(res,'occasion');
-    var resultHtml='<div style="background:var(--surface2);border:0.5px solid var(--border);border-radius:12px;padding:14px;">'
-      +'<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Your Perfect Match</div>'
-      +'<div style="font-family:Playfair Display,serif;font-size:18px;color:var(--text);font-weight:600;margin-bottom:2px;">'+(r.cigar_name||'')+'</div>'
-      +'<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">'+(r.cigar_brand||'')+' · '+(r.cigar_size||'')+' · '+(r.cigar_strength||'')+'</div>'
-      +'<div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px;">'+(r.cigar_why||'')+'</div>'
-      +'<div style="height:0.5px;background:var(--border);margin-bottom:12px;"></div>'
-      +'<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Pair With</div>'
-      +'<div style="font-size:15px;color:var(--text);font-weight:600;margin-bottom:4px;">'+(r.drink_name||'')+'</div>'
-      +'<div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px;">'+(r.drink_why||'')+'</div>'
-      +(r.occasion_note?'<div style="font-size:12px;color:var(--dim);font-style:italic;border-top:0.5px solid var(--border);padding-top:10px;">'+r.occasion_note+'</div>':'')
-      +'</div>';
-    document.getElementById('occ-result').innerHTML=resultHtml;
-    document.getElementById('occ-result').style.display='block';
-  }catch(e){
-    document.getElementById('occ-result').textContent=e.message||'Could not get a recommendation. Please try again.';
-    document.getElementById('occ-result').style.display='block';
-  }
-  btn.textContent='Find My Perfect Match';btn.disabled=false;
-}
 // ── FIND ALTERNATIVES ─────────────────────────────────────────
 function findAlternativesFromResult(){
   if(!currentResult)return;
   var name=(currentResult.name||currentResult.brand||'this cigar');
-  var profile='Flavor: '+(currentResult.flavor_notes||currentResult.pairing||'')
+  var profile='Flavor: '+(currentResult.tasting_notes||'')
     +' Strength: '+(currentResult.strength||'medium')
     +' Wrapper: '+(currentResult.wrapper||'')
     +' Origin: '+(currentResult.origin||'');
